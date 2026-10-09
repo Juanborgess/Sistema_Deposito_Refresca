@@ -117,13 +117,6 @@ const Footer = () => {
               >
                 Rastrear meu Pedido
               </Link>
-              <Link 
-                to="/admin/login" 
-                onClick={() => window.scrollTo(0,0)}
-                className="text-xs text-gray-600 hover:text-gray-400 pt-4"
-              >
-                Acesso Administrativo
-              </Link>
             </div>
           </div>
 

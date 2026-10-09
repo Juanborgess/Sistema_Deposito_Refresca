@@ -42,10 +42,12 @@ const ProductGrid = () => {
   const { categories, groupedProducts } = useMemo(() => {
     const groups = {};
     
+    const normalizeString = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
     const filteredProducts = productsData.filter(p => {
       if (!searchTerm) return true;
-      const term = searchTerm.toLowerCase();
-      return p.nome.toLowerCase().includes(term) || (p.categoria && p.categoria.toLowerCase().includes(term));
+      const term = normalizeString(searchTerm);
+      return normalizeString(p.nome).includes(term) || normalizeString(p.categoria).includes(term);
     });
 
     filteredProducts.forEach(p => {

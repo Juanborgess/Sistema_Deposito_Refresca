@@ -224,9 +224,12 @@ const Orders = () => {
     }
   };
 
+  const normalizeString = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
   const filteredPedidos = pedidos.filter(p => {
     if (!searchCode) return true;
-    return String(p.codigo_pedido).includes(searchCode) || p.cliente_nome.toLowerCase().includes(searchCode.toLowerCase());
+    const term = normalizeString(searchCode);
+    return String(p.codigo_pedido).includes(term) || normalizeString(p.cliente_nome).includes(term);
   });
 
   return (

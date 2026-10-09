@@ -15,7 +15,6 @@ import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Orders from './pages/admin/Orders';
 import Catalog from './pages/admin/Catalog';
-import Categories from './pages/admin/Categories';
 import Motoboys from './pages/admin/Motoboys';
 import Shipping from './pages/admin/Shipping';
 import Schedule from './pages/admin/Schedule';
@@ -66,7 +65,6 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="orders" element={<Orders />} />
               <Route path="catalog" element={<Catalog />} />
-              <Route path="categories" element={<Categories />} />
               <Route path="motoboys" element={<Motoboys />} />
               <Route path="shipping" element={<Shipping />} />
               <Route path="schedule" element={<Schedule />} />

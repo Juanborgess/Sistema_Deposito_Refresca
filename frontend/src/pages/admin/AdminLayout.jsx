@@ -103,7 +103,6 @@ const AdminLayout = () => {
     { label: 'Painel Geral', path: '/admin/dashboard', icon: <LayoutDashboard size={18} /> },
     { label: 'Pedidos (Kanban)', path: '/admin/orders', icon: <ShoppingBag size={18} /> },
     { label: 'Catálogo de Bebidas', path: '/admin/catalog', icon: <Package size={18} /> },
-    { label: 'Categorias', path: '/admin/categories', icon: <Tags size={18} /> },
     { label: 'Motoboys', path: '/admin/motoboys', icon: <Users size={18} /> },
     { label: 'Taxas de Frete', path: '/admin/shipping', icon: <Truck size={18} /> },
     { label: 'Horários da Loja', path: '/admin/schedule', icon: <Clock size={18} /> },

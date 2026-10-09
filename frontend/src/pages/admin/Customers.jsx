@@ -27,10 +27,13 @@ const Customers = () => {
     }
   };
 
-  const filteredCustomers = customers.filter(c => 
-    (c.nome && c.nome.toLowerCase().includes(search.toLowerCase())) ||
-    (c.telefone && c.telefone.includes(search))
-  );
+  const normalizeString = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+  const filteredCustomers = customers.filter(c => {
+    const term = normalizeString(search);
+    return (c.nome && normalizeString(c.nome).includes(term)) ||
+           (c.telefone && c.telefone.includes(search));
+  });
 
   return (
     <div className="space-y-6">
