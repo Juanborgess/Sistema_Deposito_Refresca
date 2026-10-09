@@ -1,0 +1,21 @@
+{
+  "name": "refresca-bebidas-api",
+  "version": "1.0.0",
+  "description": "API Backend Serverless do Depósito de Bebidas Refresca",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["refresca", "bebidas", "delivery", "supabase", "express"],
+  "author": "Refresca Bebidas",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}

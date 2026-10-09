@@ -1,0 +1,10 @@
+[
+  { "bairro": "São Conrado", "valor": 10.00 },
+  { "bairro": "Barra da Tijuca", "valor": 12.00 },
+  { "bairro": "Gávea", "valor": 10.00 },
+  { "bairro": "Leblon", "valor": 12.00 },
+  { "bairro": "Ipanema", "valor": 12.00 },
+  { "bairro": "Jardim Oceânico", "valor": 12.00 },
+  { "bairro": "Joá", "valor": 12.00 },
+  { "bairro": "Itanhangá", "valor": 12.00 }
+]

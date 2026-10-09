@@ -1,0 +1,31 @@
+{
+  "name": "Distribuidora de Bebidas Refresca",
+  "short_name": "Refresca",
+  "description": "Delivery de Cervejas trincando de geladas, Destilados, Vinhos, Gelo e Carvão na Barra da Tijuca e Zona Sul do Rio de Janeiro.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0F1D",
+  "theme_color": "#0A0F1D",
+  "orientation": "portrait",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/logo_refresca.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo_refresca.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo_refresca.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
