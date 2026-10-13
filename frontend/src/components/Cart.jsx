@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Trash2, ShoppingBag, ArrowRight, ArrowLeft, MapPin, CreditCard, User, Send, Clock, Sparkles } from 'lucide-react';
 import useCartStore from '../store/cartStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import toast from 'react-hot-toast';
@@ -10,6 +11,8 @@ const WHATSAPP_NUMBER = "5521983785928";
 
 const Cart = () => {
   const { items, isOpen, closeCart, updateQuantity, removeItem, getSubtotal, clearCart } = useCartStore();
+  const { theme } = useThemeStore();
+  const isDark = theme === 'dark';
   const navigate = useNavigate();
 
   // Estados do Checkout
@@ -303,34 +306,44 @@ const Cart = () => {
       />
 
       {/* Drawer Lateral */}
-      <div className={`absolute top-0 right-0 h-full w-full sm:max-w-md md:max-w-lg bg-[#0A0F1D] border-l border-white/10 shadow-2xl flex flex-col transform transition-transform duration-300 ease-out z-10 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`absolute top-0 right-0 h-full w-full sm:max-w-md md:max-w-lg border-l shadow-2xl flex flex-col transform transition-transform duration-300 ease-out z-10 ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      } ${
+        isDark ? 'bg-[#0A0F1D] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-800'
+      }`}>
         
         {/* Cabeçalho do Carrinho */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-[#101935]">
+        <div className={`p-5 border-b flex items-center justify-between ${
+          isDark ? 'bg-[#101935] border-white/10' : 'bg-slate-50 border-slate-200'
+        }`}>
           <div className="flex items-center gap-3">
             {isCheckoutMode ? (
               <button 
                 onClick={() => setIsCheckoutMode(false)}
-                className="p-1 text-gray-400 hover:text-white transition-colors"
+                className={`p-1 transition-colors ${isDark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-800'}`}
                 title="Voltar aos itens"
               >
                 <ArrowLeft size={22} />
               </button>
             ) : (
-              <ShoppingBag className="text-[#00E5FF]" size={24} />
+              <ShoppingBag className={isDark ? "text-[#00E5FF]" : "text-[#0284C7]"} size={24} />
             )}
             <div>
-              <h3 className="font-display font-black text-lg text-white uppercase tracking-wider">
+              <h3 className={`font-display font-black text-lg uppercase tracking-wider ${
+                isDark ? 'text-white' : 'text-slate-900'
+              }`}>
                 {isCheckoutMode ? 'Finalizar Pedido' : 'Meu Carrinho'}
               </h3>
-              <p className="text-xs text-gray-400">
+              <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
                 {items.length} {items.length === 1 ? 'item adicionado' : 'itens adicionados'}
               </p>
             </div>
           </div>
           <button 
             onClick={closeAndResetCart}
-            className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
+            className={`p-2 rounded-full transition-colors ${
+              isDark ? 'text-gray-400 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-700 hover:bg-slate-200'
+            }`}
           >
             <X size={22} />
           </button>
@@ -338,7 +351,9 @@ const Cart = () => {
 
         {/* Alerta de Loja Fechada / Pedido Agendado */}
         {!isStoreOpen && (
-          <div className="bg-[#FFDE59]/15 border-b border-[#FFDE59]/30 p-3 px-5 flex items-center gap-3 text-xs text-[#FFDE59]">
+          <div className={`border-b p-3 px-5 flex items-center gap-3 text-xs ${
+            isDark ? 'bg-[#FFDE59]/15 border-[#FFDE59]/30 text-[#FFDE59]' : 'bg-amber-50 border-amber-200 text-amber-800'
+          }`}>
             <Clock size={18} className="shrink-0" />
             <div>
               <span className="font-bold uppercase tracking-wider block">Loja Fechada no Momento</span>
@@ -349,22 +364,28 @@ const Cart = () => {
 
         {/* Barra de Progresso de Pedido Mínimo */}
         {!isCheckoutMode && items.length > 0 && (
-          <div className="bg-[#101935]/60 px-5 py-3 border-b border-white/5">
+          <div className={`px-5 py-3 border-b ${
+            isDark ? 'bg-[#101935]/60 border-white/5' : 'bg-slate-100/70 border-slate-200'
+          }`}>
             <div className="flex justify-between text-xs mb-1.5 font-medium">
-              <span className="text-gray-300">
+              <span className={isDark ? "text-gray-300" : "text-slate-600"}>
                 {isMinimumMet ? (
-                  <span className="text-[#00E5FF] font-bold flex items-center gap-1">
+                  <span className={`font-bold flex items-center gap-1 ${isDark ? "text-[#00E5FF]" : "text-[#0284C7]"}`}>
                     <Sparkles size={14} /> Pedido mínimo atingido!
                   </span>
                 ) : (
                   <span>Faltam <strong>R$ {amountToMinimum.toFixed(2).replace('.', ',')}</strong> para o pedido mínimo</span>
                 )}
               </span>
-              <span className="text-gray-400">R$ {MINIMUM_ORDER_VALUE.toFixed(2).replace('.', ',')}</span>
+              <span className={isDark ? "text-gray-400" : "text-slate-500"}>R$ {MINIMUM_ORDER_VALUE.toFixed(2).replace('.', ',')}</span>
             </div>
-            <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
+            <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-black/40' : 'bg-slate-200'}`}>
               <div 
-                className={`h-full transition-all duration-500 rounded-full ${isMinimumMet ? 'bg-[#00E5FF]' : 'bg-[#FFDE59]'}`}
+                className={`h-full transition-all duration-500 rounded-full ${
+                  isMinimumMet 
+                    ? (isDark ? 'bg-[#00E5FF]' : 'bg-[#0284C7]') 
+                    : (isDark ? 'bg-[#FFDE59]' : 'bg-amber-500')
+                }`}
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
@@ -378,16 +399,22 @@ const Cart = () => {
             <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-20">
-                  <div className="w-20 h-20 rounded-full bg-[#101935] flex items-center justify-center mb-4 text-gray-500">
-                    <ShoppingBag size={40} className="text-[#00E5FF]/40" />
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${
+                    isDark ? 'bg-[#101935] text-gray-500' : 'bg-slate-100 text-slate-400'
+                  }`}>
+                    <ShoppingBag size={40} className={isDark ? "text-[#00E5FF]/40" : "text-[#0284C7]/60"} />
                   </div>
-                  <h4 className="font-display font-bold text-white text-lg mb-1">Carrinho Vazio</h4>
-                  <p className="text-sm text-gray-400 max-w-xs mb-6">
+                  <h4 className={`font-display font-bold text-lg mb-1 ${isDark ? 'text-white' : 'text-slate-900'}`}>Carrinho Vazio</h4>
+                  <p className={`text-sm max-w-xs mb-6 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
                     Sua cesta está sem bebidas geladas. Escolha suas cervejas, destilados ou gelo!
                   </p>
                   <button
                     onClick={closeAndResetCart}
-                    className="bg-[#00E5FF] text-[#0A0F1D] font-bold px-6 py-2.5 rounded-xl text-sm uppercase tracking-wider hover:bg-cyan-400 transition-colors"
+                    className={`font-bold px-6 py-2.5 rounded-xl text-sm uppercase tracking-wider transition-colors ${
+                      isDark 
+                        ? 'bg-[#00E5FF] text-[#0A0F1D] hover:bg-cyan-400' 
+                        : 'bg-[#0284C7] text-white hover:bg-sky-700'
+                    }`}
                   >
                     Ver Catálogo
                   </button>
@@ -396,9 +423,13 @@ const Cart = () => {
                 items.map((item, index) => (
                   <div 
                     key={`${item.cartItemId}-${index}`}
-                    className="flex gap-4 p-3 bg-[#101935]/80 border border-white/5 rounded-2xl relative group"
+                    className={`flex gap-4 p-3 rounded-2xl relative group border ${
+                      isDark ? 'bg-[#101935]/80 border-white/5' : 'bg-slate-50 border-slate-200 shadow-sm'
+                    }`}
                   >
-                    <div className="w-16 h-16 bg-[#0A0F1D] rounded-xl flex items-center justify-center p-2 shrink-0 border border-white/5">
+                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center p-2 shrink-0 border ${
+                      isDark ? 'bg-[#0A0F1D] border-white/5' : 'bg-white border-slate-200'
+                    }`}>
                       <img 
                         src={item.imagem || item.imagem_url || '/logo_refresca.png'} 
                         alt={item.nome}
@@ -407,10 +438,10 @@ const Cart = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
-                        <h4 className="text-white font-medium text-sm truncate">{item.nome}</h4>
+                        <h4 className={`font-medium text-sm truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.nome}</h4>
                         <button 
                           onClick={() => removeItem(item.cartItemId)}
-                          className="text-gray-500 hover:text-red-400 p-1 transition-colors"
+                          className="text-gray-400 hover:text-red-500 p-1 transition-colors"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -420,8 +451,8 @@ const Cart = () => {
                       {item.variacoes_selecionadas && item.variacoes_selecionadas.length > 0 && (
                         <div className="mt-1 space-y-0.5">
                           {item.variacoes_selecionadas.map((v, i) => (
-                            <p key={i} className="text-[11px] text-gray-400">
-                              <span className="text-gray-300 font-semibold">{v.grupo_nome}:</span> {v.opcoes.map(o => o.nome).join(', ')}
+                            <p key={i} className={`text-[11px] ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
+                              <span className={isDark ? "text-gray-300 font-semibold" : "text-slate-700 font-semibold"}>{v.grupo_nome}:</span> {v.opcoes.map(o => o.nome).join(', ')}
                             </p>
                           ))}
                         </div>
@@ -429,25 +460,27 @@ const Cart = () => {
 
                       {/* Observações */}
                       {item.observacao && (
-                        <p className="text-[11px] text-gray-400 italic mt-0.5">Obs: {item.observacao}</p>
+                        <p className={`text-[11px] italic mt-0.5 ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>Obs: {item.observacao}</p>
                       )}
 
                       <div className="flex justify-between items-center mt-3">
-                        <span className="text-[#00E5FF] font-bold text-sm">
+                        <span className={`font-bold text-sm ${isDark ? 'text-[#00E5FF]' : 'text-[#0284C7]'}`}>
                           R$ {((item.valor_final || item.valor) * item.quantity).toFixed(2).replace('.', ',')}
                         </span>
                         
-                        <div className="flex items-center gap-2 bg-[#0A0F1D] border border-white/10 rounded-lg px-2 py-0.5">
+                        <div className={`flex items-center gap-2 border rounded-lg px-2 py-0.5 ${
+                          isDark ? 'bg-[#0A0F1D] border-white/10' : 'bg-white border-slate-200 shadow-sm'
+                        }`}>
                           <button 
                             onClick={() => updateQuantity(item.cartItemId, -1)}
-                            className="text-gray-400 hover:text-white px-1 text-base font-bold"
+                            className={`px-1 text-base font-bold ${isDark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-800'}`}
                           >
                             -
                           </button>
-                          <span className="text-white text-xs font-bold w-4 text-center">{item.quantity}</span>
+                          <span className={`text-xs font-bold w-4 text-center ${isDark ? 'text-white' : 'text-slate-900'}`}>{item.quantity}</span>
                           <button 
                             onClick={() => updateQuantity(item.cartItemId, 1)}
-                            className="text-gray-400 hover:text-white px-1 text-base font-bold"
+                            className={`px-1 text-base font-bold ${isDark ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-800'}`}
                           >
                             +
                           </button>
@@ -461,10 +494,12 @@ const Cart = () => {
 
             {/* Rodapé do Carrinho com Subtotal e Botão */}
             {items.length > 0 && (
-              <div className="p-5 border-t border-white/10 bg-[#101935] space-y-4">
+              <div className={`p-5 border-t space-y-4 ${
+                isDark ? 'bg-[#101935] border-white/10' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-400">Subtotal</span>
-                  <span className="text-white font-display font-black text-xl">
+                  <span className={isDark ? "text-gray-400" : "text-slate-500"}>Subtotal</span>
+                  <span className={`font-display font-black text-xl ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     R$ {subtotal.toFixed(2).replace('.', ',')}
                   </span>
                 </div>
@@ -475,7 +510,7 @@ const Cart = () => {
                   className={`w-full py-4 rounded-xl font-display font-black uppercase tracking-wider text-sm flex items-center justify-center gap-2 shadow-lg transition-all ${
                     isMinimumMet 
                       ? 'bg-[#FFDE59] hover:bg-yellow-400 text-[#0A0F1D] cursor-pointer shadow-yellow-500/20' 
-                      : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                      : isDark ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                   }`}
                 >
                   Continuar para Entrega <ArrowRight size={18} />
@@ -490,8 +525,10 @@ const Cart = () => {
               
               {/* Dados do Cliente */}
               <div className="space-y-3">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <User size={14} className="text-[#00E5FF]" /> Seus Dados
+                <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+                  isDark ? 'text-gray-400' : 'text-slate-600'
+                }`}>
+                  <User size={14} className={isDark ? "text-[#00E5FF]" : "text-[#0284C7]"} /> Seus Dados
                 </label>
                 <input 
                   type="text" 
@@ -500,7 +537,11 @@ const Cart = () => {
                   placeholder="Seu Nome Completo"
                   value={formData.nome}
                   onChange={handleInputChange}
-                  className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                  className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                    isDark 
+                      ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                      : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                  }`}
                 />
                 <input 
                   type="tel" 
@@ -509,14 +550,20 @@ const Cart = () => {
                   placeholder="WhatsApp / Telefone (ex: 21 99999-9999)"
                   value={formData.telefone}
                   onChange={handleInputChange}
-                  className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                  className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                    isDark 
+                      ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                      : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                  }`}
                 />
               </div>
 
               {/* Endereço & Frete */}
               <div className="space-y-3">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <MapPin size={14} className="text-[#00E5FF]" /> Endereço de Entrega
+                <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+                  isDark ? 'text-gray-400' : 'text-slate-600'
+                }`}>
+                  <MapPin size={14} className={isDark ? "text-[#00E5FF]" : "text-[#0284C7]"} /> Endereço de Entrega
                 </label>
                 
                 <div className="relative">
@@ -527,10 +574,14 @@ const Cart = () => {
                     placeholder="CEP (opcional - busca automática)"
                     value={formData.cep}
                     onChange={handleCepChange}
-                    className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                    className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                      isDark 
+                        ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                        : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                    }`}
                   />
                   {cepLoading && (
-                    <span className="absolute right-3 top-3.5 text-xs text-[#00E5FF] animate-pulse">Buscando...</span>
+                    <span className={`absolute right-3 top-3.5 text-xs animate-pulse ${isDark ? 'text-[#00E5FF]' : 'text-[#0284C7]'}`}>Buscando...</span>
                   )}
                 </div>
 
@@ -539,7 +590,11 @@ const Cart = () => {
                   required
                   value={formData.bairro}
                   onChange={handleInputChange}
-                  className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white focus:outline-none focus:border-[#00E5FF]"
+                  className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                    isDark 
+                      ? 'bg-[#101935] border-white/10 text-white focus:border-[#00E5FF]' 
+                      : 'bg-white border-slate-200 text-slate-900 focus:border-[#0284C7] shadow-sm'
+                  }`}
                 >
                   <option value="">Selecione seu Bairro...</option>
                   {bairrosOrdenados.map((b) => (
@@ -556,7 +611,11 @@ const Cart = () => {
                   placeholder="Rua / Avenida e Número"
                   value={formData.endereco}
                   onChange={handleInputChange}
-                  className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                  className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                    isDark 
+                      ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                      : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                  }`}
                 />
 
                 <input 
@@ -565,24 +624,30 @@ const Cart = () => {
                   placeholder="Complemento / Bloco / Apto (opcional)"
                   value={formData.complemento}
                   onChange={handleInputChange}
-                  className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                  className={`w-full border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                    isDark 
+                      ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                      : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                  }`}
                 />
               </div>
 
               {/* Cupom de Desconto */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400">
+                <label className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-slate-600'}`}>
                   Cupom de Desconto
                 </label>
                 {cupomAtivo ? (
-                  <div className="flex items-center justify-between bg-[#00E5FF]/10 border border-[#00E5FF]/40 rounded-xl p-3">
-                    <span className="text-xs text-[#00E5FF] font-bold">
+                  <div className={`flex items-center justify-between border rounded-xl p-3 ${
+                    isDark ? 'bg-[#00E5FF]/10 border-[#00E5FF]/40 text-[#00E5FF]' : 'bg-sky-50 border-sky-300 text-sky-800'
+                  }`}>
+                    <span className="text-xs font-bold">
                       Cupom <strong>{cupomAtivo.codigo}</strong> ({cupomAtivo.porcentagem_desconto}% OFF)
                     </span>
                     <button 
                       type="button" 
                       onClick={removeCoupon} 
-                      className="text-xs text-red-400 hover:text-red-300 font-bold"
+                      className="text-xs text-red-500 hover:text-red-700 font-bold"
                     >
                       Remover
                     </button>
@@ -594,13 +659,21 @@ const Cart = () => {
                       placeholder="Código do Cupom"
                       value={cupomInput}
                       onChange={(e) => setCupomInput(e.target.value.toUpperCase())}
-                      className="flex-1 bg-[#101935] border border-white/10 rounded-xl px-4 py-2 text-[16px] text-white focus:outline-none focus:border-[#00E5FF]"
+                      className={`flex-1 border rounded-xl px-4 py-2 text-[16px] focus:outline-none transition-colors ${
+                        isDark 
+                          ? 'bg-[#101935] border-white/10 text-white focus:border-[#00E5FF]' 
+                          : 'bg-white border-slate-200 text-slate-900 focus:border-[#0284C7] shadow-sm'
+                      }`}
                     />
                     <button
                       type="button"
                       disabled={cupomLoading || !cupomInput.trim()}
                       onClick={validateCoupon}
-                      className="bg-[#101935] border border-[#00E5FF]/40 text-[#00E5FF] font-bold px-4 py-2 rounded-xl text-xs uppercase hover:bg-[#00E5FF]/10 transition-colors disabled:opacity-50"
+                      className={`border font-bold px-4 py-2 rounded-xl text-xs uppercase transition-colors disabled:opacity-50 ${
+                        isDark 
+                          ? 'bg-[#101935] border-[#00E5FF]/40 text-[#00E5FF] hover:bg-[#00E5FF]/10' 
+                          : 'bg-sky-50 border-sky-300 text-sky-700 hover:bg-sky-100'
+                      }`}
                     >
                       {cupomLoading ? '...' : 'Aplicar'}
                     </button>
@@ -610,8 +683,10 @@ const Cart = () => {
 
               {/* Forma de Pagamento */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <CreditCard size={14} className="text-[#00E5FF]" /> Forma de Pagamento
+                <label className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+                  isDark ? 'text-gray-400' : 'text-slate-600'
+                }`}>
+                  <CreditCard size={14} className={isDark ? "text-[#00E5FF]" : "text-[#0284C7]"} /> Forma de Pagamento
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -626,8 +701,12 @@ const Cart = () => {
                       onClick={() => setFormData(prev => ({ ...prev, pagamento: metodo.id }))}
                       className={`p-3 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all text-center flex items-center justify-center min-h-[46px] ${
                         formData.pagamento === metodo.id 
-                          ? 'border-[#00E5FF] bg-[#00E5FF]/15 text-[#00E5FF]' 
-                          : 'border-white/10 bg-[#101935] text-gray-400 hover:border-white/20'
+                          ? isDark 
+                            ? 'border-[#00E5FF] bg-[#00E5FF]/15 text-[#00E5FF]' 
+                            : 'border-[#0284C7] bg-sky-50 text-[#0284C7]'
+                          : isDark 
+                            ? 'border-white/10 bg-[#101935] text-gray-400 hover:border-white/20' 
+                            : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
                       }`}
                     >
                       {metodo.label}
@@ -642,7 +721,11 @@ const Cart = () => {
                     placeholder="Precisa de troco para quanto? (ex: R$ 100)"
                     value={formData.troco}
                     onChange={handleInputChange}
-                    className="w-full mt-2 bg-[#101935] border border-white/10 rounded-xl px-4 py-3 text-[16px] text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+                    className={`w-full mt-2 border rounded-xl px-4 py-3 text-[16px] focus:outline-none transition-colors ${
+                      isDark 
+                        ? 'bg-[#101935] border-white/10 text-white placeholder-gray-500 focus:border-[#00E5FF]' 
+                        : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0284C7] shadow-sm'
+                    }`}
                   />
                 )}
               </div>
@@ -650,27 +733,33 @@ const Cart = () => {
             </div>
 
             {/* Resumo Final & Disparo WhatsApp */}
-            <div className="p-5 border-t border-white/10 bg-[#101935] space-y-3">
-              <div className="space-y-1 text-xs text-gray-400">
+            <div className={`p-5 border-t space-y-3 ${
+              isDark ? 'bg-[#101935] border-white/10' : 'bg-slate-50 border-slate-200'
+            }`}>
+              <div className={`space-y-1 text-xs ${isDark ? 'text-gray-400' : 'text-slate-500'}`}>
                 <div className="flex justify-between">
                   <span>Subtotal:</span>
-                  <span className="text-white font-medium">R$ {subtotal.toFixed(2).replace('.', ',')}</span>
+                  <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
                 </div>
                 {valorDesconto > 0 && (
-                  <div className="flex justify-between text-[#00E5FF]">
+                  <div className={`flex justify-between ${isDark ? 'text-[#00E5FF]' : 'text-emerald-600 font-bold'}`}>
                     <span>Desconto ({cupomAtivo.codigo}):</span>
                     <span>-R$ {valorDesconto.toFixed(2).replace('.', ',')}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span>Taxa de Entrega:</span>
-                  <span className="text-white font-medium">
+                  <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>
                     {frete > 0 ? `R$ ${frete.toFixed(2).replace('.', ',')}` : 'Selecione o bairro'}
                   </span>
                 </div>
-                <div className="flex justify-between text-base font-bold text-white pt-2 border-t border-white/10">
+                <div className={`flex justify-between text-base font-bold pt-2 border-t ${
+                  isDark ? 'border-white/10 text-white' : 'border-slate-200 text-slate-900'
+                }`}>
                   <span>Total:</span>
-                  <span className="text-[#00E5FF] font-display font-black text-xl">
+                  <span className={`font-display font-black text-xl ${
+                    isDark ? 'text-[#00E5FF]' : 'text-[#0284C7]'
+                  }`}>
                     R$ {totalGeral.toFixed(2).replace('.', ',')}
                   </span>
                 </div>

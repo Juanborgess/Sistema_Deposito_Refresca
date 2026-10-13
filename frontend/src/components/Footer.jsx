@@ -1,10 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Clock, ShieldCheck, Heart } from 'lucide-react';
+import { useThemeStore } from '../store/useThemeStore';
 
 const Footer = () => {
+  const { theme } = useThemeStore();
+  const isDark = theme === 'dark';
+
   return (
-    <footer className="bg-[#070B16] text-gray-400 border-t border-white/10 pt-16 pb-12">
+    <footer className={`${isDark ? 'bg-[#070B16] text-gray-400 border-white/10' : 'bg-slate-900 text-slate-300 border-slate-800'} border-t pt-16 pb-12 transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           
