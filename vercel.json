@@ -12,28 +12,28 @@
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/:path*",
       "destination": {
         "service": "api",
-        "path": "/api/$1"
+        "path": "/api/:path*"
       }
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/:dir*/:file.:ext",
       "destination": {
         "service": "frontend",
-        "path": "/assets/$1"
+        "path": "/:dir*/:file.:ext"
       }
     },
     {
-      "source": "/(.*\\.(?:ico|png|jpg|jpeg|svg|webp|json|txt|xml|mp3|wav|ogg))",
+      "source": "/:file.:ext",
       "destination": {
         "service": "frontend",
-        "path": "/$1"
+        "path": "/:file.:ext"
       }
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": {
         "service": "frontend",
         "path": "/index.html"
