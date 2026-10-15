@@ -14,29 +14,13 @@
     {
       "source": "/api/:path*",
       "destination": {
-        "service": "api",
-        "path": "/api/:path*"
+        "service": "api"
       }
     },
     {
-      "source": "/:dir*/:file.:ext",
+      "source": "/(.*)",
       "destination": {
-        "service": "frontend",
-        "path": "/:dir*/:file.:ext"
-      }
-    },
-    {
-      "source": "/:file.:ext",
-      "destination": {
-        "service": "frontend",
-        "path": "/:file.:ext"
-      }
-    },
-    {
-      "source": "/:path*",
-      "destination": {
-        "service": "frontend",
-        "path": "/index.html"
+        "service": "frontend"
       }
     }
   ]
