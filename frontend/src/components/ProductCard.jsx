@@ -1,13 +1,14 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 import { useThemeStore } from '../store/useThemeStore';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, priority = false }) => {
   const cardRef = useRef(null);
   const navigate = useNavigate();
   const { theme } = useThemeStore();
   const isDark = theme === 'dark';
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Efeito Lanterna (Flashlight) no hover
   const handleMouseMove = (e) => {
@@ -56,12 +57,24 @@ const ProductCard = ({ product }) => {
             {product.badge}
           </div>
         )}
+
+        {/* Skeleton Shimmer enquanto a imagem carrega */}
+        {!isLoaded && (
+          <div className={`absolute inset-4 rounded-2xl animate-pulse ${
+            isDark ? 'bg-white/5' : 'bg-slate-200/50'
+          }`} />
+        )}
         
         <img 
           src={product.imagem_url || '/logo_refresca.png'} 
           alt={product.nome}
-          className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 relative z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)]"
-          loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+          className={`w-full h-full object-contain group-hover:scale-110 transition-all duration-500 relative z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] ${
+            isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
         />
         
         {/* Glow sutil atrás da imagem */}

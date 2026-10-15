@@ -258,7 +258,7 @@ const ProductGrid = () => {
         ) : (
           /* Categoria Sections */
           <div className="flex flex-col gap-12 md:gap-20">
-            {categories.map(category => (
+            {categories.map((category, catIndex) => (
               <div key={category} id={`category-${category}`} className="scroll-mt-[200px]">
                 <div className="flex items-center gap-4 mb-6">
                   <h3 className={`text-xl md:text-3xl font-black font-display uppercase tracking-wider ${
@@ -272,8 +272,8 @@ const ProductGrid = () => {
                 </div>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                  {groupedProducts[category].map(product => (
-                    <ProductCard key={product.id} product={product} />
+                  {groupedProducts[category].map((product, pIndex) => (
+                    <ProductCard key={product.id} product={product} priority={catIndex === 0 && pIndex < 4} />
                   ))}
                 </div>
               </div>

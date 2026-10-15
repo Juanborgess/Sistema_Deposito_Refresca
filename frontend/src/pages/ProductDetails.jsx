@@ -18,6 +18,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('descricao');
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
   
   // Variações e adicionais
   const [selectedVariations, setSelectedVariations] = useState({});
@@ -219,10 +220,23 @@ const ProductDetails = () => {
                 </div>
               )}
               
+              {/* Skeleton Shimmer enquanto a imagem carrega */}
+              {!isImgLoaded && (
+                <div className={`absolute inset-8 rounded-2xl animate-pulse ${
+                  isDark ? 'bg-white/5' : 'bg-slate-200/50'
+                }`} />
+              )}
+
               <img 
                 src={product.imagem} 
                 alt={product.nome}
-                className="w-full h-full object-contain relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-transform duration-700 group-hover:scale-105"
+                onLoad={() => setIsImgLoaded(true)}
+                className={`w-full h-full object-contain relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-105 ${
+                  isImgLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>

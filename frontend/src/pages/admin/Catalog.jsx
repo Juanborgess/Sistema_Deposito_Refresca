@@ -115,13 +115,75 @@ const Catalog = () => {
     }
   };
 
+  const compressImage = async (file) => {
+    if (file.type === 'image/svg+xml' || file.size < 60 * 1024) return file;
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_SIZE = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_SIZE) {
+              height = Math.round((height * MAX_SIZE) / width);
+              width = MAX_SIZE;
+            }
+          } else {
+            if (height > MAX_SIZE) {
+              width = Math.round((width * MAX_SIZE) / height);
+              height = MAX_SIZE;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob && blob.size < file.size) {
+                const compressedFile = new File([blob], `${Date.now()}_produto.webp`, {
+                  type: 'image/webp',
+                  lastModified: Date.now()
+                });
+                resolve(compressedFile);
+              } else {
+                resolve(file);
+              }
+            },
+            'image/webp',
+            0.85
+          );
+        };
+        img.onerror = () => resolve(file);
+      };
+      reader.onerror = () => resolve(file);
+    });
+  };
+
   const uploadImage = async (file) => {
-    const fileExt = file.name.split('.').pop();
+    // Comprime e converte para WebP leve antes de subir para o Supabase
+    const optimizedFile = await compressImage(file);
+    const fileExt = optimizedFile.name.split('.').pop();
     const fileName = `${Date.now()}_produto.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from('produtos')
-      .upload(fileName, file);
+      .upload(fileName, optimizedFile, {
+        contentType: optimizedFile.type || 'image/webp',
+        cacheControl: '31536000',
+        upsert: false
+      });
 
     if (uploadError) throw uploadError;
 
