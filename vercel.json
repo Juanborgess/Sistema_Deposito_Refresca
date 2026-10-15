@@ -19,10 +19,24 @@
       }
     },
     {
-      "source": "/(.*)",
+      "source": "/assets/(.*)",
+      "destination": {
+        "service": "frontend",
+        "path": "/assets/$1"
+      }
+    },
+    {
+      "source": "/(.*\\.(?:ico|png|jpg|jpeg|svg|webp|json|txt|xml|mp3|wav|ogg))",
       "destination": {
         "service": "frontend",
         "path": "/$1"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "frontend",
+        "path": "/index.html"
       }
     }
   ]
