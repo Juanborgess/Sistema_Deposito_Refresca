@@ -62,6 +62,7 @@ const Catalog = () => {
   const [valorPromocional, setValorPromocional] = useState('');
   const [badge, setBadge] = useState('');
   const [imagemFile, setImagemFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
   const [variacoes, setVariacoes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -145,6 +146,8 @@ const Catalog = () => {
 
       if (imagemFile) {
         imagem_url = await uploadImage(imagemFile);
+      } else if (!previewUrl) {
+        imagem_url = '/logo_refresca.png';
       }
 
       const payload = {
@@ -242,6 +245,18 @@ const Catalog = () => {
     }));
   };
 
+  const handleImageSelect = (file) => {
+    if (!file) return;
+    setImagemFile(file);
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  const handleRemoveImage = () => {
+    setImagemFile(null);
+    setPreviewUrl('');
+  };
+
   const handlePaste = (e) => {
     const items = e.clipboardData?.items;
     if (items) {
@@ -249,7 +264,7 @@ const Catalog = () => {
         if (items[i].type.indexOf('image') !== -1) {
           const file = items[i].getAsFile();
           if (file) {
-            setImagemFile(file);
+            handleImageSelect(file);
             toast.success('Imagem colada da área de transferência!', { icon: '📸' });
           }
           break;
@@ -267,6 +282,7 @@ const Catalog = () => {
     setValorPromocional(item && item.valor_promocional ? String(item.valor_promocional) : '');
     setBadge(item ? item.badge || '' : '');
     setImagemFile(null);
+    setPreviewUrl(item && item.imagem_url ? item.imagem_url : '');
     setVariacoes(item && item.variacoes ? JSON.parse(JSON.stringify(item.variacoes)) : []);
     setIsModalOpen(true);
   };
@@ -274,6 +290,8 @@ const Catalog = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditItem(null);
+    setPreviewUrl('');
+    setImagemFile(null);
   };
 
   // Funções de Categoria
@@ -810,17 +828,74 @@ const Catalog = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-1">Foto do Produto</label>
-                <input 
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setImagemFile(e.target.files[0])}
-                  className="w-full bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00E5FF] file:text-[#0A0F1D]"
-                />
-                {imagemFile && (
-                  <p className="text-[#00E5FF] text-[10px] mt-2 font-bold flex items-center gap-1">
-                    <CheckCircle size={12} /> Imagem carregada e pronta para envio!
-                  </p>
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Foto do Produto</label>
+                
+                {previewUrl ? (
+                  <div className="flex items-center gap-4 bg-[#0A0F1D] border border-white/10 rounded-2xl p-3">
+                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 group">
+                      <img 
+                        src={previewUrl} 
+                        alt="Pré-visualização do produto" 
+                        className="w-full h-full object-contain p-1"
+                        onError={(e) => { e.target.src = '/logo_refresca.png'; }}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        title="Remover imagem"
+                        className="absolute top-1 right-1 p-1 bg-red-500/80 hover:bg-red-500 text-white rounded-lg transition-colors shadow-md"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-center gap-2">
+                        {imagemFile ? (
+                          <span className="text-[11px] font-bold text-[#00E5FF] bg-[#00E5FF]/10 px-2.5 py-1 rounded-full flex items-center gap-1 border border-[#00E5FF]/20">
+                            <CheckCircle size={12} /> Nova foto selecionada
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-bold text-gray-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
+                            Foto cadastrada
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-[11px] text-gray-400 leading-tight">
+                        Para trocar, escolha outro arquivo ou pressione <strong>CTRL+V</strong>.
+                      </p>
+
+                      <input 
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            handleImageSelect(e.target.files[0]);
+                          }
+                        }}
+                        className="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-bold file:bg-[#00E5FF]/15 file:text-[#00E5FF] hover:file:bg-[#00E5FF]/25 file:transition-colors file:cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <input 
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          handleImageSelect(e.target.files[0]);
+                        }
+                      }}
+                      className="w-full bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00E5FF] file:text-[#0A0F1D] file:cursor-pointer"
+                    />
+                    <div className="bg-[#0A0F1D]/60 border border-dashed border-white/10 rounded-xl p-3 text-center">
+                      <p className="text-[11px] text-gray-500">
+                        Nenhuma foto adicionada. Escolha um arquivo acima ou simplesmente <strong>cole com CTRL+V</strong> aqui na janela.
+                      </p>
+                    </div>
+                  </div>
                 )}
               </div>
 
