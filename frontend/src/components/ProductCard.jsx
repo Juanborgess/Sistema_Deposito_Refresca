@@ -69,6 +69,12 @@ const ProductCard = ({ product, priority = false }) => {
           src={product.imagem_url || '/logo_refresca.png'} 
           alt={product.nome}
           onLoad={() => setIsLoaded(true)}
+          onError={(e) => {
+            if (e.target.src !== window.location.origin + '/logo_refresca.png') {
+              e.target.src = '/logo_refresca.png';
+            }
+            setIsLoaded(true);
+          }}
           className={`w-full h-full object-contain group-hover:scale-110 transition-all duration-500 relative z-10 drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] ${
             isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}

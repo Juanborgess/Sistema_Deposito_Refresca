@@ -1,0 +1,116 @@
+{
+	"pedidos": [
+		{
+			"id": "608f5439-1843-4fb6-8258-bc7a7f86d436",
+			"codigo_pedido": 13,
+			"cliente_nome": "Jonathan Antônio ",
+			"cliente_telefone": "21979375945",
+			"bairro": "Barra da Tijuca",
+			"endereco_completo": "Rua São Tillon - 141 (CEP: 22640-050)",
+			"metodo_pagamento": "PIX",
+			"subtotal": 195,
+			"taxa_entrega": 10,
+			"total": 205,
+			"cupom_aplicado": null,
+			"is_agendado": false,
+			"status": "ENTREGUE",
+			"motoboy_id": null,
+			"created_at": "2026-10-15T15:48:37.40198+00:00"
+		},
+		{
+			"id": "d4e961e2-38c0-49f1-a958-a2748fe19b48",
+			"codigo_pedido": 14,
+			"cliente_nome": "Sonia maria",
+			"cliente_telefone": "21983930222",
+			"bairro": "Barra da Tijuca",
+			"endereco_completo": "Rua lucio costa 3360 - Bloco 8  sala de festas (apto 1002) (CEP: )",
+			"metodo_pagamento": "PIX",
+			"subtotal": 60,
+			"taxa_entrega": 10,
+			"total": 70,
+			"cupom_aplicado": null,
+			"is_agendado": false,
+			"status": "ENTREGUE",
+			"motoboy_id": null,
+			"created_at": "2026-10-18T17:15:37.14419+00:00"
+		}
+	],
+	"itens_pedido": [
+		{
+			"id": "56f2b8c9-0c8e-40cb-acc0-0f2d53fcfb6c",
+			"pedido_id": "608f5439-1843-4fb6-8258-bc7a7f86d436",
+			"produto_id": "991b7d9d-93db-4b00-ba2d-76d4bc92ba00",
+			"quantidade": 1,
+			"preco_unitario": 195,
+			"variacoes": [],
+			"observacao": null
+		},
+		{
+			"id": "d24f7e20-a432-4468-935c-20f68c181c90",
+			"pedido_id": "d4e961e2-38c0-49f1-a958-a2748fe19b48",
+			"produto_id": "3fca7c09-de70-4961-bc3a-f23fffceb684",
+			"quantidade": 2,
+			"preco_unitario": 30,
+			"variacoes": [],
+			"observacao": null
+		}
+	],
+	"configuracoes_loja": [
+		{
+			"id": 1,
+			"horario_abertura": "08:00:00",
+			"horario_fechamento": "23:00:00",
+			"dias_funcionamento": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6
+			],
+			"chave_pix": "21992962260",
+			"banner_primeira_compra_ativo": true,
+			"texto_banner": "Peça sua bebida trincando de gelada com entrega rápida!"
+		}
+	],
+	"taxas_frete": [
+		{
+			"id": "00c6b99c-8a71-4df3-aeff-4788c0e2be3b",
+			"bairro": "Barra da Tijuca",
+			"valor": 10
+		},
+		{
+			"id": "c207a91b-9dd9-4709-baad-74f2621ea768",
+			"bairro": "Gávea",
+			"valor": 12
+		},
+		{
+			"id": "8fdc3873-5729-40f4-b565-c8d8abc2b293",
+			"bairro": "Recreio",
+			"valor": 20
+		},
+		{
+			"id": "3185d699-d045-4b33-8d93-81ed73b07d09",
+			"bairro": "Penisula",
+			"valor": 15
+		},
+		{
+			"id": "086ead18-fd5b-405c-a77f-7dc5fe4dc5ae",
+			"bairro": "Leblon",
+			"valor": 15
+		},
+		{
+			"id": "43c5274a-9de1-4b80-8bd8-d9eefcf1eb15",
+			"bairro": "São Conrado",
+			"valor": 12
+		},
+		{
+			"id": "4ba243cd-e3cc-406e-b4a3-946ced900f91",
+			"bairro": "Ipanema",
+			"valor": 15
+		}
+	],
+	"motoboys": [],
+	"cupons": []
+}

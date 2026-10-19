@@ -231,6 +231,12 @@ const ProductDetails = () => {
                 src={product.imagem} 
                 alt={product.nome}
                 onLoad={() => setIsImgLoaded(true)}
+                onError={(e) => {
+                  if (e.target.src !== window.location.origin + '/logo_refresca.png') {
+                    e.target.src = '/logo_refresca.png';
+                  }
+                  setIsImgLoaded(true);
+                }}
                 className={`w-full h-full object-contain relative z-10 drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all duration-500 group-hover:scale-105 ${
                   isImgLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
                 }`}
