@@ -46,3 +46,7 @@ REFRESCA_MASTER_PLAN.txt
 products_dump.json
 DE_PARA_IFOOD.md
 CATALOGO_ATUAL_SISTEMA.md
+
+# Fotos locais resgatadas
+api/fotos_resgatadas/
+api/backup_fotos/

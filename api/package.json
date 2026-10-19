@@ -7,11 +7,18 @@
     "start": "node index.js",
     "dev": "node --watch index.js"
   },
-  "keywords": ["refresca", "bebidas", "delivery", "supabase", "express"],
+  "keywords": [
+    "refresca",
+    "bebidas",
+    "delivery",
+    "supabase",
+    "express"
+  ],
   "author": "Refresca Bebidas",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1152.0",
     "@supabase/supabase-js": "^2.49.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
