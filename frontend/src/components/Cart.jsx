@@ -457,6 +457,7 @@ const Cart = () => {
                       <img 
                         src={item.imagem || item.imagem_url || '/logo_refresca.png'} 
                         alt={item.nome}
+                        onError={(e) => { e.target.src = '/logo_refresca.png'; }}
                         className="w-full h-full object-contain"
                       />
                     </div>

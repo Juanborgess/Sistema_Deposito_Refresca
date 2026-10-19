@@ -249,6 +249,7 @@ app.post('/api/products', authMiddleware, upload.single('imagem'), async (req, r
         .from('produtos')
         .upload(fileName, file.buffer, {
           contentType: file.mimetype,
+          cacheControl: '31536000',
           upsert: false
         });
 

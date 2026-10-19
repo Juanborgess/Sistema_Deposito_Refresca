@@ -65,6 +65,43 @@ const Catalog = () => {
   const [previewUrl, setPreviewUrl] = useState('');
   const [variacoes, setVariacoes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [photoFilter, setPhotoFilter] = useState('all'); // 'all', 'pending', 'completed'
+
+  // Helper para verificar se produto tem foto real salva no Supabase novo
+  const hasValidPhoto = (p) => {
+    return Boolean(
+      p?.imagem_url &&
+      p.imagem_url !== '/logo_refresca.png' &&
+      !p.imagem_url.includes('zsfelllqiwunfftybbjc') &&
+      p.imagem_url.includes('/storage/v1/object/public/produtos/')
+    );
+  };
+
+  // Listener global de Ctrl + V quando o modal está aberto
+  useEffect(() => {
+    if (!isModalOpen) return;
+
+    const onGlobalPaste = (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          e.preventDefault();
+          const file = items[i].getAsFile();
+          if (file) {
+            handleImageSelect(file);
+            toast.success('Foto colada da área de transferência!', { icon: '✨' });
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('paste', onGlobalPaste);
+    return () => window.removeEventListener('paste', onGlobalPaste);
+  }, [isModalOpen]);
 
   useEffect(() => {
     fetchData();
@@ -98,15 +135,36 @@ const Catalog = () => {
     }
   };
 
+  const deleteStorageImage = async (url) => {
+    if (!url || typeof url !== 'string') return;
+    try {
+      if (url.includes('/storage/v1/object/public/produtos/')) {
+        const parts = url.split('/storage/v1/object/public/produtos/');
+        if (parts[1]) {
+          const filePath = decodeURIComponent(parts[1].split('?')[0]);
+          if (filePath) {
+            await supabase.storage.from('produtos').remove([filePath]);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Erro ao remover imagem antiga do storage:', err);
+    }
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm('Tem certeza que deseja excluir este produto?')) return;
 
     try {
+      const prod = produtos.find(p => p.id === id);
       const { error } = await supabase.from('produtos').delete().eq('id', id);
       if (error) {
         await supabase.from('produtos').update({ ativo: false }).eq('id', id);
         toast('Produto desativado (possui histórico de pedidos).', { icon: '⚠️' });
       } else {
+        if (prod?.imagem_url && prod.imagem_url !== '/logo_refresca.png') {
+          deleteStorageImage(prod.imagem_url);
+        }
         toast.success('Produto excluído com sucesso.');
       }
       fetchData();
@@ -116,7 +174,7 @@ const Catalog = () => {
   };
 
   const compressImage = async (file) => {
-    if (file.type === 'image/svg+xml' || file.size < 60 * 1024) return file;
+    if (file.type === 'image/svg+xml') return file;
 
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -151,8 +209,8 @@ const Catalog = () => {
 
           canvas.toBlob(
             (blob) => {
-              if (blob && blob.size < file.size) {
-                const compressedFile = new File([blob], `${Date.now()}_produto.webp`, {
+              if (blob) {
+                const compressedFile = new File([blob], `prod_${Date.now()}.webp`, {
                   type: 'image/webp',
                   lastModified: Date.now()
                 });
@@ -162,7 +220,7 @@ const Catalog = () => {
               }
             },
             'image/webp',
-            0.85
+            0.82
           );
         };
         img.onerror = () => resolve(file);
@@ -174,13 +232,13 @@ const Catalog = () => {
   const uploadImage = async (file) => {
     // Comprime e converte para WebP leve antes de subir para o Supabase
     const optimizedFile = await compressImage(file);
-    const fileExt = optimizedFile.name.split('.').pop();
-    const fileName = `${Date.now()}_produto.${fileExt}`;
+    const randomSuffix = Math.random().toString(36).substring(2, 8);
+    const fileName = `prod_${Date.now()}_${randomSuffix}.webp`;
 
     const { error: uploadError } = await supabase.storage
       .from('produtos')
       .upload(fileName, optimizedFile, {
-        contentType: optimizedFile.type || 'image/webp',
+        contentType: 'image/webp',
         cacheControl: '31536000',
         upsert: false
       });
@@ -194,8 +252,8 @@ const Catalog = () => {
     return data.publicUrl;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e, shouldOpenNext = false) => {
+    if (e && e.preventDefault) e.preventDefault();
     if (!categoria) {
       toast.error('Selecione uma categoria.');
       return;
@@ -207,8 +265,15 @@ const Catalog = () => {
       let imagem_url = editItem ? editItem.imagem_url : '';
 
       if (imagemFile) {
+        const oldImage = editItem?.imagem_url;
         imagem_url = await uploadImage(imagemFile);
-      } else if (!previewUrl) {
+        if (oldImage && oldImage !== imagem_url && oldImage !== '/logo_refresca.png') {
+          deleteStorageImage(oldImage);
+        }
+      } else if (!previewUrl || previewUrl === '/logo_refresca.png') {
+        if (editItem?.imagem_url && editItem.imagem_url !== '/logo_refresca.png') {
+          deleteStorageImage(editItem.imagem_url);
+        }
         imagem_url = '/logo_refresca.png';
       }
 
@@ -224,17 +289,39 @@ const Catalog = () => {
         variacoes: variacoes
       };
 
+      let savedId = editItem?.id;
+
       if (editItem) {
         const { error } = await supabase.from('produtos').update(payload).eq('id', editItem.id);
         if (error) throw error;
-        toast.success('Produto atualizado com sucesso!');
+        toast.success(`"${nome}" atualizado!`);
       } else {
-        const { error } = await supabase.from('produtos').insert([{ ...payload, ordem: produtos.length }]);
+        const { data: inserted, error } = await supabase.from('produtos').insert([{ ...payload, ordem: produtos.length }]).select().single();
         if (error) throw error;
-        toast.success('Produto cadastrado com sucesso!');
+        savedId = inserted?.id;
+        toast.success(`"${nome}" cadastrado!`);
       }
 
-      closeModal();
+      const updatedList = produtos.map(p => p.id === savedId ? { ...p, ...payload } : p);
+      setProdutos(updatedList);
+
+      if (shouldOpenNext) {
+        const currentIndex = updatedList.findIndex(p => p.id === savedId);
+        const nextPending = 
+          updatedList.slice(currentIndex + 1).find(p => !hasValidPhoto(p)) ||
+          updatedList.find(p => !hasValidPhoto(p) && p.id !== savedId);
+
+        if (nextPending) {
+          openModal(nextPending);
+          toast('Abrindo próximo produto pendente...', { icon: '➡️' });
+        } else {
+          closeModal();
+          toast.success('🎉 Todos os produtos já possuem fotos cadastradas!');
+        }
+      } else {
+        closeModal();
+      }
+
       fetchData();
     } catch (err) {
       toast.error('Erro ao salvar produto: ' + err.message);
@@ -480,21 +567,33 @@ const Catalog = () => {
 
   const normalizeString = (str) => str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
 
+  const totalProducts = produtos.length;
+  const completedPhotos = produtos.filter(hasValidPhoto).length;
+  const pendingPhotos = totalProducts - completedPhotos;
+  const progressPercent = totalProducts > 0 ? Math.round((completedPhotos / totalProducts) * 100) : 0;
+
+  const isSearchActive = search.trim().length > 0;
+  const isFilterActive = isSearchActive || photoFilter !== 'all';
+
   const filteredProdutos = produtos.filter((p) => {
     const term = normalizeString(search);
-    return normalizeString(p.nome).includes(term) || normalizeString(p.categoria).includes(term);
-  });
-  const isSearchActive = search.trim().length > 0;
+    const matchesSearch = !term || normalizeString(p.nome).includes(term) || normalizeString(p.categoria).includes(term);
+    if (!matchesSearch) return false;
 
-  // Group by category (showing ALL categories if not searching)
+    if (photoFilter === 'pending') return !hasValidPhoto(p);
+    if (photoFilter === 'completed') return hasValidPhoto(p);
+    return true;
+  });
+
+  // Group by category (showing ALL categories if not searching or filtering)
   const groupedProdutos = categorias.map(cat => ({
     id: cat.id,
     categoria: cat.nome,
     rawCategory: cat,
-    produtos: (isSearchActive ? filteredProdutos : produtos)
+    produtos: (isFilterActive ? filteredProdutos : produtos)
       .filter(p => p.categoria === cat.nome)
       .sort((a,b) => a.ordem - b.ordem)
-  })).filter(g => !isSearchActive || g.produtos.length > 0);
+  })).filter(g => !isFilterActive || g.produtos.length > 0);
 
   return (
     <div className="space-y-6">
@@ -520,6 +619,66 @@ const Catalog = () => {
             className="bg-[#00E5FF] text-[#0A0F1D] px-4 py-3 rounded-xl font-bold uppercase text-[10px] sm:text-xs tracking-wider flex items-center gap-2 hover:bg-cyan-400 shadow-lg shadow-cyan-500/20"
           >
             <PackagePlus size={16} /> Novo Produto
+          </button>
+        </div>
+      </div>
+
+      {/* Dashboard de Progresso das Fotos */}
+      <div className="bg-[#101935] border border-white/5 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-xl">
+        <div className="flex-1">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
+                <ImageIcon size={14} className="text-[#00E5FF]" /> Fotos no Banco Novo
+              </span>
+              <span className="text-[10px] font-black text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-0.5 rounded-full border border-[#00E5FF]/20">
+                {completedPhotos} de {totalProducts} ({progressPercent}%)
+              </span>
+            </div>
+            <span className="text-[11px] text-gray-400 font-medium">
+              {pendingPhotos === 0 ? '🎉 Todas as fotos cadastradas!' : `${pendingPhotos} pendente(s)`}
+            </span>
+          </div>
+          <div className="w-full bg-[#070B16] h-2.5 rounded-full overflow-hidden border border-white/5">
+            <div 
+              className="bg-gradient-to-r from-cyan-500 to-[#00E5FF] h-full transition-all duration-500 rounded-full"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setPhotoFilter('all')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+              photoFilter === 'all'
+                ? 'bg-[#00E5FF] text-[#0A0F1D] shadow-md shadow-[#00E5FF]/20'
+                : 'bg-[#070B16] text-gray-400 hover:text-white border border-white/5'
+            }`}
+          >
+            Todos ({totalProducts})
+          </button>
+          <button
+            onClick={() => setPhotoFilter('pending')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+              photoFilter === 'pending'
+                ? 'bg-amber-400 text-[#0A0F1D] shadow-md shadow-amber-400/20'
+                : 'bg-[#070B16] text-gray-400 hover:text-white border border-white/5'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            Pendentes ({pendingPhotos})
+          </button>
+          <button
+            onClick={() => setPhotoFilter('completed')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+              photoFilter === 'completed'
+                ? 'bg-emerald-400 text-[#0A0F1D] shadow-md shadow-emerald-400/20'
+                : 'bg-[#070B16] text-gray-400 hover:text-white border border-white/5'
+            }`}
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            Com Foto ({completedPhotos})
           </button>
         </div>
       </div>
@@ -656,12 +815,51 @@ const Catalog = () => {
                                             <GripVertical size={20} />
                                           </div>
 
-                                          <div className="w-12 h-12 rounded-xl bg-[#070B16] flex items-center justify-center p-1 shrink-0 border border-white/5">
-                                            <img src={produto.imagem_url || '/logo_refresca.png'} alt={produto.nome} className="w-full h-full object-contain" />
+                                          <div 
+                                            onClick={() => openModal(produto)}
+                                            className="w-12 h-12 rounded-xl bg-[#070B16] flex items-center justify-center p-1 shrink-0 border border-white/5 relative cursor-pointer hover:border-[#00E5FF]/50 transition-all group/thumb"
+                                            title="Clique para editar ou alterar foto"
+                                          >
+                                            <img 
+                                              src={produto.imagem_url || '/logo_refresca.png'} 
+                                              alt={produto.nome} 
+                                              className="w-full h-full object-contain"
+                                              onError={(e) => { e.target.src = '/logo_refresca.png'; }}
+                                            />
+                                            {hasValidPhoto(produto) ? (
+                                              <span 
+                                                className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#101935]" 
+                                                title="Foto salva e otimizada no Supabase" 
+                                              />
+                                            ) : (
+                                              <span 
+                                                className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-400 rounded-full border-2 border-[#101935]" 
+                                                title="Pendente de foto nova" 
+                                              />
+                                            )}
                                           </div>
 
                                           <div className="flex-1 min-w-0 pr-2">
-                                            <h4 className="text-sm font-bold text-white uppercase truncate">{produto.nome}</h4>
+                                            <div className="flex items-center gap-2">
+                                              <h4 
+                                                onClick={() => openModal(produto)}
+                                                className="text-sm font-bold text-white uppercase truncate cursor-pointer hover:text-[#00E5FF] transition-colors"
+                                              >
+                                                {produto.nome}
+                                              </h4>
+                                              {hasValidPhoto(produto) ? (
+                                                <span className="hidden sm:inline-flex text-[9px] font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                                                  Foto OK
+                                                </span>
+                                              ) : (
+                                                <span 
+                                                  onClick={() => openModal(produto)}
+                                                  className="cursor-pointer text-[9px] font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/20 transition-colors"
+                                                >
+                                                  + Add Foto
+                                                </span>
+                                              )}
+                                            </div>
                                             <div className="flex items-center gap-2 mt-1 md:hidden">
                                               {produto.valor_promocional ? (
                                                 <>
@@ -890,11 +1088,24 @@ const Catalog = () => {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Foto do Produto</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block">Foto do Produto</label>
+                  <span className="text-[10px] text-[#00E5FF] font-semibold bg-[#00E5FF]/10 px-2 py-0.5 rounded-full">
+                    Otimização WebP ultraleve ativa
+                  </span>
+                </div>
+
+                {/* Dica de Superprodutividade com Gemini */}
+                <div className="mb-3 p-3 bg-gradient-to-r from-[#00E5FF]/10 to-indigo-500/10 border border-[#00E5FF]/20 rounded-xl flex items-center gap-2.5">
+                  <span className="text-lg shrink-0">⚡</span>
+                  <p className="text-[11px] text-gray-300 leading-snug">
+                    <strong>Dica rápida:</strong> No Gemini, clique com o botão direito na imagem gerada e selecione <strong>"Copiar imagem"</strong>. Depois, aperte <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-cyan-300 font-bold">CTRL + V</kbd> em qualquer lugar desta tela!
+                  </p>
+                </div>
                 
-                {previewUrl ? (
+                {previewUrl && previewUrl !== '/logo_refresca.png' ? (
                   <div className="flex items-center gap-4 bg-[#0A0F1D] border border-white/10 rounded-2xl p-3">
-                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 group">
+                    <div className="relative w-24 h-24 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 group">
                       <img 
                         src={previewUrl} 
                         alt="Pré-visualização do produto" 
@@ -915,17 +1126,17 @@ const Catalog = () => {
                       <div className="flex items-center gap-2">
                         {imagemFile ? (
                           <span className="text-[11px] font-bold text-[#00E5FF] bg-[#00E5FF]/10 px-2.5 py-1 rounded-full flex items-center gap-1 border border-[#00E5FF]/20">
-                            <CheckCircle size={12} /> Nova foto selecionada
+                            <CheckCircle size={12} /> Nova foto selecionada (~35 KB WebP)
                           </span>
                         ) : (
-                          <span className="text-[11px] font-bold text-gray-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-                            Foto cadastrada
+                          <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1">
+                            <CheckCircle size={12} /> Foto salva no Supabase
                           </span>
                         )}
                       </div>
 
                       <p className="text-[11px] text-gray-400 leading-tight">
-                        Para trocar, escolha outro arquivo ou pressione <strong>CTRL+V</strong>.
+                        Para trocar por outra, aperte <kbd className="px-1 py-0.5 bg-white/10 rounded font-mono text-cyan-300 font-bold">CTRL+V</kbd>, arraste o arquivo ou escolha abaixo:
                       </p>
 
                       <input 
@@ -941,22 +1152,46 @@ const Catalog = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    <input 
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          handleImageSelect(e.target.files[0]);
-                        }
-                      }}
-                      className="w-full bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#00E5FF] file:text-[#0A0F1D] file:cursor-pointer"
-                    />
-                    <div className="bg-[#0A0F1D]/60 border border-dashed border-white/10 rounded-xl p-3 text-center">
-                      <p className="text-[11px] text-gray-500">
-                        Nenhuma foto adicionada. Escolha um arquivo acima ou simplesmente <strong>cole com CTRL+V</strong> aqui na janela.
-                      </p>
+                  <div 
+                    onDragOver={(e) => { e.preventDefault(); setIsDraggingOver(true); }}
+                    onDragLeave={() => setIsDraggingOver(false)}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setIsDraggingOver(false);
+                      const file = e.dataTransfer?.files?.[0];
+                      if (file && file.type.startsWith('image/')) {
+                        handleImageSelect(file);
+                        toast.success('Foto carregada!');
+                      }
+                    }}
+                    className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all ${
+                      isDraggingOver 
+                        ? 'border-[#00E5FF] bg-[#00E5FF]/10' 
+                        : 'border-white/10 bg-[#0A0F1D]/60 hover:border-white/20'
+                    }`}
+                  >
+                    <div className="w-12 h-12 mx-auto rounded-full bg-white/5 flex items-center justify-center text-gray-400 mb-2">
+                      <Upload size={20} />
                     </div>
+                    <p className="text-xs font-bold text-white mb-1">
+                      Arraste uma foto ou pressione <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-cyan-300 font-bold">CTRL + V</kbd>
+                    </p>
+                    <p className="text-[11px] text-gray-400 mb-3">
+                      Ou escolha um arquivo do seu computador
+                    </p>
+                    <label className="inline-block cursor-pointer bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors">
+                      Escolher Arquivo
+                      <input 
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            handleImageSelect(e.target.files[0]);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 )}
               </div>
@@ -1100,20 +1335,29 @@ const Catalog = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-6 mt-4 border-t border-white/10">
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-6 mt-4 border-t border-white/10">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 bg-transparent border border-white/10 text-gray-400 py-3 rounded-xl text-xs font-bold uppercase hover:bg-white/5"
+                  className="sm:w-28 bg-transparent border border-white/10 text-gray-400 py-3 rounded-xl text-xs font-bold uppercase hover:bg-white/5 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={(e) => handleSubmit(e, true)}
+                  className="flex-1 bg-gradient-to-r from-emerald-400 to-teal-400 text-[#0A0F1D] py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center gap-1.5"
+                  title="Salva este produto e abre o próximo produto sem foto automaticamente"
+                >
+                  {isSubmitting ? 'Salvando...' : 'Salvar e Próximo Pendente ➔'}
+                </button>
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 bg-[#00E5FF] text-[#0A0F1D] py-3 rounded-xl text-xs font-bold uppercase shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+                  className="flex-1 bg-[#00E5FF] text-[#0A0F1D] py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-cyan-500/20 hover:bg-cyan-400 disabled:opacity-50 transition-all flex items-center justify-center gap-1.5"
                 >
-                  {isSubmitting ? 'Salvando...' : 'Salvar Produto'}
+                  {isSubmitting ? 'Salvando...' : (editItem ? 'Salvar e Fechar' : 'Cadastrar Produto')}
                 </button>
               </div>
             </form>

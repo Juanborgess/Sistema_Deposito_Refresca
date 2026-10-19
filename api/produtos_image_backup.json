@@ -1,0 +1,1358 @@
+[
+  {
+    "id": "24133167-4c22-4f83-a074-777b48de81ed",
+    "nome": "Cerveja Stella Artois Long Neck 330ml (24 garrafas)",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512686475_produto.jpg"
+  },
+  {
+    "id": "991b7d9d-93db-4b00-ba2d-76d4bc92ba00",
+    "nome": "Mala com 24 unidades cerveja Corona gelada",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512760387_produto.jpg"
+  },
+  {
+    "id": "3c910412-de0d-4657-a2c2-76531ffabe1a",
+    "nome": "Mala de haineken com 24 unidades long neck gelada",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512792155_produto.jpg"
+  },
+  {
+    "id": "2603e757-c44f-4e99-8850-1146fd81fd3d",
+    "nome": "Mala de haineken ultimate  com 24 unidades long neck gelada",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792331783470_produto.jpeg"
+  },
+  {
+    "id": "e3996ebe-1cb0-49ad-a1ba-93d1a437a921",
+    "nome": "Packs 12 unidades cerveja Antarctica latão",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512878099_produto.jpg"
+  },
+  {
+    "id": "350f49ce-5459-4b42-b94b-ba847bd6b99d",
+    "nome": "Packs com 12 unidades cerveja Brahma latão",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791570935709_produto.png"
+  },
+  {
+    "id": "20d180bb-dbf4-47b2-930e-73c6dd6cbff2",
+    "nome": "Packs com 12 unidades cerveja haineken latão",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571022213_produto.png"
+  },
+  {
+    "id": "ccb15bee-e6c5-491a-908d-9ebd81cfae75",
+    "nome": "Whisky Ballantines Sunshine Abacaxi 700ml",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502094008_produto.jpg"
+  },
+  {
+    "id": "2b06cdcd-4f48-4a6d-9a3a-e68c3e24409c",
+    "nome": "Whisky Johnnie Walker Red Label 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502753646_produto.jpg"
+  },
+  {
+    "id": "15df29bf-7aee-4f54-a43e-69990fe56a62",
+    "nome": "Whisky Jack Daniels Maçã Verde 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502848136_produto.jpg"
+  },
+  {
+    "id": "563e6d5e-6702-4f90-922e-ff2fb1fb67ea",
+    "nome": "Chivas Regal Extra 13 anos whisky escocês 750ml",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502945050_produto.jpg"
+  },
+  {
+    "id": "bc170f07-ca9a-4df6-b91d-dda483b4fedd",
+    "nome": "Whisky Escocês 12 Anos 1 Litro Chivas Regal",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557542266_produto.png"
+  },
+  {
+    "id": "a89fa9bb-96ee-44a4-b916-dc9ab21e6d6f",
+    "nome": "Whisky Americano Old No. 7 Jack Daniels 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791503049175_produto.jpg"
+  },
+  {
+    "id": "bfe7bc60-48ed-4d47-8768-cd97da1c6865",
+    "nome": "Combo Black Label 1 litro + 4 Red Bull + 4 gelo de coco",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791503122074_produto.jpg"
+  },
+  {
+    "id": "c3eb65c8-70ef-4abe-9353-d26d0a9c0c87",
+    "nome": "Coca cola 2 litros",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509509442_produto.jpg"
+  },
+  {
+    "id": "9102346d-71f2-45df-9add-217ee466e1cc",
+    "nome": "Fanta laranja 2 litros gelada",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509697186_produto.jpg"
+  },
+  {
+    "id": "839cdd32-14ee-485e-aba2-512821d20d09",
+    "nome": "Fanta uva 2 litros gelada",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509649267_produto.jpg"
+  },
+  {
+    "id": "b6966ffb-f090-4b64-bf3a-972f66dc80cc",
+    "nome": "Suco Dell vale laranja 1/5",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509941403_produto.jpg"
+  },
+  {
+    "id": "addd3fd8-180d-45b4-9c28-40e7a94eb118",
+    "nome": "Suco Dell vale limão 1/5 gelado",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509972398_produto.jpg"
+  },
+  {
+    "id": "68ff3a03-d6fb-4182-a8ae-182d2083182b",
+    "nome": "Suco Dell vale uva 1/5 gelado",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510045874_produto.jpg"
+  },
+  {
+    "id": "3513da6b-027a-470c-86f3-a1db01cda84f",
+    "nome": "Suco Dell valle lata sabor manga 290 ml gelado",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510081643_produto.jpg"
+  },
+  {
+    "id": "fc0570b8-7558-461a-acf8-d43723821ee6",
+    "nome": "Suco Dell valle lata sabor pêssego 290 ml gelado",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510126650_produto.jpg"
+  },
+  {
+    "id": "90081ab0-301c-4a8e-b3a1-13bd45eb31e6",
+    "nome": "Coca cola lata 350 ml",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510190522_produto.jpg"
+  },
+  {
+    "id": "e2303d0f-5aa3-460e-a739-1bb3d4131e48",
+    "nome": "Coca cola lata zero",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510217420_produto.jpg"
+  },
+  {
+    "id": "02192222-c9be-4903-9ae7-203961b8593e",
+    "nome": "Guaraná Antarctica lata",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510306783_produto.jpg"
+  },
+  {
+    "id": "94325bfc-a627-472b-8eed-71eb34bc07cc",
+    "nome": "Sukita uva 350 ml",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510342634_produto.jpg"
+  },
+  {
+    "id": "92ecda40-7b80-4124-8389-3482aa8357bb",
+    "nome": "Guaravita 290 ml",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510382591_produto.jpg"
+  },
+  {
+    "id": "841db528-04bb-4a4c-89d4-f3f47eb19512",
+    "nome": "Energético Monster Energy Juice Mango Loco latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510423331_produto.jpg"
+  },
+  {
+    "id": "48064def-53d3-4b12-b912-ff66f689d8f5",
+    "nome": "Energético Red Bull Zero sem Açúcar 250ml",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510463219_produto.jpg"
+  },
+  {
+    "id": "a8ffecca-e6aa-472e-9d64-dfd951544ddb",
+    "nome": "Red Bull 250 ml",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510574242_produto.jpg"
+  },
+  {
+    "id": "e4685b4e-6042-4d7a-a083-c607601fb70f",
+    "nome": "Whisky Grand Old Parr 12 anos 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502175310_produto.jpg"
+  },
+  {
+    "id": "6281f22e-c633-4328-bfc4-39f9593c8f37",
+    "nome": "Combo red labell 1 litro + 4 Red Bull gelado 4 gelo de coco",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791554831932_produto.png"
+  },
+  {
+    "id": "6980de20-e6bc-42dd-8309-772bb76db82b",
+    "nome": "Combo wisck Ballantines 1 garrafa 4 redbull 4 gelo de coco",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791503248230_produto.jpg"
+  },
+  {
+    "id": "1f37fe4f-85b9-4dcb-995f-d023f1b47c73",
+    "nome": "Gelo Saborizado Melancia",
+    "categoria": "GELO E CARVÃO",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508480034_produto.jpg"
+  },
+  {
+    "id": "ff631895-2f1a-4a36-849d-0a729c4ec450",
+    "nome": "Licor Fino Cream & Marula Fruit Amarula Garrafa 750ml",
+    "categoria": "LICORES E APERITIVOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508616841_produto.jpg"
+  },
+  {
+    "id": "e9432606-4bfd-48e1-b516-bcc8b7610892",
+    "nome": "Licor Espanhol 43 tradicional 700ml",
+    "categoria": "LICORES E APERITIVOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572088060_produto.png"
+  },
+  {
+    "id": "d182fbd3-00ce-457b-b6a6-a868d5d2a404",
+    "nome": "Licor Bananinha Carioca 750ml",
+    "categoria": "LICORES E APERITIVOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572729764_produto.png"
+  },
+  {
+    "id": "973e93f2-7558-47f3-ba77-3c5eef94a9b0",
+    "nome": "Licor Reggiani Bananinha 920ml",
+    "categoria": "LICORES E APERITIVOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572396797_produto.png"
+  },
+  {
+    "id": "80fba952-7b16-4367-94df-9d6a04412315",
+    "nome": "Red Bull Melancia",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791510556983_produto.jpg"
+  },
+  {
+    "id": "bec407c6-d14e-4adb-b29f-f3fba428fcca",
+    "nome": "Red Bull tropical gelado",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572486301_produto.png"
+  },
+  {
+    "id": "60ad2870-a484-4d01-8007-30b6f29d9f4d",
+    "nome": "Energético Monster Energy latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571125972_produto.png"
+  },
+  {
+    "id": "bde7c30b-3921-4138-bb56-fba49547cbe2",
+    "nome": "Baly energético 2 litros sabor melancia",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572548829_produto.png"
+  },
+  {
+    "id": "8abf462b-d1f4-4b5e-b0aa-7d9efcf80bb8",
+    "nome": "Baly energético 2 litros sabor tradicional",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572604156_produto.png"
+  },
+  {
+    "id": "b1c577b8-84dd-4cfe-8726-1816f162c673",
+    "nome": "Baly energético 2 litros tropical",
+    "categoria": "ENERGÉTICOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572660388_produto.png"
+  },
+  {
+    "id": "3816d8df-0c91-443e-b17e-20b5961e9f6d",
+    "nome": "Gelo Cubo 10 Kilos",
+    "categoria": "GELO E CARVÃO",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513682832_produto.jpg"
+  },
+  {
+    "id": "5ff0e53d-d691-4d0d-ad11-e98f1b5edb81",
+    "nome": "Carvão dois irmão (3 kilo)",
+    "categoria": "GELO E CARVÃO",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513704500_produto.jpeg"
+  },
+  {
+    "id": "1704cfe3-b861-4cab-b874-7488a0c78810",
+    "nome": "Carvão dois irmãos (6 kilo)",
+    "categoria": "GELO E CARVÃO",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513713679_produto.jpeg"
+  },
+  {
+    "id": "dfebbdd1-6f66-4ef5-bf76-e25283b7f373",
+    "nome": "Seda King blunt baunilha",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513785534_produto.jpg"
+  },
+  {
+    "id": "05b0789a-b428-46af-b18a-8d45998c86c3",
+    "nome": "Seda King blunt mel",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513923284_produto.jpg"
+  },
+  {
+    "id": "444b7d34-eeed-4b42-a73c-4bcdd87ddc86",
+    "nome": "Seda King blunt morango",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514058244_produto.jpg"
+  },
+  {
+    "id": "dfbe565e-01c2-4a5d-a00c-0eb04c6a4ab1",
+    "nome": "Seda King blunt uva",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514182668_produto.png"
+  },
+  {
+    "id": "e895289a-517e-4e50-a2a0-1a14dec527b7",
+    "nome": "Seda King blunt melancia",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514279971_produto.png"
+  },
+  {
+    "id": "855fc72e-b775-437b-935f-baca0abc79b0",
+    "nome": "Seda King blunt maçã verde",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514319556_produto.png"
+  },
+  {
+    "id": "67058c16-9583-4741-b36f-8fcddab18046",
+    "nome": "Seda smoking Brown King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514562820_produto.png"
+  },
+  {
+    "id": "7aa6b09d-0e47-4a99-80e1-a9c0c231c6c3",
+    "nome": "Ballena Morango Com Tequila 750ml",
+    "categoria": "DESTILADOS (Vodka & Tequila)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791572018126_produto.png"
+  },
+  {
+    "id": "82c9f073-72fb-41f9-baa7-265f62a0a1b6",
+    "nome": "Bombay gin london dry sapphire 750ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557278780_produto.png"
+  },
+  {
+    "id": "744ef300-685a-46c1-a76e-404235ceb69f",
+    "nome": "Gin Blackberry London Beefeater 700ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571449053_produto.png"
+  },
+  {
+    "id": "140b92d7-72f2-4982-bd45-3d79b7018767",
+    "nome": "Gin London Dry Bulldog",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571484669_produto.png"
+  },
+  {
+    "id": "21971064-18c2-4e85-86b9-16ed5efc4ce0",
+    "nome": "Vodka Absolut 1l",
+    "categoria": "DESTILADOS (Vodka & Tequila)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512111611_produto.jpg"
+  },
+  {
+    "id": "d178f3f3-5b2e-4808-a451-9f202301e653",
+    "nome": "Tequila Morango Rosa Tequilero Del Leste 750ml",
+    "categoria": "DESTILADOS (Vodka & Tequila)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512552547_produto.jpg"
+  },
+  {
+    "id": "8544f617-d0a2-4269-a76c-e8d683d54f1b",
+    "nome": "Lion Rolling Circus Alfalfa King Size",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514723844_produto.png"
+  },
+  {
+    "id": "59fc7daf-b8e4-4dbd-8d9f-47ef691a1390",
+    "nome": "Seda Papelito Brown Longa King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514945820_produto.png"
+  },
+  {
+    "id": "6b077ddc-67ed-4a82-b3ff-3c887a5377af",
+    "nome": "Seda Papelito Tradicional King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514984580_produto.png"
+  },
+  {
+    "id": "ecb7992d-f3b8-4901-bbd9-b93279e422f1",
+    "nome": "Seda Raw Classic King Size Slim",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515020788_produto.png"
+  },
+  {
+    "id": "b027af2b-c911-456f-b8f2-538aba8aa546",
+    "nome": "Seda Bem Bolado King Size Brown Slim",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515077141_produto.png"
+  },
+  {
+    "id": "47a3a968-5642-4e6e-8769-33f25c4229d1",
+    "nome": "Seda Bem Bolado King Size Large",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515132396_produto.png"
+  },
+  {
+    "id": "9d5e3012-bd0d-46d8-bb8e-925b7a91fc27",
+    "nome": "Seda Bem Bolado Pop King Size Slim",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515167868_produto.png"
+  },
+  {
+    "id": "77a924ed-4363-44f0-9c5b-7b2bd087810b",
+    "nome": "Seda Bem Bolado Mc Kevin King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515190428_produto.png"
+  },
+  {
+    "id": "49174fa6-fb7b-467a-b25e-7fd72b6ffba9",
+    "nome": "Seda Zomo Slim Alfalfa",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515209532_produto.png"
+  },
+  {
+    "id": "c2ba6a33-5612-43ac-a8c4-6b098258ba44",
+    "nome": "Seda Ocb Organic Hemp Slim King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515227860_produto.png"
+  },
+  {
+    "id": "b592863a-47a0-421c-bd5d-e2fbc5a3cefe",
+    "nome": "Seda Ocb Slim Premium King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515281564_produto.png"
+  },
+  {
+    "id": "65ba72c1-eaac-4dfe-9d05-5308841a3106",
+    "nome": "Seda Ocb Virgin Paper Brown Slim King Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515300420_produto.png"
+  },
+  {
+    "id": "37df28ca-df70-482e-b942-42253b5be678",
+    "nome": "Seda Raw Classic 1 1/4",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515320092_produto.png"
+  },
+  {
+    "id": "8da4c8bf-0ca7-49f0-b636-930ba99e8402",
+    "nome": "Seda Ocb Premium 11/4 Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515343429_produto.png"
+  },
+  {
+    "id": "04026585-26bb-4e0a-8789-315674c99b51",
+    "nome": "Seda Ocb Ultimate 11/4 Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515363460_produto.png"
+  },
+  {
+    "id": "a9e7bcb1-185e-4d1a-8df5-a1c72a91561c",
+    "nome": "Seda Ocb Virgin Paper Brown 11/4 Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515382436_produto.png"
+  },
+  {
+    "id": "7c4003a0-f543-4b62-aac8-ad7fafa092ed",
+    "nome": "Seda Ocb Organic Hemp 11/4 Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515423405_produto.png"
+  },
+  {
+    "id": "62e8f2fe-39f5-4815-94ab-d4ee8ebd61c2",
+    "nome": "Seda Smoking Master Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515442164_produto.png"
+  },
+  {
+    "id": "76d92e31-9471-4aa9-a6a8-c965204820c6",
+    "nome": "Seda Smoking Delux Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515462293_produto.png"
+  },
+  {
+    "id": "8d43e1c9-b78f-4e98-a1ba-980cdce3c7c3",
+    "nome": "Seda smoking brown mini size 11/4 mini size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515534101_produto.png"
+  },
+  {
+    "id": "c0490caa-2932-48d7-8cd2-938640c0e877",
+    "nome": "Aperol 750ml",
+    "categoria": "LICORES E APERITIVOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512201691_produto.avif"
+  },
+  {
+    "id": "190a1955-e437-4b93-85a6-dc40d4b8954b",
+    "nome": "Água Mineral Cristal com gás 500 ml",
+    "categoria": "ÁGUA MINERAL",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791556079491_produto.png"
+  },
+  {
+    "id": "a8661b2b-a651-48c1-bc1d-a943ea89ebd5",
+    "nome": "Refrigerante H2oh! Limoneto 500ml",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509331562_produto.jpg"
+  },
+  {
+    "id": "4c7cceae-c029-4273-8f2f-0157ae0d63d6",
+    "nome": "Gatorad sabor morango e maracujá gelado",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509384242_produto.jpg"
+  },
+  {
+    "id": "1fb7cc1f-f8fd-4af8-94b9-9d40714c3c5b",
+    "nome": "Gatorade sabor laranja gelado",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509462565_produto.jpg"
+  },
+  {
+    "id": "8eef307f-f81b-42eb-98ae-56db7eb435b1",
+    "nome": "Seda Papelito Mini Size",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515628788_produto.png"
+  },
+  {
+    "id": "fd11b228-b886-4487-867c-7b2234203740",
+    "nome": "Seda Bem Bolado Brown Large 11 / 4",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515724812_produto.png"
+  },
+  {
+    "id": "7520e044-dd3e-49cc-bfe9-9dae830d6963",
+    "nome": "Piteira de papel Gorilla - Extra longa (display com 30)",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515750468_produto.png"
+  },
+  {
+    "id": "772610a1-2eb7-419c-8fd9-ff86cef99b35",
+    "nome": "Piteira Sesh - Tamanho Large",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515792860_produto.png"
+  },
+  {
+    "id": "deedd473-7f24-47ba-a2bb-396301daef9a",
+    "nome": "Piteira Sesh - Tamanho Small",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515830300_produto.png"
+  },
+  {
+    "id": "fd05a935-57d1-4487-b5cf-60ed0bba51cc",
+    "nome": "Piteira Sesh - Tamanho Xl",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515881564_produto.png"
+  },
+  {
+    "id": "25e1f0cd-40ec-4c01-aa5d-7596991ccfe0",
+    "nome": "Piteira Papelito Slim",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516032028_produto.png"
+  },
+  {
+    "id": "6b60ab6e-ecc0-4b0e-b81f-40971c4a3d9e",
+    "nome": "Piteira Longa Papelito",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516072813_produto.png"
+  },
+  {
+    "id": "e00746db-2159-4e40-9d27-a5433b03c174",
+    "nome": "Piteira Papelito Tradicional",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516088476_produto.png"
+  },
+  {
+    "id": "33a18e23-2135-4196-9d48-b53f04c5d3dc",
+    "nome": "Piteira Bem Bolado Girls In Green Super Large Vergé",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516107109_produto.png"
+  },
+  {
+    "id": "6b2a1f79-6c2a-4cae-9d90-4b99594f8084",
+    "nome": "Piteira Bem Bolado Slim",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516136541_produto.png"
+  },
+  {
+    "id": "7e0faae6-bfbe-48c0-abac-2905b4d620f4",
+    "nome": "Piteira Bem Bolado Pop Extra Large",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516165933_produto.png"
+  },
+  {
+    "id": "b7f121e0-aba8-407c-8dd6-5618e140fa93",
+    "nome": "Piteira Bem Bolado Pop Large",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516186260_produto.png"
+  },
+  {
+    "id": "ef84e737-951e-4ed6-aa27-13e03d1259ff",
+    "nome": "Piteira Bem Bolado Brown Large",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516201676_produto.png"
+  },
+  {
+    "id": "972912dd-92c0-405f-8284-f60d14f0517b",
+    "nome": "Filtro aleda biodegradável slim - pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516219733_produto.png"
+  },
+  {
+    "id": "7d35b620-26fa-4f74-85bb-c794410bc100",
+    "nome": "Filtro aleda slim Classic - pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516254581_produto.png"
+  },
+  {
+    "id": "34cf4c52-8e7f-4bef-8b5d-26fce5625b0a",
+    "nome": "Filtro aleda slim longo - pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516271772_produto.png"
+  },
+  {
+    "id": "829e220e-4f04-49f2-a1dc-aa4648b1823d",
+    "nome": "Filtro Bem bolado Pop longo slim",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516295957_produto.png"
+  },
+  {
+    "id": "9b82edcf-2bb0-4474-9532-f865b44e15db",
+    "nome": "Whisky Johnnie Walker Gold label reserve 750 ml",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502466670_produto.jpg"
+  },
+  {
+    "id": "8f518625-e059-42d9-98d5-4b4f54d23eb7",
+    "nome": "Whisky White Horse 1L",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502512007_produto.jpg"
+  },
+  {
+    "id": "f0e1968a-e908-4ac0-a248-d37842e87a7a",
+    "nome": "Whisky Buchanan S Deluxe 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502568839_produto.jpg"
+  },
+  {
+    "id": "59c52c39-5fc3-48a2-acfa-57cdb2bb12b3",
+    "nome": "Whisky Black Label 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502636800_produto.jpg"
+  },
+  {
+    "id": "82245c4a-3ee4-43b1-8e9c-79cca9bc9367",
+    "nome": "Whisky Ballantines 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502697206_produto.jpg"
+  },
+  {
+    "id": "70d3aab0-0578-461d-b2ff-aaa9fca755ee",
+    "nome": "Filtro papelito tradicional 6mm - pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516313566_produto.png"
+  },
+  {
+    "id": "60e19946-fa34-4151-b375-2d58ff3d428c",
+    "nome": "Filtro papelito tradicional ultra longos - pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516335165_produto.png"
+  },
+  {
+    "id": "6af8695a-ce32-4f2c-aec0-42477aa4193f",
+    "nome": "Filtro Sesh Slim - contém 120 filtros",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516378028_produto.png"
+  },
+  {
+    "id": "b31538d1-a8f2-4dbc-82d9-f85b7192541c",
+    "nome": "Filtro The Og Slim - contém 130 filtros",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516404989_produto.png"
+  },
+  {
+    "id": "ddffbc69-0871-4959-9f94-2c9031e49129",
+    "nome": "Filtro Ocb Gammed Slim -Pacote",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516438055_produto.png"
+  },
+  {
+    "id": "7b23bb93-90d6-48f9-be81-d22826f5fab9",
+    "nome": "Filtro Papelito Biodegradável Longo",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516478654_produto.png"
+  },
+  {
+    "id": "cf269d04-fca2-4d9a-8704-15194705b85e",
+    "nome": "Filtro Papelito Slim 5,3 MM",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516506829_produto.png"
+  },
+  {
+    "id": "1636dbed-294b-4378-8c1f-aed2539652cb",
+    "nome": "Isqueiro maçarico recarregável",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516554325_produto.png"
+  },
+  {
+    "id": "93eecee9-f039-47a3-9021-fd90c5fca70b",
+    "nome": "Isqueiro ocb grande",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516571780_produto.png"
+  },
+  {
+    "id": "592bf134-34dc-4f47-b8aa-796aff03c5a7",
+    "nome": "Isqueiro Clipper Grande",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516592612_produto.png"
+  },
+  {
+    "id": "60247b62-225f-4e60-8879-03042795aa06",
+    "nome": "Isqueiro Bic Max",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516714620_produto.png"
+  },
+  {
+    "id": "ac5f31aa-8d7e-4b56-bcac-08c757543006",
+    "nome": "Bolador Himalaia Spilff 11/4 mini Size 78mm",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516699165_produto.png"
+  },
+  {
+    "id": "bf231610-fd79-40d6-adc9-ed9b9a2c50ac",
+    "nome": "Bolador Himalaia Spilff King Size 110mm",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516744821_produto.png"
+  },
+  {
+    "id": "8bea9e88-4525-483b-8508-303b08fc61c0",
+    "nome": "Cinzeiro The Og",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516764253_produto.png"
+  },
+  {
+    "id": "a6907554-eaa2-4ed6-afcb-9e456b62604a",
+    "nome": "Cuia de silicone chapogren",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516784524_produto.png"
+  },
+  {
+    "id": "bffb7473-935d-4b84-b23b-0d809a0657a5",
+    "nome": "Slick The Og/ Sesh 10ml",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516627804_produto.png"
+  },
+  {
+    "id": "9c169ca7-6f51-4591-ac69-aa167054a31c",
+    "nome": "Tesoura Dobravel Sadhu",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516530109_produto.png"
+  },
+  {
+    "id": "c0484107-8786-40cc-8f94-7f1bd46dd0d4",
+    "nome": "Toobeck Sadhu",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516356180_produto.png"
+  },
+  {
+    "id": "3fca7c09-de70-4961-bc3a-f23fffceb684",
+    "nome": "Gelo Escama 20kg",
+    "categoria": "GELO E CARVÃO",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791517140437_produto.png"
+  },
+  {
+    "id": "668b8f31-4813-4598-9088-b9f5f1be204b",
+    "nome": "Slick Sadhu 5ml",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516239292_produto.png"
+  },
+  {
+    "id": "11e3df6d-d395-4988-8bf5-1710ebe1a31a",
+    "nome": "Whisky Jack Daniel's Honey Tennessee Whiskey 1litro",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502236662_produto.jpg"
+  },
+  {
+    "id": "058e4c46-9c3e-4bcb-9f69-3bde7029053c",
+    "nome": "Whisky Johnnie Walker Double Black 1l",
+    "categoria": "DESTILADOS (Whisky)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791502389783_produto.jpg"
+  },
+  {
+    "id": "b01e3cdf-014c-499a-aca7-d89e76fea337",
+    "nome": "Gin Beefeater London Pink Strawberry 750ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791511546331_produto.jpg"
+  },
+  {
+    "id": "9ca23f10-7f56-40d4-9885-7b2d39874699",
+    "nome": "Guaraná Antarctica 2 litros",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509812219_produto.jpg"
+  },
+  {
+    "id": "87dbe899-bea4-4bf2-8652-095930bcd74d",
+    "nome": "Pepsi 2 litros",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509852352_produto.jpg"
+  },
+  {
+    "id": "f29ad537-a171-4692-8c6d-7c30d9ee5855",
+    "nome": "Sukita 2 litros",
+    "categoria": "REFRIGERANTES E SUCOS (2L e 1.5L)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509895253_produto.jpg"
+  },
+  {
+    "id": "5d218e6d-f074-4cb7-bdcb-7faeb356f4eb",
+    "nome": "Piteira The Og - Tamanho Large",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515902748_produto.png"
+  },
+  {
+    "id": "50bc19d5-f847-4be7-8362-4fe5d421795f",
+    "nome": "Seda King blunt chocolate",
+    "categoria": "TABACARIA (Sedas)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791514243484_produto.png"
+  },
+  {
+    "id": "640b1353-f60d-4cab-8784-9f6290c1781d",
+    "nome": "Piteira The Og - Tamanho Xl",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515925917_produto.png"
+  },
+  {
+    "id": "4c0d359d-9f04-41b6-8c22-d1a78f589f93",
+    "nome": "Piteira The Og - Tam Small 70 piteira",
+    "categoria": "TABACARIA (Piteiras e Filtros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516008852_produto.png"
+  },
+  {
+    "id": "c2b5b16e-dd30-46ce-bce2-68f864eebfa9",
+    "nome": "Tesoura patchwork",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516460339_produto.png"
+  },
+  {
+    "id": "61402f98-eafb-4cca-9c3f-3c9b47d943bd",
+    "nome": "Dichavador 3 partes Fibra De Coco - Cremaria",
+    "categoria": "TABACARIA (Acessórios e Isqueiros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791516057853_produto.png"
+  },
+  {
+    "id": "2e1e685d-b0d8-4ac1-bdfa-2928bef76387",
+    "nome": "Somente Cabo Turbo Para Iphone 8 Plus Xr 11 12 13 14",
+    "categoria": "ELETRÔNICOS E UTILITÁRIOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513135956_produto.avif"
+  },
+  {
+    "id": "11e79dbf-1a8a-447f-9b0b-11e0e4378492",
+    "nome": "Gin Beefeater London Pink Strawberry 750ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557011738_produto.png"
+  },
+  {
+    "id": "02d6da63-cddf-470a-8aab-c3be3b8918f9",
+    "nome": "Somente o cabo turbo Usb - Tipo C",
+    "categoria": "ELETRÔNICOS E UTILITÁRIOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515406076_produto.png"
+  },
+  {
+    "id": "d26c672a-c0fa-4b25-a2d0-42bdc0492040",
+    "nome": "Mini balança digital de alta precisão portátil 0,1g a 500 g",
+    "categoria": "ELETRÔNICOS E UTILITÁRIOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515701204_produto.png"
+  },
+  {
+    "id": "cf9f6cfa-2812-4b3d-ab82-d065e7f1f4e8",
+    "nome": "Somente o cabo Kaidi entrada v8",
+    "categoria": "ELETRÔNICOS E UTILITÁRIOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791515859764_produto.png"
+  },
+  {
+    "id": "c050f9a8-79d9-483a-ad46-8b24c4ea6086",
+    "nome": "Del Valle Uva em lata (290ml)",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557978187_produto.png"
+  },
+  {
+    "id": "d128bca4-a222-4952-95d2-4a8aa3d2185a",
+    "nome": "Del Valle Maracujá em lata (290ml)",
+    "categoria": "REFRIGERANTES E SUCOS (Latas e Pequenos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791558072060_produto.png"
+  },
+  {
+    "id": "e56c47cb-8a34-4557-aed4-82ac120341b1",
+    "nome": "Água Mineral Crystal sem gás de 1,5L",
+    "categoria": "ÁGUA MINERAL",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791558128516_produto.png"
+  },
+  {
+    "id": "3737a17a-ef72-4352-8b99-2ce36ca40e3b",
+    "nome": "Água Mineral Crystal com gás de 1,5L",
+    "categoria": "ÁGUA MINERAL",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791558226877_produto.png"
+  },
+  {
+    "id": "8a5a1278-2151-4b99-958f-6ff0ff4cc73a",
+    "nome": "Heineken Latão 473 Ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557394499_produto.png"
+  },
+  {
+    "id": "53a3dac3-1cd7-4ffe-b712-334e987fd8dc",
+    "nome": "Cerveja amestel latão 473 gelado",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557499220_produto.png"
+  },
+  {
+    "id": "f71adc5c-979b-4c20-8ed6-4fca74368626",
+    "nome": "Cerveja Imperio Puro Malte Latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513474115_produto.jpg"
+  },
+  {
+    "id": "9c6e2539-e9cd-47c7-baa8-fb3418387c26",
+    "nome": "Cerveja Original Latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513522212_produto.jpg"
+  },
+  {
+    "id": "d2dcd4f0-1717-4790-bd0e-c279fffa53d2",
+    "nome": "Cerveja Brasileira Antarctica Pilsen Latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513561227_produto.jpg"
+  },
+  {
+    "id": "bdc56c6e-02a6-42cf-a2b1-32aadbab060c",
+    "nome": "Cerveja Brahma Chopp Latão 473ml",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791513602796_produto.jpg"
+  },
+  {
+    "id": "83d5fa38-1fd0-470f-8bf5-a4a19cf27916",
+    "nome": "Stella Artois puro Gold - Latão",
+    "categoria": "CERVEJAS (Latões Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791555861012_produto.png"
+  },
+  {
+    "id": "69496b95-d91a-4fc1-b326-80f61f2ec83b",
+    "nome": "CAMEL BLUE",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791632561189_produto.jpeg"
+  },
+  {
+    "id": "ae21b960-f3c2-43fe-9467-2996d24f351e",
+    "nome": "Gin Tanqueray Bossa 700ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571525084_produto.png"
+  },
+  {
+    "id": "4eb899e3-fb0b-409a-85dd-5d3aaf9e8866",
+    "nome": "Gin Tanqueray",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571579188_produto.png"
+  },
+  {
+    "id": "3703053e-9c90-4aff-b233-811b140d363c",
+    "nome": "Combo tanquerai e Tônica (gin tanquerai + 4 água Tônica",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791511625755_produto.jpg"
+  },
+  {
+    "id": "5889668b-8647-4bef-840d-d76182a6aa93",
+    "nome": "Combo tanque (Tanqueray + 4 Red Bull )",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791511682372_produto.jpg"
+  },
+  {
+    "id": "5efe1a6f-a5f8-48ca-8d46-ef6408bee36a",
+    "nome": "Combo tanque tropical ( Tanqueray + 4 Red Bull tropical",
+    "categoria": "COMBOS (Kits Prontos para Festa)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571350637_produto.png"
+  },
+  {
+    "id": "50af5033-db56-4289-b839-f5697b8dcb46",
+    "nome": "Rocks Gin Green Apple",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791511865667_produto.jpg"
+  },
+  {
+    "id": "f9b6b031-3ac7-49ae-97c3-6d3efeebbcb5",
+    "nome": "Rocks Gin Strawberry",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571791397_produto.png"
+  },
+  {
+    "id": "88b76be3-46c2-458e-9734-bbc6337338fb",
+    "nome": "Rocks Gin Watermelon",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571901764_produto.png"
+  },
+  {
+    "id": "39163c9b-c789-4d77-b96c-61bde9ec4b75",
+    "nome": "Vodka Smirnoff 998 ml",
+    "categoria": "DESTILADOS (Vodka & Tequila)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512026315_produto.jpg"
+  },
+  {
+    "id": "54fd339c-af8d-4417-8d52-dc4ba54ca337",
+    "nome": "CAMEL DOUBLE",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791636827248_produto.jpeg"
+  },
+  {
+    "id": "ac440d9a-4b11-4d61-93ad-0907f2ee47ba",
+    "nome": "CAMEL Yellow - Box",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637008087_produto.jpeg"
+  },
+  {
+    "id": "b0f6a6d3-b54c-47b5-a4df-c2f9bd9a2523",
+    "nome": "CARLTON DUNHILL RED BOX",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637070663_produto.jpeg"
+  },
+  {
+    "id": "913d3c21-9436-41b7-8346-53dbde969553",
+    "nome": "LUCKY STRIKE FRESH DOUBLE ICE X",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637144438_produto.jpeg"
+  },
+  {
+    "id": "443c47ce-504d-4882-974b-11da89d8e299",
+    "nome": "LUCKY STRIKE FRESH MINT X",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637285263_produto.jpeg"
+  },
+  {
+    "id": "ea1f3476-0501-46ca-8a65-277cd9b9461d",
+    "nome": "LUCKY STRIKE ORIGINAL BLUE BOX",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637441860_produto.jpeg"
+  },
+  {
+    "id": "d97df0f6-36e3-40cb-9df7-78f94744720e",
+    "nome": "MARLBORO GOLD SELECTION",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637535386_produto.jpeg"
+  },
+  {
+    "id": "2c25b5ef-61fd-4334-8c44-284f354253d4",
+    "nome": "ROTHMANS CORE BLUE",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791637668146_produto.jpeg"
+  },
+  {
+    "id": "546b0cb2-2b0d-462e-8fcd-f7c07f184877",
+    "nome": "Marlboro Vista Double Fusion",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011214829_produto.png"
+  },
+  {
+    "id": "e0173e74-3732-4a4f-8ec1-6cb1eee70dbc",
+    "nome": "Marlboro Gold.",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011338481_produto.png"
+  },
+  {
+    "id": "fc96faed-d398-4c0f-acf1-3ecb3c59b9e0",
+    "nome": "Marlboro Vista Double Burst.",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011541250_produto.png"
+  },
+  {
+    "id": "3eea95df-c9cb-4e86-a4c6-5bd9399c23f8",
+    "nome": "Marlboro Vista Purple Mix",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011589098_produto.png"
+  },
+  {
+    "id": "f6adb623-4906-44a6-9a5a-4a4e10385b87",
+    "nome": "Camel Double Mint & Red",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011629034_produto.png"
+  },
+  {
+    "id": "c77b47ae-867e-4023-ae1e-bfbee64093e2",
+    "nome": "Camel Kretek Berry",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011711850_produto.png"
+  },
+  {
+    "id": "f4759830-2962-4670-90fa-36b1c342a44b",
+    "nome": "Lucky Strike Fresh Wild",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011788082_produto.png"
+  },
+  {
+    "id": "f14aaf18-e4c1-45df-b3e5-ba592f2d8699",
+    "nome": "Marlboro Red Selection",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011865969_produto.png"
+  },
+  {
+    "id": "1d905ec6-dda2-4294-9a1d-f1b8ad513261",
+    "nome": "Marlboro Ice Blast",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792011938881_produto.png"
+  },
+  {
+    "id": "85097573-bb54-4919-a008-93328187a593",
+    "nome": "Lucky Strike Fresh Ice",
+    "categoria": "Tabacaria (Cigarros)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012033692_produto.png"
+  },
+  {
+    "id": "3576afea-deb8-4a9f-a5c6-6693b44e7769",
+    "nome": "Doritos Queijo Nacho 75g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012258930_produto.png"
+  },
+  {
+    "id": "959c0dc9-a34b-4a77-adb2-7a9d59075a68",
+    "nome": "Fandangos Sabor Presunto 85g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012376042_produto.png"
+  },
+  {
+    "id": "4c8e05e6-02be-441d-b148-8446325a8344",
+    "nome": "Cebolitos 91g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012413106_produto.png"
+  },
+  {
+    "id": "377e8a02-48ad-496b-9bf4-e7cddb7a2c2e",
+    "nome": "Batata Ruffles Original 68g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012628075_produto.png"
+  },
+  {
+    "id": "07ddbb86-742f-413f-bb3c-a4135dbb8bf6",
+    "nome": "Batata Lay's Sensações Peito de Peru 70g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012746603_produto.png"
+  },
+  {
+    "id": "24af660d-f8e1-478d-bbd7-a8aba3bcc80f",
+    "nome": "Salgadinho Baconzitos 86g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792012868491_produto.png"
+  },
+  {
+    "id": "3af72159-f2e9-47f4-8013-378f301a9f94",
+    "nome": "Fandangos 85g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792013024979_produto.png"
+  },
+  {
+    "id": "7576189c-19ba-4772-99bf-a284241bcaf7",
+    "nome": "Cheetos",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792013106186_produto.png"
+  },
+  {
+    "id": "f8957b6a-0172-4dff-8a1d-f9601f232ece",
+    "nome": "Cheetos Onda Requeijão 90g",
+    "categoria": "SALGADINHOS E BISCOITOS",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792013193315_produto.png"
+  },
+  {
+    "id": "90256fc8-734f-4474-adb5-1e7d810053e2",
+    "nome": "Tabaco The OG Golden Virginia 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792033976077_produto.png"
+  },
+  {
+    "id": "4b589477-b9c5-4df5-84f3-a2c39883b234",
+    "nome": "Tabaco Sesh Golden Virginia Destalado 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034021501_produto.png"
+  },
+  {
+    "id": "38cf0c41-2501-4694-9355-923a50231d72",
+    "nome": "Chopp de Vinho Pink Moon 2L",
+    "categoria": "VINHOS E ESPUMANTES",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557822173_produto.png"
+  },
+  {
+    "id": "197b6f7e-5919-4fdb-9ca0-a9f9939d3322",
+    "nome": "Skol Beats Senses Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508732126_produto.jpg"
+  },
+  {
+    "id": "7289b0e3-0878-4470-b515-6a3dfdfa7b1d",
+    "nome": "Skol Beats Caipirinha Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508805330_produto.jpg"
+  },
+  {
+    "id": "755f8ab3-6107-445a-a9fd-0d7240f9a696",
+    "nome": "Skol Beats Tropical Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508847435_produto.jpg"
+  },
+  {
+    "id": "8c2e775a-e79c-4ec8-b36a-ab141b844173",
+    "nome": "Skol Beats Gin Tônica Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508901827_produto.jpg"
+  },
+  {
+    "id": "02a83a02-a904-4133-9697-dc3b11a2619e",
+    "nome": "Cerveja Stella Artois Long Neck 330ml",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512399555_produto.jpg"
+  },
+  {
+    "id": "b2740c08-17a0-4bf4-b559-9057bfa160be",
+    "nome": "Haineken ultimate",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792331535318_produto.jpeg"
+  },
+  {
+    "id": "d4da215d-d444-4f56-80ce-c425ce9e97ca",
+    "nome": "Cerveja Heineken zero álcool gelada",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791508957570_produto.jpg"
+  },
+  {
+    "id": "0d176056-5e35-43b4-84aa-2bc5b685f931",
+    "nome": "Haineken 330 Ml Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512447947_produto.jpg"
+  },
+  {
+    "id": "362c5cc8-7ded-4717-bd3d-9fc80728248c",
+    "nome": "Cerveja Spaten Munich Helles Puro Malte Long Neck 330ml",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512505763_produto.jpg"
+  },
+  {
+    "id": "782b3875-a6f4-4461-8b73-8d8a8d411f47",
+    "nome": "Cerveja Corona Extra Long Neck 330ml",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512552547_produto.jpg"
+  },
+  {
+    "id": "53b88875-2a4a-468e-bdfc-1224a341ed9c",
+    "nome": "Cerveja Império Gold 210ml",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512599651_produto.jpg"
+  },
+  {
+    "id": "49855d5d-64a4-447f-9564-86d5f986f5ec",
+    "nome": "Cerveja Império Lager Puro Malte Long Neck",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791512645701_produto.jpg"
+  },
+  {
+    "id": "f5c0ddcb-da3a-493d-982e-c4dce0eb5ca4",
+    "nome": "Stella Artois Puro Gold",
+    "categoria": "CERVEJAS (Long Necks Individuais)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791555623804_produto.png"
+  },
+  {
+    "id": "be05836f-78df-4dc8-8c81-a769b50dfe9d",
+    "nome": "Packs com 12 unidades cerveja Original latão",
+    "categoria": "CERVEJAS (Packs e Fardos)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791571077397_produto.png"
+  },
+  {
+    "id": "7fa6e4fd-ffe5-4081-a985-10238e20da1f",
+    "nome": "Tabaco Acrema Blend Ryo 20g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034064220_produto.png"
+  },
+  {
+    "id": "1bb883b1-afa3-40bc-a91a-d10d561ba0c5",
+    "nome": "Tabaco Véio Pimenta Virginia Gold Sem Talo 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034089197_produto.png"
+  },
+  {
+    "id": "667d7b2f-087c-4270-9d93-4d6810de0c57",
+    "nome": "Tabaco Tabaquin Golden Virginia Roll-Your-Own 20g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034150389_produto.png"
+  },
+  {
+    "id": "7bc1ae45-7536-4604-b962-7ecd5382cb96",
+    "nome": "Tabaco Parvathi Golden Virginia Destalado 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034185973_produto.png"
+  },
+  {
+    "id": "e0f0974f-2669-41ef-81ee-319aa7240aa1",
+    "nome": "Tabaco Tá Na Mão Virgínia 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034263068_produto.png"
+  },
+  {
+    "id": "0822a2cf-3278-433e-a049-f7162379eafb",
+    "nome": "Tabaco Rainbow Silver Bright 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034296229_produto.png"
+  },
+  {
+    "id": "6abec3eb-ebdc-4998-91b6-79a2076d566a",
+    "nome": "Tabaco Hi Tobacco Virginia Blend 35g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034415039_produto.png"
+  },
+  {
+    "id": "468e753b-edce-4fa6-bf16-543e520b2a9e",
+    "nome": "Tabaco Hi Tobacco Golden Virginia 35g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034544030_produto.png"
+  },
+  {
+    "id": "2f4df820-a79c-4ada-8e1f-e3ff4c3141dd",
+    "nome": "Tabaco Sasso Tabaccos Brasil Virginia Blend Destalado 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034606381_produto.png"
+  },
+  {
+    "id": "40773bb2-3f8c-4831-98cd-cf221c692382",
+    "nome": "Tabaco Tabear Virgínia Destalado Manualmente 25g",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034693262_produto.png"
+  },
+  {
+    "id": "a0316fb6-3877-4784-bee0-327158dccaf5",
+    "nome": "**Tabaco Amsterdam Natural Tobacco 25g**",
+    "categoria": "TABACARIA (TABACOS)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1792034780637_produto.png"
+  },
+  {
+    "id": "1e83b2a7-c7b5-475b-8e8f-1fc266826969",
+    "nome": "Espumante Branco Prosecco Casa Perini 750ml",
+    "categoria": "VINHOS E ESPUMANTES",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791487598813_produto.jpg"
+  },
+  {
+    "id": "0636c8ba-c838-440e-8b42-79902fcda23a",
+    "nome": "Espumante Casa Perini Moscatel Aquarela 750ml",
+    "categoria": "VINHOS E ESPUMANTES",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791487702964_produto.jpg"
+  },
+  {
+    "id": "0071416c-b8e3-4dcf-aac3-ebbb0524b773",
+    "nome": "Chopp de vinho pink moon 600 ml",
+    "categoria": "VINHOS E ESPUMANTES",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791509186130_produto.jpg"
+  },
+  {
+    "id": "9aec28ff-ee6c-46ef-9714-a6bc5d072951",
+    "nome": "Chopp de Vinho Pink Moon 300 ml",
+    "categoria": "VINHOS E ESPUMANTES",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557744556_produto.png"
+  },
+  {
+    "id": "ab252596-7c3d-4eed-82f5-4870be6e6689",
+    "nome": "Gin Beefeater London 750ml",
+    "categoria": "DESTILADOS (Gin)",
+    "imagem_url": "https://zsfelllqiwunfftybbjc.supabase.co/storage/v1/object/public/produtos/1791557122803_produto.png"
+  }
+]
