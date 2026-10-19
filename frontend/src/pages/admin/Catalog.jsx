@@ -1095,11 +1095,11 @@ const Catalog = () => {
                   </span>
                 </div>
 
-                {/* Dica de Superprodutividade com Gemini */}
+                {/* Dica de Superprodutividade */}
                 <div className="mb-3 p-3 bg-gradient-to-r from-[#00E5FF]/10 to-indigo-500/10 border border-[#00E5FF]/20 rounded-xl flex items-center gap-2.5">
                   <span className="text-lg shrink-0">⚡</span>
                   <p className="text-[11px] text-gray-300 leading-snug">
-                    <strong>Dica rápida:</strong> No Gemini, clique com o botão direito na imagem gerada e selecione <strong>"Copiar imagem"</strong>. Depois, aperte <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-cyan-300 font-bold">CTRL + V</kbd> em qualquer lugar desta tela!
+                    <strong>Super Prático:</strong> Copie qualquer imagem (do WhatsApp, Google, Gemini ou fotos do celular) e aperte <kbd className="px-1.5 py-0.5 bg-white/10 rounded font-mono text-cyan-300 font-bold">CTRL + V</kbd> em qualquer lugar desta tela! Você também pode arrastar o arquivo ou escolher do computador.
                   </p>
                 </div>
                 
