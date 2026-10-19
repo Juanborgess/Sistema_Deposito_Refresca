@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Conexao ativa do Supabase - Refresca Producao
 const NEW_SUPABASE_URL = 'https://ybjlfnnhbusfltxxdqiy.supabase.co';
 const NEW_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inliamxmbm5oYnVzZmx0eHhkcWl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzNTMyMzAsImV4cCI6MjEwNzkyOTIzMH0.-NZ9bF6LBsNUq3MPdnoeR6_i__Hl88ZUJi695-lQVQU';
 
