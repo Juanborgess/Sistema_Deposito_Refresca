@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 
-const MINIMUM_ORDER_VALUE = 30.00;
 const WHATSAPP_NUMBER = "5521983785928";
 
 const Cart = () => {
@@ -36,15 +35,32 @@ const Cart = () => {
   const [cupomLoading, setCupomLoading] = useState(false);
   const [cupomError, setCupomError] = useState('');
 
-  // Cálculos Financeiros
-  const subtotal = getSubtotal();
-  const amountToMinimum = Math.max(0, MINIMUM_ORDER_VALUE - subtotal);
-  const progressPercentage = Math.min(100, (subtotal / MINIMUM_ORDER_VALUE) * 100);
-  const isMinimumMet = subtotal >= MINIMUM_ORDER_VALUE;
-
   const [bairrosOrdenados, setBairrosOrdenados] = useState([]);
   const [storeConfig, setStoreConfig] = useState(null);
   const [isStoreOpen, setIsStoreOpen] = useState(true);
+
+  // Cálculos Financeiros e Pedido Mínimo Dinâmico
+  const subtotal = getSubtotal();
+  const minimumOrderValue = storeConfig && storeConfig.pedido_minimo !== undefined && storeConfig.pedido_minimo !== null
+    ? Math.max(0, Number(storeConfig.pedido_minimo))
+    : 30.00;
+  const hasMinimum = minimumOrderValue > 0;
+  const isMinimumMet = !hasMinimum || subtotal >= minimumOrderValue;
+  const amountToMinimum = hasMinimum ? Math.max(0, minimumOrderValue - subtotal) : 0;
+  const progressPercentage = hasMinimum ? Math.min(100, (subtotal / minimumOrderValue) * 100) : 100;
+
+  // Busca configurações e fretes ao iniciar e ao abrir carrinho
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const { data } = await api.get('/config');
+        if (data) setStoreConfig(data);
+      } catch (error) {
+        console.error('Erro ao buscar config:', error);
+      }
+    };
+    fetchConfig();
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -59,7 +75,7 @@ const Cart = () => {
       const fetchConfig = async () => {
         try {
           const { data } = await api.get('/config');
-          if (data && data.horario_abertura) setStoreConfig(data);
+          if (data) setStoreConfig(data);
         } catch (error) {
           console.error('Erro ao buscar config:', error);
         }
@@ -193,7 +209,7 @@ const Cart = () => {
   const sendOrderToWhatsApp = async (e) => {
     e.preventDefault();
     if (!isMinimumMet) {
-      toast.error(`O pedido mínimo é de R$ ${MINIMUM_ORDER_VALUE.toFixed(2).replace('.', ',')}`);
+      toast.error(`O pedido mínimo é de R$ ${minimumOrderValue.toFixed(2).replace('.', ',')}`);
       return;
     }
     if (!formData.bairro) {
@@ -369,7 +385,11 @@ const Cart = () => {
           }`}>
             <div className="flex justify-between text-xs mb-1.5 font-medium">
               <span className={isDark ? "text-gray-300" : "text-slate-600"}>
-                {isMinimumMet ? (
+                {!hasMinimum ? (
+                  <span className={`font-bold flex items-center gap-1 ${isDark ? "text-[#00E5FF]" : "text-[#0284C7]"}`}>
+                    <Sparkles size={14} /> Sem valor mínimo! Peça o quanto quiser.
+                  </span>
+                ) : isMinimumMet ? (
                   <span className={`font-bold flex items-center gap-1 ${isDark ? "text-[#00E5FF]" : "text-[#0284C7]"}`}>
                     <Sparkles size={14} /> Pedido mínimo atingido!
                   </span>
@@ -377,18 +397,22 @@ const Cart = () => {
                   <span>Faltam <strong>R$ {amountToMinimum.toFixed(2).replace('.', ',')}</strong> para o pedido mínimo</span>
                 )}
               </span>
-              <span className={isDark ? "text-gray-400" : "text-slate-500"}>R$ {MINIMUM_ORDER_VALUE.toFixed(2).replace('.', ',')}</span>
+              {hasMinimum && (
+                <span className={isDark ? "text-gray-400" : "text-slate-500"}>R$ {minimumOrderValue.toFixed(2).replace('.', ',')}</span>
+              )}
             </div>
-            <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-black/40' : 'bg-slate-200'}`}>
-              <div 
-                className={`h-full transition-all duration-500 rounded-full ${
-                  isMinimumMet 
-                    ? (isDark ? 'bg-[#00E5FF]' : 'bg-[#0284C7]') 
-                    : (isDark ? 'bg-[#FFDE59]' : 'bg-amber-500')
-                }`}
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
+            {hasMinimum && (
+              <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-black/40' : 'bg-slate-200'}`}>
+                <div 
+                  className={`h-full transition-all duration-500 rounded-full ${
+                    isMinimumMet 
+                      ? (isDark ? 'bg-[#00E5FF]' : 'bg-[#0284C7]') 
+                      : (isDark ? 'bg-[#FFDE59]' : 'bg-amber-500')
+                  }`}
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
+            )}
           </div>
         )}
 

@@ -105,7 +105,7 @@ const AdminLayout = () => {
     { label: 'Catálogo de Bebidas', path: '/admin/catalog', icon: <Package size={18} /> },
     { label: 'Motoboys', path: '/admin/motoboys', icon: <Users size={18} /> },
     { label: 'Taxas de Frete', path: '/admin/shipping', icon: <Truck size={18} /> },
-    { label: 'Horários da Loja', path: '/admin/schedule', icon: <Clock size={18} /> },
+    { label: 'Configurações da Loja', path: '/admin/schedule', icon: <Clock size={18} /> },
     { label: 'Cupons', path: '/admin/coupons', icon: <Ticket size={18} /> },
     { label: 'Clientes (CRM)', path: '/admin/customers', icon: <Users size={18} /> },
   ];

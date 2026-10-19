@@ -516,22 +516,30 @@ app.get('/api/customers', authMiddleware, async (req, res) => {
 
 // 17. Atualizar Configurações da Loja
 app.put('/api/config', authMiddleware, async (req, res) => {
-  const { horario_abertura, horario_fechamento, dias_funcionamento, chave_pix } = req.body;
+  const { horario_abertura, horario_fechamento, dias_funcionamento, chave_pix, texto_banner, pedido_minimo } = req.body;
   try {
     const { data: current } = await supabase.from('configuracoes_loja').select('id').limit(1).single();
     
+    const payload = {};
+    if (horario_abertura !== undefined) payload.horario_abertura = horario_abertura;
+    if (horario_fechamento !== undefined) payload.horario_fechamento = horario_fechamento;
+    if (dias_funcionamento !== undefined) payload.dias_funcionamento = dias_funcionamento;
+    if (chave_pix !== undefined) payload.chave_pix = chave_pix;
+    if (texto_banner !== undefined) payload.texto_banner = texto_banner;
+    if (pedido_minimo !== undefined) payload.pedido_minimo = Math.max(0, parseFloat(pedido_minimo) || 0);
+
     let result;
     if (current) {
       result = await supabase
         .from('configuracoes_loja')
-        .update({ horario_abertura, horario_fechamento, dias_funcionamento, chave_pix })
+        .update(payload)
         .eq('id', current.id)
         .select()
         .single();
     } else {
       result = await supabase
         .from('configuracoes_loja')
-        .insert([{ horario_abertura, horario_fechamento, dias_funcionamento, chave_pix }])
+        .insert([payload])
         .select()
         .single();
     }
