@@ -36,7 +36,8 @@ const Dashboard = () => {
         startDate.setHours(0, 0, 0, 0);
       }
 
-      const { data: pedidos, error } = await supabase
+      let pedidos = [];
+      const { data, error } = await supabase
         .from('pedidos')
         .select(`
           id, created_at, total, subtotal, taxa_entrega, status, is_agendado,
@@ -45,9 +46,20 @@ const Dashboard = () => {
             produtos ( nome )
           )
         `)
-        .gte('created_at', startDate.toISOString());
+        .gte('created_at', startDate.toISOString())
+        .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.warn('Erro na consulta completa, tentando busca simplificada:', error);
+        const { data: fallbackData } = await supabase
+          .from('pedidos')
+          .select('id, created_at, total, subtotal, taxa_entrega, status, is_agendado')
+          .gte('created_at', startDate.toISOString())
+          .order('created_at', { ascending: false });
+        pedidos = fallbackData || [];
+      } else {
+        pedidos = data || [];
+      }
 
       let fatTotal = 0;
       let pedValidos = 0;
@@ -59,8 +71,11 @@ const Dashboard = () => {
       const productMap = {};
 
       // Inicializa dias no mapa
-      if (period !== 'hoje') {
-        const days = parseInt(period);
+      if (period === 'hoje') {
+        const todayStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        chartMap[todayStr] = { name: todayStr, faturamento: 0 };
+      } else {
+        const days = parseInt(period) || 7;
         for (let i = days - 1; i >= 0; i--) {
           const d = new Date();
           d.setDate(d.getDate() - i);
@@ -85,16 +100,17 @@ const Dashboard = () => {
         freteTotal += frete;
         pedValidos++;
 
-        if (p.is_agendado) {
+        if (p.is_agendado || p.status === 'AGENDADO') {
           agendQtd++;
         }
 
         const dateObj = new Date(p.created_at);
         const dateStr = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
 
-        if (chartMap[dateStr]) {
-          chartMap[dateStr].faturamento += valor;
+        if (!chartMap[dateStr]) {
+          chartMap[dateStr] = { name: dateStr, faturamento: 0 };
         }
+        chartMap[dateStr].faturamento += valor;
 
         // Agrupa produtos mais vendidos
         if (p.itens_pedido) {

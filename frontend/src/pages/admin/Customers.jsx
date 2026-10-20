@@ -19,7 +19,14 @@ const Customers = () => {
         .select('*')
         .order('ultimo_pedido', { ascending: false });
 
-      if (data) setCustomers(data);
+      if (data) {
+        const mapped = data.map(c => ({
+          ...c,
+          nome: c.cliente_nome || c.nome || 'Cliente Anônimo',
+          telefone: c.cliente_telefone || c.telefone || ''
+        }));
+        setCustomers(mapped);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -31,8 +38,11 @@ const Customers = () => {
 
   const filteredCustomers = customers.filter(c => {
     const term = normalizeString(search);
-    return (c.nome && normalizeString(c.nome).includes(term)) ||
-           (c.telefone && c.telefone.includes(search));
+    const nome = normalizeString(c.nome || c.cliente_nome || '');
+    const telefone = (c.telefone || c.cliente_telefone || '').replace(/\D/g, '');
+    const cleanSearch = search.replace(/\D/g, '');
+    
+    return nome.includes(term) || (cleanSearch && telefone.includes(cleanSearch)) || (c.telefone && c.telefone.includes(search));
   });
 
   return (
