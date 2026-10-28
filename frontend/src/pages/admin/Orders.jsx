@@ -191,14 +191,15 @@ const Orders = () => {
           <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
             @page {
-              size: auto;
+              size: 80mm auto;
               margin: 0mm;
             }
             @media print {
               html, body {
-                width: 72mm;
-                margin: 0 auto;
-                padding: 0;
+                width: 72mm !important;
+                max-width: 72mm !important;
+                margin: 0 !important;
+                padding: 2mm 1mm 0mm 1mm !important;
               }
               .no-print {
                 display: none !important;
