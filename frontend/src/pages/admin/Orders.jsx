@@ -185,6 +185,8 @@ const Orders = () => {
     const dataHora = new Date(pedido.created_at).toLocaleString('pt-BR');
     const codigoFormatado = String(pedido.codigo_pedido).padStart(4, '0');
     const motoboyNome = pedido.motoboys?.nome;
+    // Altura inicial estimada em mm baseada na quantidade de itens (mínimo 100mm)
+    const alturaInicialMm = Math.max(100, 85 + (itens.length * 14));
 
     printWindow.document.open();
     printWindow.document.write(`
@@ -195,8 +197,8 @@ const Orders = () => {
           <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
             @page {
-              size: 80mm auto;
-              margin: 0mm !important;
+              size: 80mm ${alturaInicialMm}mm;
+              margin: 0mm;
             }
             @media print {
               html, body {
@@ -394,7 +396,7 @@ const Orders = () => {
                 var alturaMm = Math.max(85, Math.ceil((alturaPx * 25.4) / 96) + 6);
                 var styleEl = document.getElementById('dynamic-page-size');
                 if (styleEl) {
-                  styleEl.innerHTML = '@page { size: 80mm ' + alturaMm + 'mm !important; margin: 0mm !important; }';
+                  styleEl.innerHTML = '@page { size: 80mm ' + alturaMm + 'mm; margin: 0mm; }';
                 }
               }
               window.focus();
