@@ -194,11 +194,60 @@ const Orders = () => {
       <html lang="pt-BR">
         <head>
           <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
             @page {
               size: 80mm ${alturaInicialMm}mm;
               margin: 0mm;
+            }
+            @media screen {
+              html, body {
+                background-color: #070B16 !important;
+                min-height: 100vh;
+                margin: 0;
+                padding: 0 0 24px 0;
+                font-family: system-ui, -apple-system, sans-serif;
+              }
+              .screen-toolbar {
+                position: sticky;
+                top: 0;
+                z-index: 50;
+                background: rgba(16, 25, 53, 0.95);
+                backdrop-filter: blur(8px);
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding: 10px 14px;
+                margin-bottom: 16px;
+              }
+              .toolbar-inner {
+                max-width: 340px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+              }
+              .toolbar-badge {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: #9CA3AF !important;
+              }
+              .toolbar-badge span.dot {
+                color: #00E5FF !important;
+              }
+              .paper-sheet {
+                width: 80mm;
+                max-width: calc(100vw - 20px);
+                margin: 0 auto;
+                background-color: #ffffff !important;
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.08);
+                border-radius: 4px;
+                overflow: hidden;
+              }
             }
             @media print {
               html, body {
@@ -210,6 +259,14 @@ const Orders = () => {
                 background-color: #ffffff !important;
                 color: #000000 !important;
               }
+              .paper-sheet {
+                width: 80mm !important;
+                max-width: 80mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+              }
               #receipt-container {
                 width: 72mm !important;
                 max-width: 72mm !important;
@@ -220,29 +277,24 @@ const Orders = () => {
                 display: none !important;
               }
             }
-            * {
+            #receipt-container, #receipt-container * {
               box-sizing: border-box;
               margin: 0;
               padding: 0;
               color: #000000 !important;
+              font-family: 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', Courier, monospace;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
             }
-            html, body {
-              background-color: #ffffff !important;
-              font-family: 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', Courier, monospace;
-              width: 80mm;
-              margin: 0 auto;
-              padding: 0;
-              font-size: 11px;
-              line-height: 1.25;
-              font-weight: 700;
-            }
             #receipt-container {
+              background-color: #ffffff !important;
               width: 72mm;
               max-width: 72mm;
               margin: 0 auto;
               padding: 4mm 0 6mm 0;
+              font-size: 11px;
+              line-height: 1.25;
+              font-weight: 700;
             }
             .center { text-align: center; }
             .right { text-align: right; }
@@ -261,41 +313,50 @@ const Orders = () => {
             }
             .actions-bar {
               display: flex;
-              gap: 6px;
-              width: 72mm;
-              margin: 8px auto;
+              gap: 8px;
+              width: 100%;
             }
             .btn-imprimir {
               flex: 1;
-              background: #000000 !important;
-              color: #ffffff !important;
-              padding: 8px;
-              font-weight: bold;
+              background: #00E5FF !important;
+              color: #070B16 !important;
+              padding: 9px 12px;
+              font-weight: 900;
               text-transform: uppercase;
+              letter-spacing: 0.05em;
               font-size: 11px;
               border: none;
               cursor: pointer;
-              border-radius: 4px;
+              border-radius: 8px;
             }
             .btn-fechar {
-              background: #e5e7eb !important;
-              color: #000000 !important;
-              padding: 8px 12px;
-              font-weight: bold;
+              background: rgba(255,255,255,0.08) !important;
+              color: #ffffff !important;
+              padding: 9px 14px;
+              font-weight: 700;
               font-size: 11px;
-              border: 1px solid #000000;
+              border: 1px solid rgba(255,255,255,0.15);
               cursor: pointer;
-              border-radius: 4px;
+              border-radius: 8px;
             }
           </style>
           <style id="dynamic-page-size"></style>
         </head>
         <body>
-          <div class="no-print actions-bar">
-            <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir</button>
-            <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
+          <div class="no-print screen-toolbar">
+            <div class="toolbar-inner">
+              <div class="toolbar-badge">
+                <span><span class="dot">●</span> Bobina 80mm (72mm úteis)</span>
+                <span>#${codigoFormatado}</span>
+              </div>
+              <div class="actions-bar">
+                <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir Comanda</button>
+                <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
+              </div>
+            </div>
           </div>
 
+          <div class="paper-sheet">
           <div id="receipt-container">
             <!-- CABEÇALHO DA EMPRESA -->
             <div class="center">
@@ -387,6 +448,7 @@ const Orders = () => {
             <!-- MARGEM CURTA DE AVANÇO PARA CORTE DA GUILHOTINA SEM SOBRA DE PAPEL A4 -->
             <div style="height: 12mm; line-height: 12mm; text-align: center;">&nbsp;</div>
           </div>
+          </div>
 
           <script>
             function executarImpressao() {
@@ -402,6 +464,10 @@ const Orders = () => {
               window.focus();
               window.print();
             }
+            window.addEventListener('keydown', function(e) {
+              if (e.key === 'Escape') window.close();
+              if (e.key === 'Enter') executarImpressao();
+            });
             setTimeout(executarImpressao, 350);
           </script>
         </body>
@@ -436,47 +502,118 @@ const Orders = () => {
     return String(p.codigo_pedido).includes(term) || normalizeString(p.cliente_nome).includes(term);
   });
 
+  const getStatusBadgeStyle = (status) => {
+    switch (status) {
+      case 'RECEBIDO':
+        return 'bg-[#00E5FF]/15 text-[#00E5FF] border-[#00E5FF]/40';
+      case 'PREPARANDO':
+        return 'bg-amber-500/15 text-amber-400 border-amber-500/40';
+      case 'SAIU_ENTREGA':
+        return 'bg-indigo-500/15 text-indigo-300 border-indigo-500/40';
+      case 'ENTREGUE':
+        return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40';
+      case 'CANCELADO':
+        return 'bg-red-500/15 text-red-400 border-red-500/40';
+      default:
+        return 'bg-white/10 text-gray-300 border-white/20';
+    }
+  };
+
+  const countRecebidos = pedidos.filter(p => p.status === 'RECEBIDO').length;
+  const countPreparando = pedidos.filter(p => p.status === 'PREPARANDO').length;
+  const countEmRota = pedidos.filter(p => p.status === 'SAIU_ENTREGA').length;
+  const countFinalizados = pedidos.filter(p => p.status === 'ENTREGUE').length;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 max-w-full">
       
-      {/* Top Header com Filtros */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Top Header com Filtros Responsivos */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-display font-black uppercase text-white tracking-wider flex items-center gap-3">
-            <ShoppingBag className="text-[#00E5FF]" /> Gestão de Pedidos
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-black uppercase text-white tracking-wider flex items-center gap-2.5">
+            <ShoppingBag className="text-[#00E5FF] shrink-0" /> Gestão de Pedidos
           </h1>
-          <p className="text-xs text-gray-400">Controle de expedição, entrega e motoboys em tempo real.</p>
+          <p className="text-xs text-gray-400 mt-0.5">Controle de expedição, impressão térmica 80mm e motoboys em tempo real.</p>
         </div>
 
-        <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
-          <div className="relative w-full md:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+          <div className="relative flex-1 sm:w-64">
             <input 
               type="text" 
-              placeholder="Buscar por código ou cliente..." 
+              placeholder="Buscar por #código ou cliente..." 
               value={searchCode}
               onChange={(e) => setSearchCode(e.target.value)}
-              className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-2.5 pl-9 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF]"
+              className="w-full bg-[#101935] border border-white/10 rounded-xl px-4 py-2.5 pl-9 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00E5FF] transition-colors"
             />
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           </div>
 
-          <div className="flex bg-[#101935] border border-white/10 rounded-xl p-1 text-[10px] md:text-xs overflow-x-auto">
-            {['pendentes', 'concluidos', 'todos'].map((f) => (
+          <div className="flex bg-[#101935] border border-white/10 rounded-xl p-1 text-[11px] overflow-x-auto">
+            {[
+              { id: 'pendentes', label: 'Ativos' },
+              { id: 'concluidos', label: 'Finalizados' },
+              { id: 'todos', label: 'Todos' }
+            ].map((f) => (
               <button
-                key={f}
-                onClick={() => setActiveFilter(f)}
-                className={`flex-1 md:flex-none px-3 py-2 md:py-1.5 rounded-lg font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
-                  activeFilter === f ? 'bg-[#00E5FF] text-[#0A0F1D]' : 'text-gray-400 hover:text-white'
+                key={f.id}
+                onClick={() => setActiveFilter(f.id)}
+                className={`flex-1 sm:flex-none px-3.5 py-2 sm:py-1.5 rounded-lg font-bold uppercase tracking-wider transition-all whitespace-nowrap ${
+                  activeFilter === f.id
+                    ? 'bg-[#00E5FF] text-[#0A0F1D] shadow-md shadow-cyan-500/20'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
-                {f}
+                {f.label}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Lista de Pedidos - Layout de Tabela Vaiper */}
+      {/* Barra Rápida de Status (KPIs Operacionais) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+        <div className="bg-[#101935] border border-[#00E5FF]/20 rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Novos / Recebidos</span>
+            <span className="text-lg sm:text-2xl font-display font-black text-[#00E5FF]">{countRecebidos}</span>
+          </div>
+          <div className="w-9 h-9 rounded-xl bg-[#00E5FF]/10 text-[#00E5FF] flex items-center justify-center">
+            <AlertCircle size={18} />
+          </div>
+        </div>
+
+        <div className="bg-[#101935] border border-amber-500/20 rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Separando</span>
+            <span className="text-lg sm:text-2xl font-display font-black text-amber-400">{countPreparando}</span>
+          </div>
+          <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <Clock size={18} />
+          </div>
+        </div>
+
+        <div className="bg-[#101935] border border-indigo-500/20 rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Em Rota</span>
+            <span className="text-lg sm:text-2xl font-display font-black text-indigo-300">{countEmRota}</span>
+          </div>
+          <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-300 flex items-center justify-center">
+            <Truck size={18} />
+          </div>
+        </div>
+
+        <div className="bg-[#101935] border border-emerald-500/20 rounded-2xl p-3 sm:p-4 flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Entregues (Lista)</span>
+            <span className="text-lg sm:text-2xl font-display font-black text-emerald-400">{countFinalizados}</span>
+          </div>
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <CheckCircle2 size={18} />
+          </div>
+        </div>
+      </div>
+
+      {/* Lista de Pedidos - Híbrida Responsiva (Cards em Mobile/Tablet/Split-screen & Tabela Fluida em Telas Grandes) */}
       {loading ? (
         <div className="flex justify-center items-center py-24">
           <div className="w-10 h-10 border-4 border-[#00E5FF]/20 border-t-[#00E5FF] rounded-full animate-spin" />
@@ -488,205 +625,350 @@ const Orders = () => {
           <p className="text-xs text-gray-400">Não há pedidos para o filtro selecionado no momento.</p>
         </div>
       ) : (
-        <div className="bg-[#101935] border border-white/5 rounded-2xl overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[900px]">
-            <thead>
-              <tr className="border-b border-white/5 text-[10px] text-gray-500 font-bold uppercase tracking-widest">
-                <th className="p-5 font-medium">Cod</th>
-                <th className="p-5 font-medium">Cliente</th>
-                <th className="p-5 font-medium">Bairro</th>
-                <th className="p-5 font-medium">Total / Pgto</th>
-                <th className="p-5 font-medium">Status</th>
-                <th className="p-5 font-medium">Motoboy</th>
-                <th className="p-5 font-medium text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {filteredPedidos.map((pedido) => (
-                <tr 
-                  key={pedido.id} 
-                  className="hover:bg-white/5 transition-colors group cursor-pointer"
+        <>
+          {/* VISÃO EM CARDS (Mobile, Tablet e Janelas Divididas até 1279px) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:hidden">
+            {filteredPedidos.map((pedido) => {
+              const cod = String(pedido.codigo_pedido).padStart(4, '0');
+              const dataCurta = new Date(pedido.created_at).toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+              });
+              const foneLimpo = (pedido.cliente_telefone || '').replace(/\D/g, '');
+
+              return (
+                <div
+                  key={pedido.id}
                   onClick={() => handleOpenDetails(pedido)}
+                  className="bg-[#101935] border border-white/10 hover:border-[#00E5FF]/40 rounded-2xl p-4 flex flex-col justify-between gap-3.5 transition-all shadow-lg cursor-pointer"
                 >
-                  <td className="p-5 align-top">
-                    <span className="font-display font-black text-white">
-                      #{String(pedido.codigo_pedido).padStart(4, '0')}
-                    </span>
-                  </td>
-                  <td className="p-5 align-top">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-bold text-white text-sm">
-                        {pedido.cliente_nome}
+                  {/* Topo do Card */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-display font-black text-base text-white bg-[#0A0F1D] border border-white/10 px-3 py-1 rounded-xl">
+                        #{cod}
                       </span>
-                      <span className="text-[11px] text-gray-500">
-                        {new Date(pedido.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                      </span>
-                      <span className="text-[11px] text-gray-500">
-                        {pedido.cliente_telefone}
-                      </span>
+                      <div>
+                        <h3 className="font-bold text-white text-sm leading-tight">{pedido.cliente_nome}</h3>
+                        <span className="text-[11px] text-gray-400 block mt-0.5">{dataCurta}</span>
+                      </div>
                     </div>
-                  </td>
-                  <td className="p-5 align-top">
-                    <span className="text-[11px] text-gray-400">{pedido.bairro}</span>
-                  </td>
-                  <td className="p-5 align-top">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-bold text-[#00E5FF] text-sm">
+
+                    <div className="text-right shrink-0">
+                      <span className="font-display font-black text-base text-[#00E5FF] block leading-tight">
                         R$ {Number(pedido.total || 0).toFixed(2).replace('.', ',')}
                       </span>
-                      <span className="text-[10px] text-gray-500 uppercase font-bold tracking-widest">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-white/5 px-2 py-0.5 rounded-md inline-block mt-0.5">
                         {pedido.metodo_pagamento}
                       </span>
                     </div>
-                  </td>
-                  <td className="p-5 align-top">
-                    <select
-                      value={pedido.status}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        handleStatusChange(pedido.id, e.target.value);
-                      }}
-                      className="bg-[#0A0F1D] border border-white/10 rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-white focus:outline-none focus:border-[#00E5FF]"
-                    >
-                      <option value="RECEBIDO">Recebido</option>
-                      <option value="PREPARANDO">Preparando</option>
-                      <option value="SAIU_ENTREGA">Em Rota</option>
-                      <option value="ENTREGUE">Entregue</option>
-                      <option value="CANCELADO">Cancelado</option>
-                    </select>
-                  </td>
-                  <td className="p-5 align-top">
-                    <select
-                      value={pedido.motoboy_id || ''}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => {
-                        e.stopPropagation();
-                        handleMotoboyChange(pedido.id, e.target.value);
-                      }}
-                      className="bg-[#0A0F1D] border border-white/10 rounded-lg px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-white focus:outline-none focus:border-[#00E5FF] min-w-[120px]"
-                    >
-                      <option value="">Selecione...</option>
-                      {motoboys.map(m => (
-                        <option key={m.id} value={m.id}>{m.nome}</option>
-                      ))}
-                    </select>
-                  </td>
-                  <td className="p-5 align-top">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); printThermalReceipt(pedido); }}
-                        className="bg-transparent border border-[#00E5FF]/30 hover:bg-[#00E5FF]/10 text-[#00E5FF] px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5"
-                      >
-                        <Printer size={12} /> Imprimir
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleOpenDetails(pedido); }}
-                        className="bg-transparent border border-white/10 hover:bg-white/10 text-gray-300 p-1.5 rounded-lg transition-colors"
-                        title="Ver detalhes"
-                      >
-                        <Eye size={14} />
-                      </button>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); handleDeletePedido(pedido.id, pedido.codigo_pedido); }}
-                        className="bg-transparent border border-red-500/30 hover:bg-red-500/10 text-red-500 p-1.5 rounded-lg transition-colors"
-                        title="Excluir"
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                  </div>
+
+                  {/* Endereço e Contato Rápido */}
+                  <div className="bg-[#0A0F1D]/70 border border-white/5 rounded-xl p-3 space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#00E5FF]">
+                        📍 {pedido.bairro}
+                      </span>
+                      {foneLimpo && (
+                        <a
+                          href={`https://wa.me/55${foneLimpo}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] font-bold text-[#25D366] hover:underline flex items-center gap-1"
+                        >
+                          <Phone size={11} /> {pedido.cliente_telefone}
+                        </a>
+                      )}
                     </div>
-                  </td>
+                    <p className="text-xs text-gray-300 line-clamp-2 leading-snug">
+                      {pedido.endereco_completo}
+                    </p>
+                  </div>
+
+                  {/* Seletores Rápidos: Status e Motoboy */}
+                  <div className="grid grid-cols-2 gap-2" onClick={(e) => e.stopPropagation()}>
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                        Status
+                      </label>
+                      <select
+                        value={pedido.status}
+                        onChange={(e) => handleStatusChange(pedido.id, e.target.value)}
+                        className={`w-full border rounded-xl px-2.5 py-2 text-[11px] font-bold uppercase tracking-wider focus:outline-none ${getStatusBadgeStyle(pedido.status)} bg-[#0A0F1D]`}
+                      >
+                        <option value="RECEBIDO" className="bg-[#0A0F1D] text-white">Recebido</option>
+                        <option value="PREPARANDO" className="bg-[#0A0F1D] text-white">Preparando</option>
+                        <option value="SAIU_ENTREGA" className="bg-[#0A0F1D] text-white">Em Rota</option>
+                        <option value="ENTREGUE" className="bg-[#0A0F1D] text-white">Entregue</option>
+                        <option value="CANCELADO" className="bg-[#0A0F1D] text-white">Cancelado</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[9px] font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                        Entregador
+                      </label>
+                      <select
+                        value={pedido.motoboy_id || ''}
+                        onChange={(e) => handleMotoboyChange(pedido.id, e.target.value)}
+                        className="w-full bg-[#0A0F1D] border border-white/10 rounded-xl px-2.5 py-2 text-[11px] font-bold uppercase tracking-wider text-white focus:outline-none focus:border-[#00E5FF]"
+                      >
+                        <option value="">Selecione...</option>
+                        {motoboys.map(m => (
+                          <option key={m.id} value={m.id}>{m.nome}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Barra de Ações do Card */}
+                  <div className="flex items-center gap-2 pt-1" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => printThermalReceipt(pedido)}
+                      className="flex-1 bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-cyan-500/15"
+                    >
+                      <Printer size={15} /> Imprimir Comanda
+                    </button>
+                    <button
+                      onClick={() => handleOpenDetails(pedido)}
+                      className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-200 p-2.5 rounded-xl transition-colors"
+                      title="Ver detalhes"
+                    >
+                      <Eye size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDeletePedido(pedido.id, pedido.codigo_pedido)}
+                      className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 p-2.5 rounded-xl transition-colors"
+                      title="Excluir pedido"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* VISÃO EM TABELA FLUIDA (Desktop Largo xl+) */}
+          <div className="hidden xl:block bg-[#101935] border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/5 bg-[#070B16]/60 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+                  <th className="py-4 px-4 font-medium">Pedido</th>
+                  <th className="py-4 px-4 font-medium">Cliente / Contato</th>
+                  <th className="py-4 px-4 font-medium">Bairro / Endereço</th>
+                  <th className="py-4 px-4 font-medium">Total / Pgto</th>
+                  <th className="py-4 px-4 font-medium">Status</th>
+                  <th className="py-4 px-4 font-medium">Motoboy</th>
+                  <th className="py-4 px-4 font-medium text-right">Expedição</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {filteredPedidos.map((pedido) => (
+                  <tr 
+                    key={pedido.id} 
+                    className="hover:bg-white/5 transition-colors group cursor-pointer"
+                    onClick={() => handleOpenDetails(pedido)}
+                  >
+                    <td className="py-4 px-4 align-middle">
+                      <span className="font-display font-black text-white bg-[#0A0F1D] border border-white/10 px-2.5 py-1 rounded-lg text-xs">
+                        #{String(pedido.codigo_pedido).padStart(4, '0')}
+                      </span>
+                      <span className="block text-[10px] text-gray-500 mt-1">
+                        {new Date(pedido.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 align-middle">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-bold text-white text-sm">
+                          {pedido.cliente_nome}
+                        </span>
+                        <span className="text-[11px] text-gray-400">
+                          {pedido.cliente_telefone}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 align-middle max-w-[240px]">
+                      <span className="text-xs font-bold text-[#00E5FF] block">{pedido.bairro}</span>
+                      <span className="text-[11px] text-gray-400 truncate block" title={pedido.endereco_completo}>
+                        {pedido.endereco_completo}
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 align-middle">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-display font-black text-[#00E5FF] text-sm">
+                          R$ {Number(pedido.total || 0).toFixed(2).replace('.', ',')}
+                        </span>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
+                          {pedido.metodo_pagamento}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-4 px-4 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <select
+                        value={pedido.status}
+                        onChange={(e) => handleStatusChange(pedido.id, e.target.value)}
+                        className={`border rounded-xl px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider focus:outline-none ${getStatusBadgeStyle(pedido.status)} bg-[#0A0F1D]`}
+                      >
+                        <option value="RECEBIDO" className="bg-[#0A0F1D] text-white">Recebido</option>
+                        <option value="PREPARANDO" className="bg-[#0A0F1D] text-white">Preparando</option>
+                        <option value="SAIU_ENTREGA" className="bg-[#0A0F1D] text-white">Em Rota</option>
+                        <option value="ENTREGUE" className="bg-[#0A0F1D] text-white">Entregue</option>
+                        <option value="CANCELADO" className="bg-[#0A0F1D] text-white">Cancelado</option>
+                      </select>
+                    </td>
+                    <td className="py-4 px-4 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <select
+                        value={pedido.motoboy_id || ''}
+                        onChange={(e) => handleMotoboyChange(pedido.id, e.target.value)}
+                        className="bg-[#0A0F1D] border border-white/10 rounded-xl px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white focus:outline-none focus:border-[#00E5FF] min-w-[130px]"
+                      >
+                        <option value="">Selecione...</option>
+                        {motoboys.map(m => (
+                          <option key={m.id} value={m.id}>{m.nome}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td className="py-4 px-4 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => printThermalReceipt(pedido)}
+                          className="bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] px-3.5 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5 shadow-sm"
+                        >
+                          <Printer size={14} /> Imprimir
+                        </button>
+                        <button
+                          onClick={() => handleOpenDetails(pedido)}
+                          className="bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 p-2 rounded-xl transition-colors"
+                          title="Ver detalhes"
+                        >
+                          <Eye size={15} />
+                        </button>
+                        <button
+                          onClick={() => handleDeletePedido(pedido.id, pedido.codigo_pedido)}
+                          className="bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 p-2 rounded-xl transition-colors"
+                          title="Excluir"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
-      {/* MODAL DETALHES DO PEDIDO (DIVIDIDO) */}
+      {/* MODAL DETALHES DO PEDIDO (DIVIDIDO E RESPONSIVO) */}
       {detailsModalOpen && selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
-          <div className="bg-[#101935] rounded-3xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden border border-white/10 max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm">
+          <div className="bg-[#101935] rounded-3xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden border border-white/10 max-h-[92vh] shadow-2xl">
             
-            {/* LADO ESQUERDO: Recibo Térmico */}
-            <div className="w-full md:w-1/2 bg-[#E5E7EB] p-6 md:p-8 flex items-center justify-center overflow-y-auto">
-              <div className="bg-white p-6 shadow-2xl text-black font-mono text-[11px] leading-tight w-full max-w-sm">
-                <div className="text-center mb-4">
-                  <h2 className="font-bold text-sm">DISTRIBUIDORA DE BEBIDAS REFRESCA</h2>
-                  <p>Rio de Janeiro - RJ</p>
+            {/* LADO ESQUERDO: Simulação Fiel da Comanda 80mm */}
+            <div className="w-full md:w-1/2 bg-[#070B16] p-4 sm:p-6 flex flex-col items-center justify-start overflow-y-auto border-b md:border-b-0 md:border-r border-white/10">
+              <div className="w-full max-w-[300px] mb-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#00E5FF]"></span> Preview Bobina 80mm
+                </span>
+                <span>72mm Úteis</span>
+              </div>
+
+              <div className="bg-white p-4 shadow-2xl text-black font-mono text-[11px] leading-snug w-full max-w-[300px] rounded-sm">
+                <div className="text-center">
+                  <div className="font-black text-sm tracking-tight">REFRESCA BEBIDAS</div>
+                  <div className="text-[10px] font-bold">DISTRIBUIDORA & DEPÓSITO</div>
+                  <div className="text-[10px]">Rua São Tillon, 141 - Barra da Tijuca</div>
+                  <div className="text-[10px]">WhatsApp: (21) 98378-5928</div>
                 </div>
+
+                <div className="border-t-2 border-black my-2"></div>
+
+                <div className="flex justify-between items-baseline">
+                  <span className="font-black text-xs">PEDIDO: #{String(selectedOrder.codigo_pedido).padStart(4, '0')}</span>
+                  <span className="text-[10px]">{new Date(selectedOrder.created_at).toLocaleString('pt-BR')}</span>
+                </div>
+
                 <div className="border-t border-dashed border-black my-2"></div>
-                
-                <div className="mb-2">
-                  <p><strong>PEDIDO #{selectedOrder.codigo_pedido}</strong></p>
-                  <p>Data: {new Date(selectedOrder.created_at).toLocaleString('pt-BR')}</p>
+
+                <div className="space-y-0.5 text-[11px]">
+                  <p><strong>CLIENTE:</strong> {selectedOrder.cliente_nome}</p>
+                  <p><strong>TEL:</strong> {selectedOrder.cliente_telefone}</p>
+                  <p><strong>ENDEREÇO:</strong> {selectedOrder.endereco_completo}</p>
+                  <p><strong>BAIRRO:</strong> {selectedOrder.bairro}</p>
                 </div>
-                
+
+                <div className="border-t-2 border-black my-2"></div>
+
                 <div className="mb-2">
-                  <p><strong>DADOS DO CLIENTE:</strong></p>
-                  <p>Nome: {selectedOrder.cliente_nome}</p>
-                  <p>Tel: {selectedOrder.cliente_telefone}</p>
-                  <p className="mt-1">Endereço: {selectedOrder.endereco_completo}</p>
-                  <p>Bairro: {selectedOrder.bairro}</p>
-                </div>
-                <div className="border-t border-dashed border-black my-2"></div>
-                
-                <div className="mb-2">
-                  <p><strong>ITENS DO PEDIDO:</strong></p>
-                  <div className="flex justify-between font-bold mb-1">
-                    <span>Qtd Item</span>
-                    <span>R$</span>
+                  <div className="flex justify-between font-black text-[10px] border-b border-black pb-1 mb-1.5">
+                    <span>QTD / DESCRIÇÃO</span>
+                    <span>TOTAL</span>
                   </div>
                   {loadingItems ? (
-                    <p className="text-gray-500">Carregando...</p>
+                    <p className="text-gray-500 py-2 text-center">Carregando itens...</p>
                   ) : (
                     orderItems.map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-start mb-1">
-                        <span className="pr-2">{item.quantidade}x {item.produtos?.nome || 'Bebida'}</span>
-                        <span>{(Number(item.preco_unitario) * item.quantidade).toFixed(2)}</span>
+                      <div key={idx} className="py-1 border-b border-dashed border-black/40">
+                        <div className="flex justify-between items-start font-bold">
+                          <span className="pr-2">{item.quantidade}x {item.produtos?.nome || 'Bebida'}</span>
+                          <span className="whitespace-nowrap">R$ {(Number(item.preco_unitario) * item.quantidade).toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        {item.observacao && (
+                          <div className="text-[10px] font-bold mt-0.5">[Obs: {item.observacao}]</div>
+                        )}
                       </div>
                     ))
                   )}
                 </div>
-                
-                <div className="border-t border-dashed border-black my-2"></div>
-                <div className="flex justify-between mb-1">
-                  <span>Subtotal:</span>
-                  <span>R$ {Number(selectedOrder.subtotal || 0).toFixed(2)}</span>
+
+                <div className="space-y-0.5 text-[11px]">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span>R$ {Number(selectedOrder.subtotal || 0).toFixed(2).replace('.', ',')}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Taxa de Entrega:</span>
+                    <span>R$ {Number(selectedOrder.taxa_entrega || 0).toFixed(2).replace('.', ',')}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between mb-2">
-                  <span>Taxa Entrega:</span>
-                  <span>R$ {Number(selectedOrder.taxa_entrega || 0).toFixed(2)}</span>
+
+                <div className="border-t border-dashed border-black my-1.5"></div>
+
+                <div className="flex justify-between font-black text-sm">
+                  <span>TOTAL A PAGAR:</span>
+                  <span>R$ {Number(selectedOrder.total || 0).toFixed(2).replace('.', ',')}</span>
                 </div>
-                
-                <div className="flex justify-between font-bold text-sm mb-2">
-                  <span>TOTAL:</span>
-                  <span>R$ {Number(selectedOrder.total || 0).toFixed(2)}</span>
-                </div>
-                
-                <div className="flex justify-between">
-                  <span>Forma de Pgto:</span>
-                  <span>{selectedOrder.metodo_pagamento}</span>
+
+                <div className="border-t-2 border-black my-1.5"></div>
+
+                <div className="text-[11px] font-bold">
+                  PAGAMENTO: {selectedOrder.metodo_pagamento}
                 </div>
               </div>
             </div>
 
-            {/* LADO DIREITO: Ações */}
-            <div className="w-full md:w-1/2 bg-[#0A0F1D] p-6 md:p-8 flex flex-col relative overflow-y-auto">
-              <button 
-                onClick={() => setDetailsModalOpen(false)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
-              >
-                ✕
-              </button>
-
-              <h2 className="font-display font-black text-xl text-white uppercase tracking-widest mb-8">Ações do Pedido</h2>
+            {/* LADO DIREITO: Ações Operacionais */}
+            <div className="w-full md:w-1/2 bg-[#0A0F1D] p-5 sm:p-7 flex flex-col relative overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display font-black text-lg sm:text-xl text-white uppercase tracking-widest">
+                  Expedição #{String(selectedOrder.codigo_pedido).padStart(4, '0')}
+                </h2>
+                <button 
+                  onClick={() => setDetailsModalOpen(false)}
+                  className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
               
-              <div className="space-y-6 flex-1">
+              <div className="space-y-5 flex-1">
                 {/* Status Atual */}
                 <div className="space-y-2">
-                  <label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest block">
-                    Status Atual
+                  <label className="text-gray-400 text-[10px] font-bold uppercase tracking-widest block">
+                    Status do Pedido
                   </label>
                   <select
                     value={selectedOrder.status}
@@ -703,7 +985,7 @@ const Orders = () => {
 
                 {/* Motoboy Responsável */}
                 <div className="space-y-2">
-                  <label className="text-gray-500 text-[10px] font-bold uppercase tracking-widest block">
+                  <label className="text-gray-400 text-[10px] font-bold uppercase tracking-widest block">
                     Motoboy Responsável
                   </label>
                   <select
@@ -720,21 +1002,21 @@ const Orders = () => {
               </div>
 
               {/* Botões Finais */}
-              <div className="pt-8 space-y-3 mt-auto">
+              <div className="pt-6 space-y-2.5 mt-auto">
+                <button
+                  onClick={() => printThermalReceipt(selectedOrder)}
+                  className="w-full bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-3.5 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors shadow-[0_0_15px_rgba(0,229,255,0.25)]"
+                >
+                  <Printer size={16} /> Imprimir Comanda (80mm)
+                </button>
                 <a
-                  href={`https://wa.me/55${selectedOrder.cliente_telefone.replace(/\D/g, '')}`}
+                  href={`https://wa.me/55${(selectedOrder.cliente_telefone || '').replace(/\D/g, '')}`}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full bg-[#10B981] hover:bg-[#059669] text-white py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors"
                 >
-                  <MessageCircle size={16} /> Falar com Cliente
+                  <MessageCircle size={16} /> Falar com Cliente no WhatsApp
                 </a>
-                <button
-                  onClick={() => printThermalReceipt(selectedOrder)}
-                  className="w-full bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-3.5 rounded-xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-colors shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)]"
-                >
-                  <Printer size={16} /> Imprimir Comanda
-                </button>
               </div>
             </div>
 

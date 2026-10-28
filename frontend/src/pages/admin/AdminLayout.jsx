@@ -111,13 +111,13 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0F1D] flex flex-col md:flex-row text-white font-sans">
+    <div className="min-h-screen bg-[#0A0F1D] flex flex-col lg:flex-row text-white font-sans overflow-x-hidden">
       
-      {/* Sidebar Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-[#070B16] border-r border-white/10 p-5 shrink-0 justify-between">
+      {/* Sidebar Desktop (Telas Grandes lg+) */}
+      <aside className="hidden lg:flex flex-col w-64 bg-[#070B16] border-r border-white/10 p-5 shrink-0 justify-between sticky top-0 h-screen">
         <div className="space-y-6">
           <Link to="/admin/dashboard" className="flex items-center gap-3 px-2">
-            <img src="/logo_refresca.png" alt="Refresca Bebidas" className="h-12 w-auto object-contain rounded-lg" />
+            <img src="/logo_refresca.png" alt="Refresca Bebidas" className="h-11 w-auto object-contain rounded-lg" />
             <div>
               <span className="font-display font-black text-sm text-white tracking-wider block">REFRESCA</span>
               <span className="text-[10px] text-[#00E5FF] font-bold tracking-widest uppercase block">Painel Gerente</span>
@@ -132,14 +132,14 @@ const AdminLayout = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                     isActive
                       ? 'bg-[#00E5FF] text-[#0A0F1D] shadow-lg shadow-cyan-500/20'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   {item.icon}
-                  <span>{item.label}</span>
+                  <span className="truncate">{item.label}</span>
                 </Link>
               );
             })}
@@ -147,7 +147,7 @@ const AdminLayout = () => {
         </div>
 
         {/* Rodapé da Sidebar */}
-        <div className="pt-6 border-t border-white/10 space-y-2">
+        <div className="pt-4 border-t border-white/10 space-y-2">
           <a
             href="/"
             target="_blank"
@@ -165,45 +165,78 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Topbar Mobile */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-[#070B16] border-b border-white/10">
+      {/* Topbar Mobile & Tablet / Split-Screen */}
+      <div className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-[#070B16]/95 backdrop-blur-md border-b border-white/10">
+        <Link to="/admin/dashboard" className="flex items-center gap-2.5">
+          <img src="/logo_refresca.png" alt="Refresca" className="h-9 w-auto object-contain rounded-md" />
+          <div>
+            <span className="font-display font-black text-xs sm:text-sm text-white block leading-none">REFRESCA ADMIN</span>
+            <span className="text-[9px] text-[#00E5FF] font-bold uppercase tracking-widest">Gestão Express</span>
+          </div>
+        </Link>
         <div className="flex items-center gap-2">
-          <img src="/logo_refresca.png" alt="Refresca" className="h-10 w-auto object-contain" />
-          <span className="font-display font-black text-sm text-white">REFRESCA ADMIN</span>
+          <Link
+            to="/admin/orders"
+            className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
+              location.pathname === '/admin/orders'
+                ? 'bg-[#00E5FF] text-[#0A0F1D]'
+                : 'bg-white/5 text-gray-300 hover:text-white'
+            }`}
+          >
+            <ShoppingBag size={14} /> Pedidos
+          </Link>
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-white p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            aria-label="Menu"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-white p-2"
-        >
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
 
-      {/* Menu Drawer Mobile */}
+      {/* Menu Drawer Mobile & Tablet */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#070B16] border-b border-white/10 p-4 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-white/5"
+        <div className="lg:hidden fixed inset-x-0 top-[57px] z-40 bg-[#070B16] border-b border-white/10 p-4 space-y-1 shadow-2xl max-h-[calc(100vh-57px)] overflow-y-auto">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                  isActive
+                    ? 'bg-[#00E5FF] text-[#0A0F1D]'
+                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+          <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="px-4 py-2.5 text-xs font-bold text-[#00E5FF]"
             >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
-          ))}
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold uppercase text-red-400"
-          >
-            <LogOut size={16} /> Sair
-          </button>
+              Abrir Loja Pública ↗
+            </a>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase text-red-400 hover:bg-red-500/10 rounded-xl"
+            >
+              <LogOut size={16} /> Sair
+            </button>
+          </div>
         </div>
       )}
 
       {/* Conteúdo Principal das Telas Admin */}
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto custom-scrollbar">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar">
         <Outlet />
       </main>
 
