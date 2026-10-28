@@ -111,13 +111,13 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0A0F1D] flex flex-col lg:flex-row text-white font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#0A0F1D] flex flex-col md:flex-row text-white font-sans overflow-x-hidden">
       
-      {/* Sidebar Desktop (Telas Grandes lg+) */}
-      <aside className="hidden lg:flex flex-col w-64 bg-[#070B16] border-r border-white/10 p-5 shrink-0 justify-between sticky top-0 h-screen">
+      {/* Sidebar Desktop (Telas md+ 768px+) */}
+      <aside className="hidden md:flex flex-col w-60 lg:w-64 bg-[#070B16] border-r border-white/10 p-5 shrink-0 justify-between sticky top-0 h-screen">
         <div className="space-y-6">
           <Link to="/admin/dashboard" className="flex items-center gap-3 px-2">
-            <img src="/logo_refresca.png" alt="Refresca Bebidas" className="h-11 w-auto object-contain rounded-lg" />
+            <img src="/logo_refresca.png" alt="Refresca Bebidas" className="h-10 w-auto object-contain rounded-lg" />
             <div>
               <span className="font-display font-black text-sm text-white tracking-wider block">REFRESCA</span>
               <span className="text-[10px] text-[#00E5FF] font-bold tracking-widest uppercase block">Painel Gerente</span>
@@ -165,8 +165,8 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Topbar Mobile & Tablet / Split-Screen */}
-      <div className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-[#070B16]/95 backdrop-blur-md border-b border-white/10">
+      {/* Topbar Mobile (< 768px) */}
+      <div className="md:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-[#070B16]/95 backdrop-blur-md border-b border-white/10">
         <Link to="/admin/dashboard" className="flex items-center gap-2.5">
           <img src="/logo_refresca.png" alt="Refresca" className="h-9 w-auto object-contain rounded-md" />
           <div>
@@ -195,9 +195,9 @@ const AdminLayout = () => {
         </div>
       </div>
 
-      {/* Menu Drawer Mobile & Tablet */}
+      {/* Menu Drawer Mobile */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[57px] z-40 bg-[#070B16] border-b border-white/10 p-4 space-y-1 shadow-2xl max-h-[calc(100vh-57px)] overflow-y-auto">
+        <div className="md:hidden fixed inset-x-0 top-[57px] z-40 bg-[#070B16] border-b border-white/10 p-4 space-y-1 shadow-2xl max-h-[calc(100vh-57px)] overflow-y-auto">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -236,7 +236,7 @@ const AdminLayout = () => {
       )}
 
       {/* Conteúdo Principal das Telas Admin */}
-      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto custom-scrollbar">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-7 overflow-y-auto custom-scrollbar">
         <Outlet />
       </main>
 
