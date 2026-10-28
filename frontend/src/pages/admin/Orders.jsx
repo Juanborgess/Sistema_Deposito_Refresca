@@ -124,6 +124,15 @@ const Orders = () => {
   };
 
   const printThermalReceipt = async (pedido) => {
+    // Abre a janela IMEDIATAMENTE no clique (antes do await) para o Chrome no Linux/Windows nunca bloquear
+    const printWindow = window.open('', '_blank', 'width=420,height=650');
+    if (!printWindow) {
+      toast.error('Permita popups no navegador para imprimir a comanda.');
+      return;
+    }
+
+    printWindow.document.write('<html><body style="font-family:sans-serif;padding:20px;text-align:center;">Gerando comanda para impressão...</body></html>');
+
     // Busca itens caso não tenha
     let itens = [];
     try {
@@ -134,12 +143,6 @@ const Orders = () => {
       itens = data || [];
     } catch (e) {
       console.error('Erro ao buscar itens para impressão:', e);
-    }
-
-    const printWindow = window.open('', '_blank', 'width=420,height=650');
-    if (!printWindow) {
-      toast.error('Permita popups no navegador para imprimir a comanda.');
-      return;
     }
 
     // Formata método de pagamento
@@ -183,6 +186,7 @@ const Orders = () => {
     const codigoFormatado = String(pedido.codigo_pedido).padStart(4, '0');
     const motoboyNome = pedido.motoboys?.nome;
 
+    printWindow.document.open();
     printWindow.document.write(`
       <!DOCTYPE html>
       <html lang="pt-BR">
@@ -191,7 +195,6 @@ const Orders = () => {
           <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
             @page {
-              size: 80mm auto;
               margin: 0mm;
             }
             @media print {
@@ -200,6 +203,8 @@ const Orders = () => {
                 max-width: 72mm !important;
                 margin: 0 !important;
                 padding: 2mm 1mm 0mm 1mm !important;
+                background-color: #ffffff !important;
+                color: #000000 !important;
               }
               .no-print {
                 display: none !important;
@@ -210,15 +215,15 @@ const Orders = () => {
               margin: 0;
               padding: 0;
               color: #000000 !important;
-              background: transparent !important;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
             }
-            body {
-              font-family: 'Courier New', Courier, monospace;
+            html, body {
+              background-color: #ffffff !important;
+              font-family: 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', Courier, monospace;
               width: 72mm;
               max-width: 72mm;
-              margin: 0 auto;
+              margin: 0;
               padding: 4mm 2mm 0mm 2mm;
               font-size: 11px;
               line-height: 1.25;
@@ -239,25 +244,40 @@ const Orders = () => {
               width: 100%;
               border-collapse: collapse;
             }
-            /* Botão de segurança na tela antes de imprimir */
+            .actions-bar {
+              display: flex;
+              gap: 6px;
+              margin-bottom: 10px;
+            }
             .btn-imprimir {
-              display: block;
-              width: 100%;
-              background: #000 !important;
-              color: #fff !important;
+              flex: 1;
+              background: #000000 !important;
+              color: #ffffff !important;
               padding: 8px;
               font-weight: bold;
               text-transform: uppercase;
-              font-size: 12px;
+              font-size: 11px;
               border: none;
               cursor: pointer;
-              margin-bottom: 10px;
+              border-radius: 4px;
+            }
+            .btn-fechar {
+              background: #e5e7eb !important;
+              color: #000000 !important;
+              padding: 8px 12px;
+              font-weight: bold;
+              font-size: 11px;
+              border: 1px solid #000;
+              cursor: pointer;
               border-radius: 4px;
             }
           </style>
         </head>
         <body>
-          <button class="no-print btn-imprimir" onclick="window.print()">🖨️ Confirmar Impressão</button>
+          <div class="no-print actions-bar">
+            <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
+            <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
+          </div>
 
           <!-- CABEÇALHO DA EMPRESA -->
           <div class="center">
@@ -347,18 +367,13 @@ const Orders = () => {
           </div>
 
           <!-- ESPAÇO DE AVANÇO (25mm) PARA CORTE LIMPO DA GUILHOTINA BEMATECH -->
-          <div style="height: 25mm; line-height: 25mm; text-align: center; color: transparent !important;">.</div>
+          <div style="height: 25mm; line-height: 25mm; text-align: center;">&nbsp;</div>
 
           <script>
-            window.onload = function() {
+            setTimeout(function() {
               window.focus();
-              setTimeout(function() {
-                window.print();
-              }, 300);
-            };
-            window.onafterprint = function() {
-              window.close();
-            };
+              window.print();
+            }, 400);
           </script>
         </body>
       </html>
