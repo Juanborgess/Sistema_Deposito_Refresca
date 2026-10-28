@@ -206,12 +206,12 @@ const Orders = () => {
   const countFinalizados = pedidos.filter(p => p.status === 'ENTREGUE').length;
 
   return (
-    <div className="space-y-5 max-w-7xl mx-auto">
+    <div className="space-y-5 w-full max-w-7xl mx-auto">
       
-      {/* Top Header: Título à Esquerda + Busca & Pílulas Compactas à Direita (Alinhado ao Dashboard) */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-display font-black uppercase text-white tracking-widest flex items-center gap-2.5">
+      {/* Top Header: Título à Esquerda + Busca & Pílulas Compactas à Direita */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
+        <div className="min-w-0">
+          <h1 className="text-lg sm:text-xl lg:text-2xl font-display font-black uppercase text-white tracking-widest flex items-center gap-2.5">
             <ShoppingBag size={22} className="text-[#00E5FF] shrink-0" /> GESTÃO DE PEDIDOS
           </h1>
           <p className="text-xs text-gray-400 mt-1">
@@ -219,9 +219,9 @@ const Orders = () => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
           {/* Busca Compacta */}
-          <div className="relative sm:w-56 lg:w-64">
+          <div className="relative sm:w-52 lg:w-60">
             <input 
               type="text" 
               placeholder="Buscar #código ou cliente..." 
@@ -255,9 +255,9 @@ const Orders = () => {
         </div>
       </div>
 
-      {/* KPIs Operacionais Compactos (4 colunas harmônicas no Desktop e 2x2 no Mobile) */}
+      {/* KPIs Operacionais Compactos (4 colunas no Desktop e 2x2 no Mobile) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3.5 flex items-center justify-between">
+        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Novos / Recebidos</span>
             <span className="text-xl sm:text-2xl font-display font-black text-[#00E5FF] mt-0.5 block leading-none">{countRecebidos}</span>
@@ -267,7 +267,7 @@ const Orders = () => {
           </div>
         </div>
 
-        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3.5 flex items-center justify-between">
+        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Separando</span>
             <span className="text-xl sm:text-2xl font-display font-black text-amber-400 mt-0.5 block leading-none">{countPreparando}</span>
@@ -277,7 +277,7 @@ const Orders = () => {
           </div>
         </div>
 
-        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3.5 flex items-center justify-between">
+        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Em Rota</span>
             <span className="text-xl sm:text-2xl font-display font-black text-indigo-300 mt-0.5 block leading-none">{countEmRota}</span>
@@ -287,7 +287,7 @@ const Orders = () => {
           </div>
         </div>
 
-        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3.5 flex items-center justify-between">
+        <div className="bg-[#101935]/80 backdrop-blur-md border border-white/5 rounded-2xl px-4 py-3 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Entregues</span>
             <span className="text-xl sm:text-2xl font-display font-black text-emerald-400 mt-0.5 block leading-none">{countFinalizados}</span>
@@ -298,7 +298,7 @@ const Orders = () => {
         </div>
       </div>
 
-      {/* Lista de Pedidos: Tabela Limpa em Desktop (md+) & Cards Compactos em Smartphones (<768px) */}
+      {/* Lista de Pedidos: Tabela Elástica Sem Cortes no Desktop (md+) & Cards no Mobile (<768px) */}
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <div className="w-9 h-9 border-4 border-[#00E5FF]/20 border-t-[#00E5FF] rounded-full animate-spin" />
@@ -311,18 +311,18 @@ const Orders = () => {
         </div>
       ) : (
         <>
-          {/* VISÃO DESKTOP (md+ 768px+): Tabela Limpa, Proporcional e Sem Scroll Horizontal */}
+          {/* VISÃO DESKTOP & NOTEBOOK (md+ 768px+): Grid/Tabela 100% Contida sem cortar botões à direita */}
           <div className="hidden md:block bg-[#101935]/90 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden shadow-xl">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full table-fixed text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5 bg-[#070B16]/60 text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                  <th className="py-3.5 px-3.5 font-medium">Pedido</th>
-                  <th className="py-3.5 px-3.5 font-medium">Cliente</th>
-                  <th className="py-3.5 px-3.5 font-medium hidden lg:table-cell">Bairro / Destino</th>
-                  <th className="py-3.5 px-3.5 font-medium">Total</th>
-                  <th className="py-3.5 px-3.5 font-medium">Status</th>
-                  <th className="py-3.5 px-3.5 font-medium">Motoboy</th>
-                  <th className="py-3.5 px-3.5 font-medium text-right">Ações</th>
+                <tr className="border-b border-white/5 bg-[#070B16]/60 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                  <th className="py-3 px-3 w-[82px] font-medium">Pedido</th>
+                  <th className="py-3 px-3 w-[22%] lg:w-[20%] font-medium">Cliente</th>
+                  <th className="py-3 px-3 hidden lg:table-cell font-medium">Bairro / Destino</th>
+                  <th className="py-3 px-3 w-[95px] font-medium">Total</th>
+                  <th className="py-3 px-3 w-[124px] font-medium">Status</th>
+                  <th className="py-3 px-3 w-[120px] font-medium">Motoboy</th>
+                  <th className="py-3 px-3 w-[142px] xl:w-[172px] font-medium text-right">Ações</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5 text-xs">
@@ -339,52 +339,52 @@ const Orders = () => {
                       className="hover:bg-white/[0.03] transition-colors cursor-pointer"
                     >
                       {/* #Código + Data */}
-                      <td className="py-3.5 px-3.5 align-middle whitespace-nowrap">
-                        <span className="font-display font-black text-white bg-[#0A0F1D] border border-white/10 px-2.5 py-1 rounded-lg text-xs inline-block">
+                      <td className="py-3 px-3 align-middle">
+                        <span className="font-display font-black text-white bg-[#0A0F1D] border border-white/10 px-2 py-0.5 rounded-lg text-[11px] inline-block">
                           #{cod}
                         </span>
-                        <span className="block text-[10px] text-gray-500 mt-1">
+                        <span className="block text-[10px] text-gray-500 mt-0.5 truncate">
                           {dataCurta}
                         </span>
                       </td>
 
-                      {/* Cliente + Telefone (e Bairro em telas md menores que lg) */}
-                      <td className="py-3.5 px-3.5 align-middle">
-                        <div className="font-bold text-white text-xs sm:text-sm leading-snug truncate max-w-[170px] xl:max-w-[220px]">
+                      {/* Cliente + Telefone */}
+                      <td className="py-3 px-3 align-middle min-w-0">
+                        <div className="font-bold text-white text-xs leading-snug truncate" title={pedido.cliente_nome}>
                           {pedido.cliente_nome}
                         </div>
-                        <div className="text-[11px] text-gray-400 mt-0.5 flex items-center gap-1.5">
-                          <span>{pedido.cliente_telefone}</span>
-                          <span className="lg:hidden text-[#00E5FF] font-semibold">• {pedido.bairro}</span>
+                        <div className="text-[11px] text-gray-400 mt-0.5 truncate">
+                          {pedido.cliente_telefone}
+                          <span className="lg:hidden text-[#00E5FF] font-semibold"> • {pedido.bairro}</span>
                         </div>
                       </td>
 
-                      {/* Bairro / Endereço (Visível em lg+) */}
-                      <td className="py-3.5 px-3.5 align-middle hidden lg:table-cell max-w-[200px] xl:max-w-[260px]">
+                      {/* Bairro / Destino (Coluna elástica que absorve a diferença de largura entre Notebooks e Monitores Full HD) */}
+                      <td className="py-3 px-3 align-middle hidden lg:table-cell min-w-0">
                         <span className="text-[11px] font-bold text-gray-200 block truncate">
                           {pedido.bairro}
                         </span>
-                        <span className="text-[11px] text-gray-500 truncate block" title={pedido.endereco_completo}>
+                        <span className="text-[11px] text-gray-400 truncate block" title={pedido.endereco_completo}>
                           {pedido.endereco_completo}
                         </span>
                       </td>
 
                       {/* Total + Pagamento */}
-                      <td className="py-3.5 px-3.5 align-middle whitespace-nowrap">
-                        <span className="font-display font-black text-[#00E5FF] text-xs sm:text-sm block">
+                      <td className="py-3 px-3 align-middle">
+                        <span className="font-display font-black text-[#00E5FF] text-xs sm:text-sm block leading-tight truncate">
                           R$ {Number(pedido.total || 0).toFixed(2).replace('.', ',')}
                         </span>
-                        <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider">
+                        <span className="text-[9px] text-gray-400 uppercase font-bold tracking-wider block truncate">
                           {pedido.metodo_pagamento}
                         </span>
                       </td>
 
                       {/* Seletor Status */}
-                      <td className="py-3.5 px-3.5 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <td className="py-3 px-2.5 align-middle" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={pedido.status}
                           onChange={(e) => handleStatusChange(pedido.id, e.target.value)}
-                          className={`border rounded-xl px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider focus:outline-none cursor-pointer ${getStatusBadgeStyle(pedido.status)} bg-[#0A0F1D]`}
+                          className={`w-full border rounded-xl px-2 py-1.5 text-[10px] font-bold uppercase tracking-wide focus:outline-none cursor-pointer ${getStatusBadgeStyle(pedido.status)} bg-[#0A0F1D]`}
                         >
                           <option value="RECEBIDO" className="bg-[#0A0F1D] text-white">Recebido</option>
                           <option value="PREPARANDO" className="bg-[#0A0F1D] text-white">Preparando</option>
@@ -395,39 +395,40 @@ const Orders = () => {
                       </td>
 
                       {/* Seletor Motoboy */}
-                      <td className="py-3.5 px-3.5 align-middle" onClick={(e) => e.stopPropagation()}>
+                      <td className="py-3 px-2.5 align-middle" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={pedido.motoboy_id || ''}
                           onChange={(e) => handleMotoboyChange(pedido.id, e.target.value)}
-                          className="bg-[#0A0F1D] border border-white/10 rounded-xl px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-200 focus:outline-none focus:border-[#00E5FF] cursor-pointer max-w-[125px] truncate"
+                          className="w-full bg-[#0A0F1D] border border-white/10 rounded-xl px-2 py-1.5 text-[10px] font-bold uppercase tracking-wide text-gray-200 focus:outline-none focus:border-[#00E5FF] cursor-pointer truncate"
                         >
-                          <option value="">Selecione...</option>
+                          <option value="">Motoboy...</option>
                           {motoboys.map(m => (
                             <option key={m.id} value={m.id}>{m.nome}</option>
                           ))}
                         </select>
                       </td>
 
-                      {/* Botões de Ação Compactos */}
-                      <td className="py-3.5 px-3.5 align-middle whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-1.5">
+                      {/* Botões de Ação (Sempre 100% visíveis dentro da borda direita) */}
+                      <td className="py-3 px-3 align-middle text-right" onClick={(e) => e.stopPropagation()}>
+                        <div className="inline-flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => printThermalReceipt(pedido)}
-                            className="bg-[#00E5FF]/10 hover:bg-[#00E5FF] text-[#00E5FF] hover:text-[#0A0F1D] border border-[#00E5FF]/40 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5"
+                            className="bg-[#00E5FF]/10 hover:bg-[#00E5FF] text-[#00E5FF] hover:text-[#0A0F1D] border border-[#00E5FF]/40 px-2.5 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all inline-flex items-center gap-1 shrink-0"
                             title="Imprimir Comanda 80mm"
                           >
-                            <Printer size={13} /> Imprimir
+                            <Printer size={13} />
+                            <span className="hidden xl:inline">Imprimir</span>
                           </button>
                           <button
                             onClick={() => handleOpenDetails(pedido)}
-                            className="bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 p-1.5 rounded-xl transition-colors"
+                            className="bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 p-1.5 rounded-xl transition-colors shrink-0"
                             title="Ver Detalhes"
                           >
                             <Eye size={14} />
                           </button>
                           <button
                             onClick={() => handleDeletePedido(pedido.id, pedido.codigo_pedido)}
-                            className="bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 p-1.5 rounded-xl transition-colors"
+                            className="bg-red-500/10 border border-red-500/30 hover:bg-red-500/20 text-red-400 p-1.5 rounded-xl transition-colors shrink-0"
                             title="Excluir Pedido"
                           >
                             <Trash2 size={14} />
@@ -557,7 +558,7 @@ const Orders = () => {
         </>
       )}
 
-      {/* MODAL DETALHES DO PEDIDO (Lado a Lado em sm+ / Desktop e Empilhado apenas em Telas Pequenas) */}
+      {/* MODAL DETALHES DO PEDIDO (Lado a Lado em sm+ / Desktop e Empilhado apenas em Smartphones) */}
       {detailsModalOpen && selectedOrder && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm"
