@@ -133,72 +133,231 @@ const Orders = () => {
         .eq('pedido_id', pedido.id);
       itens = data || [];
     } catch (e) {
-      console.error(e);
+      console.error('Erro ao buscar itens para impressão:', e);
     }
 
-    const printWindow = window.open('', '_blank', 'width=350,height=600');
+    const printWindow = window.open('', '_blank', 'width=420,height=650');
     if (!printWindow) {
-      toast.error('Permita popups para imprimir a comanda.');
+      toast.error('Permita popups no navegador para imprimir a comanda.');
       return;
     }
 
-    const itemsHtml = itens.map(i => `
-      <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:12px;">
-        <span>${i.quantidade}x ${i.produtos ? i.produtos.nome : 'Item'}</span>
-        <span>R$ ${(Number(i.preco_unitario) * i.quantidade).toFixed(2).replace('.', ',')}</span>
-      </div>
-      ${i.observacao ? `<div style="font-size:10px; color:#555; margin-bottom:4px;">Obs: ${i.observacao}</div>` : ''}
-    `).join('');
+    // Formata método de pagamento
+    let formaPgto = pedido.metodo_pagamento || 'Não informado';
+    if (formaPgto === 'PIX') formaPgto = 'PIX';
+    else if (formaPgto === 'CREDITO') formaPgto = 'Cartão de Crédito (Máquina)';
+    else if (formaPgto === 'DEBITO') formaPgto = 'Cartão de Débito (Máquina)';
+    else if (formaPgto === 'DINHEIRO') formaPgto = 'Dinheiro';
+
+    // Monta itens em tabela estruturada sem quebra desordenada
+    const rowsHtml = itens.map(i => {
+      const nomeProd = i.produtos ? i.produtos.nome : 'Item';
+      const valorUnit = Number(i.preco_unitario || 0);
+      const totalItem = valorUnit * Number(i.quantidade || 1);
+      
+      let variacoesTxt = '';
+      if (Array.isArray(i.variacoes) && i.variacoes.length > 0) {
+        variacoesTxt = i.variacoes.map(v => `• ${v.grupo_nome || ''}: ${(v.opcoes || []).map(o => o.nome).join(', ')}`).join('<br/>');
+      }
+
+      return `
+        <tr style="border-bottom: 1px dashed #000;">
+          <td style="vertical-align: top; font-weight: bold; padding: 4px 0; width: 30px;">${i.quantidade}x</td>
+          <td style="vertical-align: top; padding: 4px 4px 4px 0; word-break: break-word;">
+            <div style="font-weight: bold; font-size: 11px;">${nomeProd}</div>
+            ${i.quantidade > 1 ? `<div style="font-size: 9px; color: #000;">(Un: R$ ${valorUnit.toFixed(2).replace('.', ',')})</div>` : ''}
+            ${variacoesTxt ? `<div style="font-size: 9px; margin-top: 1px;">${variacoesTxt}</div>` : ''}
+            ${i.observacao ? `<div style="font-size: 9px; font-weight: bold; margin-top: 1px;">[Obs: ${i.observacao}]</div>` : ''}
+          </td>
+          <td style="vertical-align: top; text-align: right; white-space: nowrap; font-weight: bold; padding: 4px 0; width: 68px;">
+            R$ ${totalItem.toFixed(2).replace('.', ',')}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    const subtotal = Number(pedido.subtotal || 0).toFixed(2).replace('.', ',');
+    const frete = Number(pedido.taxa_entrega || 0).toFixed(2).replace('.', ',');
+    const total = Number(pedido.total || 0).toFixed(2).replace('.', ',');
+    const dataHora = new Date(pedido.created_at).toLocaleString('pt-BR');
+    const codigoFormatado = String(pedido.codigo_pedido).padStart(4, '0');
+    const motoboyNome = pedido.motoboys?.nome;
 
     printWindow.document.write(`
-      <html>
+      <!DOCTYPE html>
+      <html lang="pt-BR">
         <head>
-          <title>Comanda #${pedido.codigo_pedido}</title>
+          <meta charset="UTF-8">
+          <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
-            body { font-family: monospace; padding: 10px; font-size: 12px; color: #000; }
+            @page {
+              size: auto;
+              margin: 0mm;
+            }
+            @media print {
+              html, body {
+                width: 72mm;
+                margin: 0 auto;
+                padding: 0;
+              }
+              .no-print {
+                display: none !important;
+              }
+            }
+            * {
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+              color: #000000 !important;
+              background: transparent !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            body {
+              font-family: 'Courier New', Courier, monospace;
+              width: 72mm;
+              max-width: 72mm;
+              margin: 0 auto;
+              padding: 4mm 2mm 0mm 2mm;
+              font-size: 11px;
+              line-height: 1.25;
+              font-weight: 600;
+            }
             .center { text-align: center; }
-            .line { border-top: 1px dashed #000; margin: 8px 0; }
+            .right { text-align: right; }
+            .bold { font-weight: bold; }
+            .sep-line {
+              border-top: 1px dashed #000;
+              margin: 5px 0;
+            }
+            .sep-double {
+              border-top: 2px solid #000;
+              margin: 6px 0;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            /* Botão de segurança na tela antes de imprimir */
+            .btn-imprimir {
+              display: block;
+              width: 100%;
+              background: #000 !important;
+              color: #fff !important;
+              padding: 8px;
+              font-weight: bold;
+              text-transform: uppercase;
+              font-size: 12px;
+              border: none;
+              cursor: pointer;
+              margin-bottom: 10px;
+              border-radius: 4px;
+            }
           </style>
         </head>
         <body>
+          <button class="no-print btn-imprimir" onclick="window.print()">🖨️ Confirmar Impressão</button>
+
+          <!-- CABEÇALHO DA EMPRESA -->
           <div class="center">
-            <strong>DISTRIBUIDORA DE BEBIDAS REFRESCA</strong><br/>
-            Rua São Tillon, 141 - Barra da Tijuca<br/>
-            Tel/Zap: (21) 98378-5928<br/>
+            <div style="font-size: 14px; font-weight: 900; letter-spacing: 0.5px;">REFRESCA BEBIDAS</div>
+            <div style="font-size: 10px;">DISTRIBUIDORA & DEPÓSITO</div>
+            <div style="font-size: 10px;">Rua São Tillon, 141 - Barra da Tijuca</div>
+            <div style="font-size: 10px;">WhatsApp: (21) 98378-5928</div>
           </div>
-          <div class="line"></div>
-          <div>
-            <strong>PEDIDO #${pedido.codigo_pedido}</strong><br/>
-            Data: ${new Date(pedido.created_at).toLocaleString('pt-BR')}<br/>
-            Cliente: ${pedido.cliente_nome}<br/>
-            Tel: ${pedido.cliente_telefone}<br/>
-            Endereço: ${pedido.endereco_completo}<br/>
-            Bairro: ${pedido.bairro}<br/>
-            ${pedido.is_agendado ? '<strong>*** PEDIDO AGENDADO ***</strong><br/>' : ''}
+
+          <div class="sep-double"></div>
+
+          <!-- IDENTIFICAÇÃO DO PEDIDO -->
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 14px; font-weight: 900;">PEDIDO: #${codigoFormatado}</span>
+            <span style="font-size: 10px;">${dataHora}</span>
           </div>
-          <div class="line"></div>
-          <div><strong>ITENS:</strong></div>
-          ${itemsHtml}
-          <div class="line"></div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>Subtotal:</span>
-            <span>R$ ${Number(pedido.subtotal || 0).toFixed(2).replace('.', ',')}</span>
+          ${pedido.is_agendado ? '<div class="center bold" style="margin-top: 2px; font-size: 11px;">*** PEDIDO AGENDADO (PROGRAMADO) ***</div>' : ''}
+
+          <div class="sep-line"></div>
+
+          <!-- DADOS DO CLIENTE E ENTREGA -->
+          <div style="font-size: 11px;">
+            <div><strong>CLIENTE:</strong> ${pedido.cliente_nome || 'Cliente'}</div>
+            <div><strong>TEL:</strong> ${pedido.cliente_telefone || '-'}</div>
+            <div style="margin-top: 2px;"><strong>ENDEREÇO:</strong> ${pedido.endereco_completo || '-'}</div>
+            <div><strong>BAIRRO:</strong> ${pedido.bairro || '-'}</div>
+            ${motoboyNome ? `<div style="margin-top: 2px;"><strong>ENTREGADOR:</strong> ${motoboyNome}</div>` : ''}
           </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span>Frete:</span>
-            <span>R$ ${Number(pedido.taxa_entrega || 0).toFixed(2).replace('.', ',')}</span>
+
+          <div class="sep-double"></div>
+
+          <!-- TABELA DE ITENS -->
+          <table>
+            <thead>
+              <tr style="border-bottom: 1px solid #000; font-size: 10px;">
+                <th style="text-align: left; padding-bottom: 3px; width: 30px;">QTD</th>
+                <th style="text-align: left; padding-bottom: 3px;">DESCRIÇÃO</th>
+                <th style="text-align: right; padding-bottom: 3px; width: 68px;">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <div class="sep-line"></div>
+
+          <!-- RESUMO FINANCEIRO -->
+          <table>
+            <tr>
+              <td>Subtotal:</td>
+              <td class="right">R$ ${subtotal}</td>
+            </tr>
+            <tr>
+              <td>Taxa de Entrega:</td>
+              <td class="right">R$ ${frete}</td>
+            </tr>
+            ${pedido.cupom_aplicado ? `
+              <tr>
+                <td>Cupom (${pedido.cupom_aplicado}):</td>
+                <td class="right bold">Aplicado</td>
+              </tr>
+            ` : ''}
+          </table>
+
+          <div class="sep-line"></div>
+
+          <!-- TOTAL GERAL EM DESTAQUE -->
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin: 2px 0;">
+            <span>TOTAL A PAGAR:</span>
+            <span>R$ ${total}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px; margin-top:4px;">
-            <span>TOTAL:</span>
-            <span>R$ ${Number(pedido.total || 0).toFixed(2).replace('.', ',')}</span>
+
+          <div class="sep-double"></div>
+
+          <!-- FORMA DE PAGAMENTO -->
+          <div style="font-size: 11px;">
+            <div><strong>PAGAMENTO:</strong> ${formaPgto}</div>
           </div>
-          <div class="line"></div>
-          <div>Pagamento: ${pedido.metodo_pagamento}</div>
-          <div class="center" style="margin-top:15px; font-size:10px;">
-            Agradecemos a preferência! Bebida gelada é com o Refresca.
+
+          <div class="sep-line"></div>
+
+          <!-- RODAPÉ E MENSAGEM -->
+          <div class="center" style="font-size: 10px; margin-top: 4px;">
+            Bebida gelada no seu evento em minutos!<br/>
+            depositorefresca.com.br
           </div>
+
+          <!-- ESPAÇO DE AVANÇO (25mm) PARA CORTE LIMPO DA GUILHOTINA BEMATECH -->
+          <div style="height: 25mm; line-height: 25mm; text-align: center; color: transparent !important;">.</div>
+
           <script>
-            window.onload = function() { window.print(); window.close(); }
+            window.onload = function() {
+              window.focus();
+              setTimeout(function() {
+                window.print();
+              }, 300);
+            };
+            window.onafterprint = function() {
+              window.close();
+            };
           </script>
         </body>
       </html>
