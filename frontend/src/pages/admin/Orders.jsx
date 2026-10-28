@@ -5,7 +5,7 @@ import {
   Trash2, Phone, Search, Calendar, ChevronRight, AlertCircle, ShoppingBag, MessageCircle 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { buildEscPosBuffer, trySilentDirectHardwarePrint, buildThermalPrintDocument } from '../../utils/thermalPrinter';
+import { buildEscPosBuffer, trySilentDirectHardwarePrint, buildThermalPrintDocument, triggerCleanIframePrint } from '../../utils/thermalPrinter';
 
 const Orders = () => {
   const [pedidos, setPedidos] = useState([]);
@@ -126,12 +126,9 @@ const Orders = () => {
 
   const printThermalReceipt = async (pedido) => {
     const printWindow = window.open('', '_blank', 'width=420,height=680');
-    if (!printWindow) {
-      toast.error('Permita popups no navegador para imprimir a comanda.');
-      return;
+    if (printWindow) {
+      printWindow.document.write('<html><body style="font-family:sans-serif;padding:20px;text-align:center;background:#070B16;color:#fff;">Preparando comanda térmica 80mm...</body></html>');
     }
-
-    printWindow.document.write('<html><body style="font-family:sans-serif;padding:20px;text-align:center;background:#070B16;color:#fff;">Preparando comanda térmica 80mm...</body></html>');
 
     let itens = [];
     try {
@@ -149,7 +146,7 @@ const Orders = () => {
       const escPosBytes = buildEscPosBuffer(pedido, itens);
       const sentDirectly = await trySilentDirectHardwarePrint(escPosBytes);
       if (sentDirectly) {
-        printWindow.close();
+        if (printWindow) printWindow.close();
         toast.success(`Comanda #${String(pedido.codigo_pedido).padStart(4, '0')} enviada direto para a impressora térmica!`);
         return;
       }
@@ -157,11 +154,15 @@ const Orders = () => {
       console.warn('Fallback para spooler térmico visual:', err);
     }
 
-    // 2. Renderiza documento térmico 80mm isolado (com altura dinâmica em mm + botão ESC/POS direto)
+    // 2. Renderiza documento térmico 80mm isolado (com altura dinâmica em mm + seleção dinâmica USB/Serial)
     const htmlDoc = buildThermalPrintDocument(pedido, itens);
-    printWindow.document.open();
-    printWindow.document.write(htmlDoc);
-    printWindow.document.close();
+    if (printWindow) {
+      printWindow.document.open();
+      printWindow.document.write(htmlDoc);
+      printWindow.document.close();
+    } else {
+      triggerCleanIframePrint(htmlDoc);
+    }
   };
 
   const handleDeletePedido = async (id, codigo_pedido) => {

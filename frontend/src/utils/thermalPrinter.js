@@ -1,14 +1,16 @@
 /**
- * Módulo Isolado de Impressão Térmica Universal (80mm / 72mm Safe Area)
- * Compatível com Windows, Linux e macOS:
- * 1. Modo ESC/POS Direto (WebSerial / WebUSB) -> Ignora CUPS/Drivers A4, evita metadados PDF crus e aciona guilhotina.
- * 2. Modo Spooler Limpo 80mm via Blob URL -> Sem about:blank, com @page 80mm x Altura Dinâmica e 72mm centralizados.
+ * Módulo Universal e Portável de Impressão Térmica (80mm / 72mm Safe Area)
+ * Compatível com qualquer impressora térmica (Bematech, Elgin, Epson, Daruma, POS-80)
+ * em Windows, Linux e macOS:
+ * - Suporte a listagem e seleção dinâmica de dispositivo (WebUSB e WebSerial) com descoberta automática de interfaces/endpoints.
+ * - Spooler 80mm via Blob URL / Iframe Oculto (sem about:blank, sem rolos gigantes A4, altura dinâmica exata).
  */
 
 const COLS_80MM = 48;
+const STORAGE_PREF_KEY = 'refresca_thermal_device_pref';
 
 /**
- * Remove acentos e caracteres especiais incompatíveis com tabela ASCII/CP850 bruta de impressoras térmicas
+ * Normaliza texto para tabela ASCII limpa (evita caracteres corrompidos em firmwares térmicos diversos)
  */
 export function sanitizeThermalText(str = '') {
   return String(str)
@@ -18,7 +20,7 @@ export function sanitizeThermalText(str = '') {
 }
 
 /**
- * Formata linha com texto à esquerda e valor alinhado à direita dentro de N colunas
+ * Formata linha com coluna esquerda e direita alinhadas dentro de 48 colunas (80mm)
  */
 function formatLineLR(left, right, width = COLS_80MM) {
   const cleanLeft = sanitizeThermalText(left);
@@ -32,7 +34,7 @@ function formatLineLR(left, right, width = COLS_80MM) {
 }
 
 /**
- * Formata o método de pagamento de forma legível para a comanda
+ * Formata descrição amigável do método de pagamento
  */
 export function formatPaymentMethod(metodo) {
   const m = metodo || 'Não informado';
@@ -44,8 +46,7 @@ export function formatPaymentMethod(metodo) {
 }
 
 /**
- * Constrói o buffer binário ESC/POS nativo (Bematech / Epson / Elgin 80mm)
- * Não gera PDF nem HTML — envia comandos térmicos puros + acionamento de guilhotina.
+ * Constrói o buffer binário ESC/POS universal (compatível com Bematech, Epson, Elgin, POS-80)
  */
 export function buildEscPosBuffer(pedido, itens = []) {
   const encoder = new TextEncoder();
@@ -61,7 +62,7 @@ export function buildEscPosBuffer(pedido, itens = []) {
   const formaPgto = formatPaymentMethod(pedido.metodo_pagamento);
   const motoboyNome = pedido.motoboys?.nome;
 
-  // 1. Inicializa impressora (ESC @)
+  // 1. Reset / Inicialização Universal (ESC @)
   pushBytes(0x1b, 0x40);
 
   // 2. Cabeçalho Centralizado (ESC a 1) + Negrito (ESC E 1)
@@ -85,7 +86,7 @@ export function buildEscPosBuffer(pedido, itens = []) {
   pushBytes(0x1b, 0x45, 0x00);
   pushText('-'.repeat(COLS_80MM));
 
-  // 4. Dados do Cliente
+  // 4. Dados do Cliente e Entrega
   pushText(`CLIENTE: ${pedido.cliente_nome || 'Cliente'}`);
   pushText(`TEL: ${pedido.cliente_telefone || '-'}`);
   pushText(`ENDERECO: ${pedido.endereco_completo || '-'}`);
@@ -95,13 +96,13 @@ export function buildEscPosBuffer(pedido, itens = []) {
   }
   pushText('='.repeat(COLS_80MM));
 
-  // 5. Cabeçalho da Tabela de Itens
+  // 5. Cabeçalho de Itens
   pushBytes(0x1b, 0x45, 0x01);
   pushText(formatLineLR('QTD  DESCRICAO', 'TOTAL'));
   pushBytes(0x1b, 0x45, 0x00);
   pushText('-'.repeat(COLS_80MM));
 
-  // 6. Lista de Itens
+  // 6. Itens do Pedido
   itens.forEach((i) => {
     const qtd = Number(i.quantidade || 1);
     const nomeProd = i.produtos ? i.produtos.nome : 'Item';
@@ -128,7 +129,7 @@ export function buildEscPosBuffer(pedido, itens = []) {
 
   pushText('-'.repeat(COLS_80MM));
 
-  // 7. Resumo Financeiro
+  // 7. Totais Financeiros
   pushText(formatLineLR('Subtotal:', `R$ ${subtotal}`));
   pushText(formatLineLR('Taxa de Entrega:', `R$ ${frete}`));
   if (pedido.cupom_aplicado) {
@@ -151,8 +152,8 @@ export function buildEscPosBuffer(pedido, itens = []) {
   pushText('Bebida gelada no seu evento em minutos!');
   pushText('depositorefresca.com.br');
 
-  // 9. Avanço de 4 linhas e Corte Parcial da Guilhotina (GS V 66 3)
-  pushBytes(0x0a, 0x0a, 0x0a, 0x0a);
+  // 9. Avanço curto e Comando Universal de Guilhotina (GS V 66 3)
+  pushBytes(0x0a, 0x0a, 0x0a);
   pushBytes(0x1d, 0x56, 0x42, 0x03);
 
   const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
@@ -166,55 +167,129 @@ export function buildEscPosBuffer(pedido, itens = []) {
 }
 
 /**
- * Tenta enviar o buffer ESC/POS diretamente via WebSerial ou WebUSB já autorizados no navegador
+ * Descobre dinamicamente a interface e o endpoint de saída (OUT) em qualquer impressora USB (Bematech, Epson, Elgin)
  */
-export async function trySilentDirectHardwarePrint(escPosBytes) {
-  if (typeof navigator !== 'undefined' && navigator.usb) {
-    try {
-      const devices = await navigator.usb.getDevices();
-      if (devices && devices.length > 0) {
-        const device = devices[0];
-        await device.open();
-        if (device.configuration === null) {
-          await device.selectConfiguration(1);
-        }
-        const iface = device.configurations[0].interfaces[0];
-        await device.claimInterface(iface.interfaceNumber);
-        const outEndpoint = iface.alternate.endpoints.find((e) => e.direction === 'out');
-        if (outEndpoint) {
-          await device.transferOut(outEndpoint.endpointNumber, escPosBytes);
-          await device.close();
-          return true;
-        }
+async function sendToWebUsbDevice(device, escPosBytes) {
+  await device.open();
+  if (device.configuration === null) {
+    await device.selectConfiguration(1);
+  }
+
+  const interfaces = device.configuration.interfaces || [];
+  let targetInterfaceNumber = null;
+  let targetAlternateSetting = 0;
+  let targetEndpointNumber = null;
+
+  // Varre todas as interfaces e alternates procurando endpoint de direção 'out'
+  for (const iface of interfaces) {
+    for (const alt of iface.alternates || []) {
+      const outEp = (alt.endpoints || []).find((ep) => ep.direction === 'out');
+      if (outEp) {
+        targetInterfaceNumber = iface.interfaceNumber;
+        targetAlternateSetting = alt.alternateSetting;
+        targetEndpointNumber = outEp.endpointNumber;
+        // Prioriza classe de impressora USB (0x07) se existir
+        if (alt.interfaceClass === 7) break;
       }
+    }
+    if (targetEndpointNumber !== null) break;
+  }
+
+  if (targetInterfaceNumber === null || targetEndpointNumber === null) {
+    await device.close();
+    throw new Error('Endpoint de saída USB não encontrado neste dispositivo.');
+  }
+
+  await device.claimInterface(targetInterfaceNumber);
+  if (targetAlternateSetting !== 0) {
+    await device.selectAlternateInterface(targetInterfaceNumber, targetAlternateSetting);
+  }
+
+  // Envia em blocos seguros de 512 bytes para evitar overflow de buffer em diferentes controladoras
+  const chunkSize = 512;
+  for (let i = 0; i < escPosBytes.length; i += chunkSize) {
+    const slice = escPosBytes.slice(i, i + chunkSize);
+    await device.transferOut(targetEndpointNumber, slice);
+  }
+
+  await device.close();
+}
+
+/**
+ * Envia o buffer ESC/POS para uma porta WebSerial tentando taxas de transmissão padrão de impressoras térmicas
+ */
+async function sendToWebSerialPort(port, escPosBytes) {
+  const baudRates = [9600, 115200, 38400, 19200];
+  let opened = false;
+
+  for (const baudRate of baudRates) {
+    try {
+      await port.open({ baudRate, dataBits: 8, stopBits: 1, parity: 'none' });
+      opened = true;
+      break;
     } catch (err) {
-      console.warn('WebUSB silencioso indisponível:', err);
+      if (err && err.name === 'InvalidStateError') {
+        // Porta já estava aberta
+        opened = true;
+        break;
+      }
     }
   }
 
-  if (typeof navigator !== 'undefined' && navigator.serial) {
+  if (!opened) {
+    throw new Error('Não foi possível abrir a porta serial da impressora.');
+  }
+
+  const writer = port.writable.getWriter();
+  await writer.write(escPosBytes);
+  writer.releaseLock();
+  await port.close();
+}
+
+/**
+ * Tenta envio silencioso apenas se o usuário já tiver autorizado e salvo uma impressora anteriormente
+ */
+export async function trySilentDirectHardwarePrint(escPosBytes) {
+  let savedPref = null;
+  try {
+    savedPref = JSON.parse(localStorage.getItem(STORAGE_PREF_KEY) || 'null');
+  } catch (e) {
+    savedPref = null;
+  }
+
+  if (!savedPref) return false;
+
+  if (savedPref.type === 'usb' && typeof navigator !== 'undefined' && navigator.usb) {
     try {
-      const ports = await navigator.serial.getPorts();
-      if (ports && ports.length > 0) {
-        const port = ports[0];
-        await port.open({ baudRate: 9600 });
-        const writer = port.writable.getWriter();
-        await writer.write(escPosBytes);
-        writer.releaseLock();
-        await port.close();
+      const devices = await navigator.usb.getDevices();
+      const matched =
+        devices.find(
+          (d) => d.vendorId === savedPref.vendorId && d.productId === savedPref.productId
+        ) || devices[0];
+      if (matched) {
+        await sendToWebUsbDevice(matched, escPosBytes);
         return true;
       }
     } catch (err) {
-      console.warn('WebSerial silencioso indisponível:', err);
+      console.warn('Impressão USB silenciosa falhou, abrindo seletor/spooler:', err);
+    }
+  }
+
+  if (savedPref.type === 'serial' && typeof navigator !== 'undefined' && navigator.serial) {
+    try {
+      const ports = await navigator.serial.getPorts();
+      if (ports && ports.length > 0) {
+        await sendToWebSerialPort(ports[0], escPosBytes);
+        return true;
+      }
+    } catch (err) {
+      console.warn('Impressão Serial silenciosa falhou, abrindo seletor/spooler:', err);
     }
   }
 
   return false;
 }
 
-/**
- * Converte Uint8Array para Base64 para embutir no script da janela de impressão
- */
 function uint8ToBase64(bytes) {
   let binary = '';
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -224,7 +299,7 @@ function uint8ToBase64(bytes) {
 }
 
 /**
- * Gera o documento HTML/JS completo para impressão térmica universal (80mm x Altura Dinâmica + ESC/POS Direto)
+ * Gera o documento HTML/JS completo para impressão térmica universal (80mm x Altura Dinâmica + Seleção Dinâmica USB/Serial)
  */
 export function buildThermalPrintDocument(pedido, itens = []) {
   const formaPgto = formatPaymentMethod(pedido.metodo_pagamento);
@@ -245,7 +320,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
       }
 
       return `
-        <tr style="border-bottom: 1px dashed #000;">
+        <tr style="border-bottom: 1px dashed #000; page-break-inside: avoid;">
           <td style="vertical-align: top; font-weight: bold; padding: 4px 0; width: 30px;">${i.quantidade}x</td>
           <td style="vertical-align: top; padding: 4px 4px 4px 0; word-break: break-word;">
             <div style="font-weight: bold; font-size: 11px;">${nomeProd}</div>
@@ -267,7 +342,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
   const dataHora = new Date(pedido.created_at).toLocaleString('pt-BR');
   const codigoFormatado = String(pedido.codigo_pedido).padStart(4, '0');
   const motoboyNome = pedido.motoboys?.nome;
-  const alturaInicialMm = Math.max(95, 80 + itens.length * 14);
+  const alturaInicialMm = Math.max(90, 75 + itens.length * 14);
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -303,7 +378,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           margin: 0 auto;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
         .toolbar-badge {
           display: flex;
@@ -332,25 +407,36 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         html, body {
           width: 80mm !important;
           max-width: 80mm !important;
-          height: auto !important;
+          height: fit-content !important;
+          max-height: fit-content !important;
+          overflow: hidden !important;
           margin: 0 !important;
           padding: 0 !important;
           background-color: #ffffff !important;
           color: #000000 !important;
+          page-break-after: avoid !important;
+          break-after: avoid !important;
         }
         .paper-sheet {
           width: 80mm !important;
           max-width: 80mm !important;
+          height: fit-content !important;
           margin: 0 !important;
           padding: 0 !important;
           box-shadow: none !important;
           border-radius: 0 !important;
+          page-break-after: avoid !important;
+          break-after: avoid !important;
         }
         #receipt-container {
           width: 72mm !important;
           max-width: 72mm !important;
+          height: fit-content !important;
           margin: 0 auto !important;
-          padding: 3mm 0 4mm 0 !important;
+          padding: 2mm 0 3mm 0 !important;
+          page-break-inside: avoid !important;
+          page-break-after: avoid !important;
+          break-after: avoid !important;
         }
         .no-print {
           display: none !important;
@@ -408,14 +494,19 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         cursor: pointer;
         border-radius: 8px;
       }
-      .btn-direto {
+      .hw-bar {
+        display: flex;
+        gap: 6px;
         width: 100%;
+      }
+      .btn-direto {
+        flex: 1;
         background: #10B981 !important;
         color: #070B16 !important;
-        padding: 7px 10px;
+        padding: 7px 8px;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.03em;
         font-size: 10px;
         border: none;
         cursor: pointer;
@@ -442,12 +533,13 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           <span id="status-msg">#${codigoFormatado}</span>
         </div>
         <div class="actions-bar">
-          <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir (80mm)</button>
+          <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir Bobina (80mm)</button>
           <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
         </div>
-        <button class="btn-direto" onclick="imprimirDiretoEscPos()" title="Envia comandos térmicos ESC/POS direto para a porta USB/Serial sem passar pelo CUPS ou PDF">
-          ⚡ Impressão Direta USB/Serial (ESC/POS)
-        </button>
+        <div class="hw-bar">
+          <button class="btn-direto" onclick="selecionarPortaUsb()">🔌 Selecionar USB (ESC/POS)</button>
+          <button class="btn-direto" onclick="selecionarPortaSerial()">⚡ Selecionar Porta Serial</button>
+        </div>
       </div>
     </div>
 
@@ -532,12 +624,13 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           depositorefresca.com.br
         </div>
 
-        <div style="height: 8mm; line-height: 8mm; text-align: center;">&nbsp;</div>
+        <div style="height: 6mm; line-height: 6mm; text-align: center;">&nbsp;</div>
       </div>
     </div>
 
     <script>
       var ESCPOS_BASE64 = "${escPosBase64}";
+      var STORAGE_KEY = "${STORAGE_PREF_KEY}";
 
       function base64ToUint8Array(base64) {
         var binary = window.atob(base64);
@@ -553,7 +646,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         var container = document.getElementById('receipt-container');
         if (container) {
           var alturaPx = container.offsetHeight;
-          var alturaMm = Math.max(80, Math.ceil((alturaPx * 25.4) / 96) + 4);
+          var alturaMm = Math.max(75, Math.ceil((alturaPx * 25.4) / 96) + 2);
           var styleEl = document.getElementById('dynamic-page-size');
           if (styleEl) {
             styleEl.innerHTML = '@page { size: 80mm ' + alturaMm + 'mm; margin: 0mm; }';
@@ -567,50 +660,116 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         window.print();
       }
 
-      async function imprimirDiretoEscPos() {
+      // Listagem e seleção dinâmica de qualquer impressora USB pelo navegador
+      async function selecionarPortaUsb() {
         var statusEl = document.getElementById('status-msg');
-        var payload = base64ToUint8Array(ESCPOS_BASE64);
+        var navUsb = navigator.usb || (window.opener && window.opener.navigator && window.opener.navigator.usb);
+        if (!navUsb) {
+          alert('Seu navegador não suporta WebUSB direto. Use o botão Imprimir Bobina (80mm).');
+          return;
+        }
+        try {
+          var payload = base64ToUint8Array(ESCPOS_BASE64);
+          var device = await navUsb.requestDevice({ filters: [] });
+          await device.open();
+          if (device.configuration === null) {
+            await device.selectConfiguration(1);
+          }
+          var interfaces = device.configuration.interfaces || [];
+          var targetIface = null;
+          var targetAlt = 0;
+          var targetEp = null;
 
-        // 1. Tenta WebSerial (Portas COM / ttyACM0 / ttyUSB0 da Bematech no Linux/Windows)
-        if (navigator.serial) {
-          try {
-            var ports = await navigator.serial.getPorts();
-            var port = ports.length > 0 ? ports[0] : await navigator.serial.requestPort();
-            await port.open({ baudRate: 9600 });
-            var writer = port.writable.getWriter();
-            await writer.write(payload);
-            writer.releaseLock();
-            await port.close();
-            if (statusEl) statusEl.innerText = 'IMP. ENVIADA!';
+          for (var i = 0; i < interfaces.length; i++) {
+            var alts = interfaces[i].alternates || [];
+            for (var j = 0; j < alts.length; j++) {
+              var eps = alts[j].endpoints || [];
+              for (var k = 0; k < eps.length; k++) {
+                if (eps[k].direction === 'out') {
+                  targetIface = interfaces[i].interfaceNumber;
+                  targetAlt = alts[j].alternateSetting;
+                  targetEp = eps[k].endpointNumber;
+                  if (alts[j].interfaceClass === 7) break;
+                }
+              }
+              if (targetEp !== null) break;
+            }
+            if (targetEp !== null) break;
+          }
+
+          if (targetIface === null || targetEp === null) {
+            await device.close();
+            alert('Endpoint de saída não encontrado nesta impressora USB.');
             return;
-          } catch (err) {
-            console.warn('Tentando WebUSB após WebSerial:', err);
+          }
+
+          await device.claimInterface(targetIface);
+          if (targetAlt !== 0) {
+            await device.selectAlternateInterface(targetIface, targetAlt);
+          }
+
+          for (var offset = 0; offset < payload.length; offset += 512) {
+            await device.transferOut(targetEp, payload.slice(offset, offset + 512));
+          }
+          await device.close();
+
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+              type: 'usb',
+              vendorId: device.vendorId,
+              productId: device.productId
+            }));
+          } catch (e) {}
+
+          if (statusEl) statusEl.innerText = 'USB ENVIADO!';
+        } catch (err) {
+          if (err && err.name !== 'NotFoundError') {
+            alert('Não foi possível acessar a porta USB diretamente (' + err.message + '). Tente Selecionar Porta Serial ou Imprimir Bobina (80mm).');
           }
         }
+      }
 
-        // 2. Fallback WebUSB Direto
-        if (navigator.usb) {
-          try {
-            var devices = await navigator.usb.getDevices();
-            var device = devices.length > 0 ? devices[0] : await navigator.usb.requestDevice({ filters: [] });
-            await device.open();
-            if (device.configuration === null) {
-              await device.selectConfiguration(1);
+      // Listagem e seleção dinâmica de qualquer porta Serial/COM/ACM pelo navegador
+      async function selecionarPortaSerial() {
+        var statusEl = document.getElementById('status-msg');
+        var navSerial = navigator.serial || (window.opener && window.opener.navigator && window.opener.navigator.serial);
+        if (!navSerial) {
+          alert('Seu navegador não suporta WebSerial direto. Use o botão Imprimir Bobina (80mm).');
+          return;
+        }
+        try {
+          var payload = base64ToUint8Array(ESCPOS_BASE64);
+          var port = await navSerial.requestPort();
+          var bauds = [9600, 115200, 38400, 19200];
+          var opened = false;
+          for (var i = 0; i < bauds.length; i++) {
+            try {
+              await port.open({ baudRate: bauds[i], dataBits: 8, stopBits: 1, parity: 'none' });
+              opened = true;
+              break;
+            } catch (openErr) {
+              if (openErr && openErr.name === 'InvalidStateError') {
+                opened = true;
+                break;
+              }
             }
-            var iface = device.configurations[0].interfaces[0];
-            await device.claimInterface(iface.interfaceNumber);
-            var outEndpoint = iface.alternate.endpoints.find(function(e) { return e.direction === 'out'; });
-            if (outEndpoint) {
-              await device.transferOut(outEndpoint.endpointNumber, payload);
-              await device.close();
-              if (statusEl) statusEl.innerText = 'IMP. ENVIADA!';
-              return;
-            }
-          } catch (usbErr) {
-            alert('Para impressão direta USB/Serial, selecione a Bematech na lista do navegador ou use o botão Imprimir (80mm).');
           }
-        } else {
-          executarImpressao();
+          if (!opened) throw new Error('Falha ao abrir porta serial.');
+
+          var writer = port.writable.getWriter();
+          await writer.write(payload);
+          writer.releaseLock();
+          await port.close();
+
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ type: 'serial' }));
+          } catch (e) {}
+
+          if (statusEl) statusEl.innerText = 'SERIAL ENVIADO!';
+        } catch (err) {
+          if (err && err.name !== 'NotFoundError') {
+            alert('Erro ao comunicar com a porta selecionada: ' + err.message);
+          }
         }
       }
 
@@ -626,4 +785,31 @@ export function buildThermalPrintDocument(pedido, itens = []) {
     </script>
   </body>
 </html>`;
+}
+
+/**
+ * Dispara a impressão térmica limpa usando Iframe Oculto na mesma origem HTTPS (evita about:blank e bloqueio de popup)
+ * ou janela dedicada caso solicitado.
+ */
+export function triggerCleanIframePrint(htmlDoc) {
+  let iframe = document.getElementById('refresca-thermal-iframe');
+  if (iframe) {
+    iframe.remove();
+  }
+
+  iframe = document.createElement('iframe');
+  iframe.id = 'refresca-thermal-iframe';
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '80mm';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  iframe.style.visibility = 'hidden';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write(htmlDoc);
+  doc.close();
 }
