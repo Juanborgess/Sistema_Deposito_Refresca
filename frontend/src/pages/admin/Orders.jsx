@@ -195,16 +195,24 @@ const Orders = () => {
           <title>Comanda #${codigoFormatado} - Refresca</title>
           <style>
             @page {
-              margin: 0mm;
+              size: 80mm auto;
+              margin: 0mm !important;
             }
             @media print {
               html, body {
-                width: 72mm !important;
-                max-width: 72mm !important;
+                width: 80mm !important;
+                max-width: 80mm !important;
+                height: auto !important;
                 margin: 0 !important;
-                padding: 2mm 1mm 0mm 1mm !important;
+                padding: 0 !important;
                 background-color: #ffffff !important;
                 color: #000000 !important;
+              }
+              #receipt-container {
+                width: 72mm !important;
+                max-width: 72mm !important;
+                margin: 0 auto !important;
+                padding: 3mm 0 6mm 0 !important;
               }
               .no-print {
                 display: none !important;
@@ -221,23 +229,28 @@ const Orders = () => {
             html, body {
               background-color: #ffffff !important;
               font-family: 'Liberation Mono', 'DejaVu Sans Mono', 'Courier New', Courier, monospace;
-              width: 72mm;
-              max-width: 72mm;
-              margin: 0;
-              padding: 4mm 2mm 0mm 2mm;
+              width: 80mm;
+              margin: 0 auto;
+              padding: 0;
               font-size: 11px;
               line-height: 1.25;
-              font-weight: 600;
+              font-weight: 700;
+            }
+            #receipt-container {
+              width: 72mm;
+              max-width: 72mm;
+              margin: 0 auto;
+              padding: 4mm 0 6mm 0;
             }
             .center { text-align: center; }
             .right { text-align: right; }
-            .bold { font-weight: bold; }
+            .bold { font-weight: 900; }
             .sep-line {
-              border-top: 1px dashed #000;
+              border-top: 1px dashed #000000;
               margin: 5px 0;
             }
             .sep-double {
-              border-top: 2px solid #000;
+              border-top: 2px solid #000000;
               margin: 6px 0;
             }
             table {
@@ -247,7 +260,8 @@ const Orders = () => {
             .actions-bar {
               display: flex;
               gap: 6px;
-              margin-bottom: 10px;
+              width: 72mm;
+              margin: 8px auto;
             }
             .btn-imprimir {
               flex: 1;
@@ -267,113 +281,126 @@ const Orders = () => {
               padding: 8px 12px;
               font-weight: bold;
               font-size: 11px;
-              border: 1px solid #000;
+              border: 1px solid #000000;
               cursor: pointer;
               border-radius: 4px;
             }
           </style>
+          <style id="dynamic-page-size"></style>
         </head>
         <body>
           <div class="no-print actions-bar">
-            <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
+            <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir</button>
             <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
           </div>
 
-          <!-- CABEÇALHO DA EMPRESA -->
-          <div class="center">
-            <div style="font-size: 14px; font-weight: 900; letter-spacing: 0.5px;">REFRESCA BEBIDAS</div>
-            <div style="font-size: 10px;">DISTRIBUIDORA & DEPÓSITO</div>
-            <div style="font-size: 10px;">Rua São Tillon, 141 - Barra da Tijuca</div>
-            <div style="font-size: 10px;">WhatsApp: (21) 98378-5928</div>
-          </div>
+          <div id="receipt-container">
+            <!-- CABEÇALHO DA EMPRESA -->
+            <div class="center">
+              <div style="font-size: 14px; font-weight: 900; letter-spacing: 0.5px;">REFRESCA BEBIDAS</div>
+              <div style="font-size: 10px;">DISTRIBUIDORA & DEPÓSITO</div>
+              <div style="font-size: 10px;">Rua São Tillon, 141 - Barra da Tijuca</div>
+              <div style="font-size: 10px;">WhatsApp: (21) 98378-5928</div>
+            </div>
 
-          <div class="sep-double"></div>
+            <div class="sep-double"></div>
 
-          <!-- IDENTIFICAÇÃO DO PEDIDO -->
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
-            <span style="font-size: 14px; font-weight: 900;">PEDIDO: #${codigoFormatado}</span>
-            <span style="font-size: 10px;">${dataHora}</span>
-          </div>
-          ${pedido.is_agendado ? '<div class="center bold" style="margin-top: 2px; font-size: 11px;">*** PEDIDO AGENDADO (PROGRAMADO) ***</div>' : ''}
+            <!-- IDENTIFICAÇÃO DO PEDIDO -->
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 14px; font-weight: 900;">PEDIDO: #${codigoFormatado}</span>
+              <span style="font-size: 10px;">${dataHora}</span>
+            </div>
+            ${pedido.is_agendado ? '<div class="center bold" style="margin-top: 2px; font-size: 11px;">*** PEDIDO AGENDADO (PROGRAMADO) ***</div>' : ''}
 
-          <div class="sep-line"></div>
+            <div class="sep-line"></div>
 
-          <!-- DADOS DO CLIENTE E ENTREGA -->
-          <div style="font-size: 11px;">
-            <div><strong>CLIENTE:</strong> ${pedido.cliente_nome || 'Cliente'}</div>
-            <div><strong>TEL:</strong> ${pedido.cliente_telefone || '-'}</div>
-            <div style="margin-top: 2px;"><strong>ENDEREÇO:</strong> ${pedido.endereco_completo || '-'}</div>
-            <div><strong>BAIRRO:</strong> ${pedido.bairro || '-'}</div>
-            ${motoboyNome ? `<div style="margin-top: 2px;"><strong>ENTREGADOR:</strong> ${motoboyNome}</div>` : ''}
-          </div>
+            <!-- DADOS DO CLIENTE E ENTREGA -->
+            <div style="font-size: 11px;">
+              <div><strong>CLIENTE:</strong> ${pedido.cliente_nome || 'Cliente'}</div>
+              <div><strong>TEL:</strong> ${pedido.cliente_telefone || '-'}</div>
+              <div style="margin-top: 2px;"><strong>ENDEREÇO:</strong> ${pedido.endereco_completo || '-'}</div>
+              <div><strong>BAIRRO:</strong> ${pedido.bairro || '-'}</div>
+              ${motoboyNome ? `<div style="margin-top: 2px;"><strong>ENTREGADOR:</strong> ${motoboyNome}</div>` : ''}
+            </div>
 
-          <div class="sep-double"></div>
+            <div class="sep-double"></div>
 
-          <!-- TABELA DE ITENS -->
-          <table>
-            <thead>
-              <tr style="border-bottom: 1px solid #000; font-size: 10px;">
-                <th style="text-align: left; padding-bottom: 3px; width: 30px;">QTD</th>
-                <th style="text-align: left; padding-bottom: 3px;">DESCRIÇÃO</th>
-                <th style="text-align: right; padding-bottom: 3px; width: 68px;">TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
+            <!-- TABELA DE ITENS -->
+            <table>
+              <thead>
+                <tr style="border-bottom: 1px solid #000000; font-size: 10px;">
+                  <th style="text-align: left; padding-bottom: 3px; width: 30px;">QTD</th>
+                  <th style="text-align: left; padding-bottom: 3px;">DESCRIÇÃO</th>
+                  <th style="text-align: right; padding-bottom: 3px; width: 68px;">TOTAL</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
 
-          <div class="sep-line"></div>
+            <div class="sep-line"></div>
 
-          <!-- RESUMO FINANCEIRO -->
-          <table>
-            <tr>
-              <td>Subtotal:</td>
-              <td class="right">R$ ${subtotal}</td>
-            </tr>
-            <tr>
-              <td>Taxa de Entrega:</td>
-              <td class="right">R$ ${frete}</td>
-            </tr>
-            ${pedido.cupom_aplicado ? `
+            <!-- RESUMO FINANCEIRO -->
+            <table>
               <tr>
-                <td>Cupom (${pedido.cupom_aplicado}):</td>
-                <td class="right bold">Aplicado</td>
+                <td>Subtotal:</td>
+                <td class="right">R$ ${subtotal}</td>
               </tr>
-            ` : ''}
-          </table>
+              <tr>
+                <td>Taxa de Entrega:</td>
+                <td class="right">R$ ${frete}</td>
+              </tr>
+              ${pedido.cupom_aplicado ? `
+                <tr>
+                  <td>Cupom (${pedido.cupom_aplicado}):</td>
+                  <td class="right bold">Aplicado</td>
+                </tr>
+              ` : ''}
+            </table>
 
-          <div class="sep-line"></div>
+            <div class="sep-line"></div>
 
-          <!-- TOTAL GERAL EM DESTAQUE -->
-          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin: 2px 0;">
-            <span>TOTAL A PAGAR:</span>
-            <span>R$ ${total}</span>
+            <!-- TOTAL GERAL EM DESTAQUE -->
+            <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; margin: 2px 0;">
+              <span>TOTAL A PAGAR:</span>
+              <span>R$ ${total}</span>
+            </div>
+
+            <div class="sep-double"></div>
+
+            <!-- FORMA DE PAGAMENTO -->
+            <div style="font-size: 11px;">
+              <div><strong>PAGAMENTO:</strong> ${formaPgto}</div>
+            </div>
+
+            <div class="sep-line"></div>
+
+            <!-- RODAPÉ E MENSAGEM -->
+            <div class="center" style="font-size: 10px; margin-top: 4px;">
+              Bebida gelada no seu evento em minutos!<br/>
+              depositorefresca.com.br
+            </div>
+
+            <!-- MARGEM CURTA DE AVANÇO PARA CORTE DA GUILHOTINA SEM SOBRA DE PAPEL A4 -->
+            <div style="height: 12mm; line-height: 12mm; text-align: center;">&nbsp;</div>
           </div>
-
-          <div class="sep-double"></div>
-
-          <!-- FORMA DE PAGAMENTO -->
-          <div style="font-size: 11px;">
-            <div><strong>PAGAMENTO:</strong> ${formaPgto}</div>
-          </div>
-
-          <div class="sep-line"></div>
-
-          <!-- RODAPÉ E MENSAGEM -->
-          <div class="center" style="font-size: 10px; margin-top: 4px;">
-            Bebida gelada no seu evento em minutos!<br/>
-            depositorefresca.com.br
-          </div>
-
-          <!-- ESPAÇO DE AVANÇO (25mm) PARA CORTE LIMPO DA GUILHOTINA BEMATECH -->
-          <div style="height: 25mm; line-height: 25mm; text-align: center;">&nbsp;</div>
 
           <script>
-            setTimeout(function() {
+            function executarImpressao() {
+              var container = document.getElementById('receipt-container');
+              if (container) {
+                var alturaPx = container.offsetHeight;
+                var alturaMm = Math.max(85, Math.ceil((alturaPx * 25.4) / 96) + 6);
+                var styleEl = document.getElementById('dynamic-page-size');
+                if (styleEl) {
+                  styleEl.innerHTML = '@page { size: 80mm ' + alturaMm + 'mm !important; margin: 0mm !important; }';
+                }
+              }
               window.focus();
               window.print();
-            }, 400);
+            }
+            setTimeout(executarImpressao, 350);
           </script>
         </body>
       </html>
