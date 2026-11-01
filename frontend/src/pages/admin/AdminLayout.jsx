@@ -3,9 +3,10 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import supabase from '../../supabaseClient';
 import { 
   Menu, X, BellRing, LogOut, LayoutDashboard, ShoppingBag, 
-  Package, Tags, Users, Ticket, Truck, Clock, RefreshCw 
+  Package, Tags, Users, Ticket, Truck, Clock, RefreshCw, Download 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { usePWAStore } from '../../store/usePWAStore';
 
 // Instância global para destravar áudio do navegador
 let globalAudioCtx = null;
@@ -26,6 +27,7 @@ const AdminLayout = () => {
     window.matchMedia('(display-mode: standalone)').matches || 
     window.navigator.standalone === true
   );
+  const { promptInstall } = usePWAStore();
 
   // Inicializa áudio no primeiro clique/toque do usuário
   useEffect(() => {
@@ -119,7 +121,7 @@ const AdminLayout = () => {
       
       {/* Sidebar Desktop (Telas md+ 768px+) */}
       <aside className="hidden md:flex flex-col w-60 lg:w-64 bg-[#070B16] border-r border-white/10 p-5 shrink-0 justify-between sticky top-0 h-screen">
-        <div className="space-y-6">
+        <div className="space-y-4">
           <Link to="/admin/dashboard" className="flex items-center gap-3 px-2">
             <img src="/logo_refresca.png" alt="Refresca Bebidas" className="h-10 w-auto object-contain rounded-lg" />
             <div>
@@ -127,6 +129,20 @@ const AdminLayout = () => {
               <span className="text-[10px] text-[#00E5FF] font-bold tracking-widest uppercase block">Painel Gerente</span>
             </div>
           </Link>
+
+          {/* Botão Fixo de Instalar App no Desktop (oculto se já estiver no app instalado) */}
+          {!isStandalone && (
+            <div className="px-1">
+              <button
+                onClick={promptInstall}
+                className="w-full bg-gradient-to-r from-[#00E5FF]/20 to-[#00B4D8]/10 hover:from-[#00E5FF]/30 hover:to-[#00B4D8]/20 border border-[#00E5FF]/40 hover:border-[#00E5FF] text-[#00E5FF] px-3.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md shadow-cyan-500/10 active:scale-95 group cursor-pointer"
+                title="Instalar aplicativo no computador"
+              >
+                <Download size={15} className="group-hover:translate-y-0.5 transition-transform shrink-0" />
+                <span className="truncate">Instalar App no PC</span>
+              </button>
+            </div>
+          )}
 
           {/* Navegação */}
           <nav className="space-y-1">
@@ -178,6 +194,16 @@ const AdminLayout = () => {
           </div>
         </Link>
         <div className="flex items-center gap-2">
+          {!isStandalone && (
+            <button
+              onClick={promptInstall}
+              className="px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 bg-[#00E5FF] text-[#0A0F1D] shadow-sm shadow-cyan-500/20 active:scale-95 transition-all"
+              title="Instalar App no aparelho"
+            >
+              <Download size={13} />
+              <span>Instalar</span>
+            </button>
+          )}
           <Link
             to="/admin/orders"
             className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors ${
@@ -219,6 +245,16 @@ const AdminLayout = () => {
               </Link>
             );
           })}
+          {!isStandalone && (
+            <div className="pt-2">
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); promptInstall(); }}
+                className="w-full bg-gradient-to-r from-[#00E5FF] to-[#00B4D8] text-[#0A0F1D] font-black uppercase text-xs tracking-wider py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 transition-all active:scale-98"
+              >
+                <Download size={16} /> Instalar Aplicativo no Aparelho
+              </button>
+            </div>
+          )}
           <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
             <Link
               to="/"
