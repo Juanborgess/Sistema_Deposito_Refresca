@@ -562,67 +562,66 @@ const AdminLayout = () => {
               </div>
               <div>
                 <h3 className="text-base font-bold text-white uppercase tracking-wider">
-                  Configuração de Impressão PDV
+                  Impressora do Caixa (PDV)
                 </h3>
                 <p className="text-xs text-gray-400">
-                  Como fazer a notinha sair direto na Bematech sem pedir confirmação na tela.
+                  Configure a emissão automática das notinhas para o balcão.
                 </p>
               </div>
             </div>
 
-            <div className="space-y-3">
-              {/* Opção 1: Parear via WebSerial */}
-              <div className="bg-[#101935] border border-[#00E5FF]/30 rounded-xl p-3.5 space-y-2">
+            <div className="space-y-3.5">
+              {/* Card 1: Conexão da Impressora */}
+              <div className="bg-[#101935] border border-[#00E5FF]/30 rounded-xl p-4 space-y-2.5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Zap size={16} className="text-[#00E5FF]" />
-                    <span className="text-xs font-bold text-white uppercase">Opção 1: Conectar Direto pelo Navegador</span>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Conexão da Impressora Térmica
+                    </span>
                   </div>
-                  {isDirectPaired && (
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
-                      <CheckCircle2 size={10} /> Conectada
+                  {isDirectPaired ? (
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1">
+                      <CheckCircle2 size={11} /> Conectada
+                    </span>
+                  ) : (
+                    <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">
+                      Aguardando Conexão
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-gray-300">
-                  Conecta o Chrome/Edge direto à porta USB/Serial da Bematech. O navegador memoriza a impressora e nunca mais abre janelas de confirmação.
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  {isDirectPaired
+                    ? 'Sua impressora Bematech está vinculada ao sistema. As notinhas de novos pedidos serão impressas automaticamente no balcão sem abrir janelas na tela.'
+                    : 'Conecte sua impressora Bematech em um clique. O sistema memoriza o aparelho para imprimir as comandas diretamente sem pedir confirmação.'}
                 </p>
                 <button
                   onClick={handlePairDirectPrinter}
-                  className="w-full bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md shadow-cyan-500/10 cursor-pointer"
+                  className="w-full bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md shadow-cyan-500/10 cursor-pointer active:scale-98"
                 >
-                  <Zap size={14} /> {isDirectPaired ? 'Reconectar / Selecionar Porta Bematech' : '⚡ Conectar Impressora Bematech'}
+                  <Zap size={15} />
+                  <span>{isDirectPaired ? 'Alterar ou Reconectar Impressora' : 'Conectar Impressora Bematech'}</span>
                 </button>
               </div>
 
-              {/* Opção 2: Baixar Instalador de Atalho PDV */}
-              <div className="bg-[#101935] border border-white/10 rounded-xl p-3.5 space-y-2">
+              {/* Card 2: Atalho do Aplicativo no Computador */}
+              <div className="bg-[#101935] border border-white/10 rounded-xl p-4 space-y-2.5">
                 <div className="flex items-center gap-2">
                   <Download size={16} className="text-emerald-400" />
-                  <span className="text-xs font-bold text-white uppercase">Opção 2: Baixar Criador de Atalho para o Notebook</span>
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">
+                    Aplicativo do Caixa no Computador
+                  </span>
                 </div>
-                <p className="text-[11px] text-gray-300">
-                  Baixe este pequeno script direto no notebook do Jonathan e dê 2 cliques nele. Ele cria o ícone 'Refresca Bebidas PDV' na Área de Trabalho com o modo silencioso ativado.
+                <p className="text-xs text-gray-300 leading-relaxed">
+                  Para abrir o sistema do Depósito como um programa de caixa dedicado na tela do seu computador, adicione o ícone oficial à sua Área de Trabalho.
                 </p>
                 <button
                   onClick={downloadDesktopShortcut}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-[#0A0F1D] py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-500/10 cursor-pointer"
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-[#0A0F1D] py-2.5 px-4 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/10 cursor-pointer active:scale-98"
                 >
-                  <Download size={14} /> 📥 Baixar Atalho para a Área de Trabalho (.bat)
+                  <Download size={15} />
+                  <span>Adicionar Ícone na Área de Trabalho</span>
                 </button>
-              </div>
-
-              {/* Opção 3: Manual 15 segundos */}
-              <div className="bg-[#070B16] border border-white/5 rounded-xl p-3 space-y-1">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
-                  💡 Ou crie o atalho manual no Windows em 15 segundos:
-                </span>
-                <p className="text-[10px] text-gray-400">
-                  Na Área de Trabalho do notebook: Botão direito → Novo → Atalho → Cole o comando abaixo:
-                </p>
-                <div className="bg-black/50 p-2 rounded-lg font-mono text-[10px] text-cyan-300 select-all break-all border border-white/5">
-                  chrome.exe --kiosk-printing --app=https://depositorefresca.com.br/admin/orders
-                </div>
               </div>
             </div>
 
@@ -631,13 +630,13 @@ const AdminLayout = () => {
                 onClick={handleTestPrint}
                 className="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer"
               >
-                <Printer size={14} /> Imprimir Cupom de Teste
+                <Printer size={14} /> Testar Saída de Papel
               </button>
               <button
                 onClick={() => setIsPrinterModalOpen(false)}
                 className="bg-[#00E5FF] text-[#0A0F1D] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer"
               >
-                Fechar
+                Pronto
               </button>
             </div>
           </div>

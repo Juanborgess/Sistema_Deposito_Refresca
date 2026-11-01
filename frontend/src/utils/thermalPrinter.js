@@ -299,16 +299,21 @@ export async function pairWebSerialPrinter() {
 export function downloadDesktopShortcut() {
   const batContent = `@echo off
 chcp 65001 >nul
-echo Criando o atalho do Refresca PDV na sua Area de Trabalho...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $d = [Environment]::GetFolderPath('Desktop'); $s = $ws.CreateShortcut([System.IO.Path]::Combine($d, 'Refresca Bebidas PDV.lnk')); $c = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' }; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' }; $s.TargetPath = $c; $localData = [Environment]::GetFolderPath('LocalApplicationData'); $s.Arguments = '--user-data-dir=\\"' + $localData + '\\RefrescaPDV\\" --kiosk-printing --app=https://depositorefresca.com.br/admin/orders'; $s.Description = 'Refresca Bebidas - PDV'; $s.IconLocation = $c + ',0'; $s.Save();"
-echo Pronto! O atalho 'Refresca Bebidas PDV' foi criado na sua Area de Trabalho.
-pause
+title Instalador Refresca Bebidas PDV
+echo ========================================================
+echo   Instalando o icone do Refresca Bebidas no seu computador...
+echo ========================================================
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $d = [Environment]::GetFolderPath('Desktop'); $s = $ws.CreateShortcut([System.IO.Path]::Combine($d, 'Refresca Bebidas - Caixa PDV.lnk')); $c = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' }; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' }; $s.TargetPath = $c; $localData = [Environment]::GetFolderPath('LocalApplicationData'); $s.Arguments = '--user-data-dir=\\"' + $localData + '\\RefrescaPDV\\" --kiosk-printing --app=https://depositorefresca.com.br/admin/orders'; $s.Description = 'Refresca Bebidas - Painel Gerente e Caixa PDV'; $s.IconLocation = $c + ',0'; $s.Save();"
+echo.
+echo Sucesso! O icone 'Refresca Bebidas - Caixa PDV' foi adicionado a sua Area de Trabalho.
+echo Pode fechar esta janela e abrir pelo icone novo.
+timeout /t 5 >nul
 `;
   const blob = new Blob([batContent], { type: 'application/x-bat' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'Criar_Atalho_Refresca_PDV.bat';
+  a.download = 'Instalar_Refresca_PDV.bat';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
