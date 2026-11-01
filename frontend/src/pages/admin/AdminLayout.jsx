@@ -3,7 +3,8 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import supabase from '../../supabaseClient';
 import { 
   Menu, X, BellRing, LogOut, LayoutDashboard, ShoppingBag, 
-  Package, Tags, Users, Ticket, Truck, Clock, RefreshCw, Download 
+  Package, Tags, Users, Ticket, Truck, Clock, RefreshCw, Download,
+  Bell, Volume2 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { usePWAStore } from '../../store/usePWAStore';
@@ -29,6 +30,10 @@ const AdminLayout = () => {
   );
   const { promptInstall } = usePWAStore();
 
+  const [notificationPermission, setNotificationPermission] = useState(
+    typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default'
+  );
+
   // Inicializa áudio no primeiro clique/toque do usuário
   useEffect(() => {
     window.addEventListener('click', initAudioContext, { once: true });
@@ -39,12 +44,52 @@ const AdminLayout = () => {
     };
   }, []);
 
-  // Solicita permissão de notificação do sistema operacional
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-      Notification.requestPermission();
+  const handleEnableNotifications = async () => {
+    initAudioContext();
+    try {
+      const audio = new Audio('/sounds/notificacao_refresca.mp3');
+      await audio.play();
+    } catch (e) {
+      console.warn('Erro ao tocar som:', e);
     }
-  }, []);
+
+    if (typeof window !== 'undefined' && 'Notification' in window) {
+      try {
+        const permission = await Notification.requestPermission();
+        setNotificationPermission(permission);
+        if (permission === 'granted') {
+          new Notification('🔔 Notificações Ativadas - Refresca!', {
+            body: 'O som e os alertas de pedidos vão avisar no seu notebook mesmo em segundo plano.',
+            icon: '/pwa-192x192.png'
+          });
+          toast.success('🔔 Notificações e som ativados com sucesso no notebook!');
+        } else if (permission === 'denied') {
+          toast.error('Notificação bloqueada. Clique no ícone de configurações ao lado do link no navegador para permitir.');
+        }
+      } catch (err) {
+        console.error('Erro ao pedir permissão de notificação:', err);
+      }
+    } else {
+      toast.success('🔊 Som do sistema desbloqueado com sucesso!');
+    }
+  };
+
+  const handleTestSound = () => {
+    initAudioContext();
+    try {
+      const audio = new Audio('/sounds/notificacao_refresca.mp3');
+      audio.play();
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification('🔊 Teste de Som - Refresca Bebidas', {
+          body: 'Seu notebook está configurado e pronto para alertar novos pedidos!',
+          icon: '/pwa-192x192.png'
+        });
+      }
+      toast.success('🔊 Som testado com sucesso no notebook!');
+    } catch (err) {
+      toast.error('Erro ao tocar áudio. Clique na tela para desbloquear o som.');
+    }
+  };
 
   // Escuta novos pedidos em tempo real (Supabase Realtime WebSockets)
   useEffect(() => {
@@ -68,7 +113,7 @@ const AdminLayout = () => {
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Novo Pedido no Refresca Bebidas!', {
             body: `Pedido #${String(payload.new.codigo_pedido).padStart(4, '0')} • R$ ${Number(payload.new.total).toFixed(2).replace('.', ',')}`,
-            icon: '/logo_refresca.png'
+            icon: '/pwa-192x192.png'
           });
         }
 
@@ -167,7 +212,33 @@ const AdminLayout = () => {
         </div>
 
         {/* Rodapé da Sidebar */}
-        <div className="pt-4 border-t border-white/10 space-y-2">
+        <div className="pt-4 border-t border-white/10 space-y-3">
+          {/* Card de Status do Som / Notificações */}
+          <div className="bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 shadow-inner">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${notificationPermission === 'granted' ? 'bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse' : 'bg-amber-400'}`}></span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-300 truncate">
+                {notificationPermission === 'granted' ? 'Som Ativo' : 'Som Pendente'}
+              </span>
+            </div>
+            {notificationPermission === 'granted' ? (
+              <button
+                onClick={handleTestSound}
+                className="bg-white/5 hover:bg-white/10 border border-white/10 text-[#00E5FF] hover:text-white px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-colors shrink-0 cursor-pointer"
+                title="Tocar som de teste no notebook"
+              >
+                <Volume2 size={12} /> Testar
+              </button>
+            ) : (
+              <button
+                onClick={handleEnableNotifications}
+                className="bg-amber-400 hover:bg-amber-300 text-[#0A0F1D] px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-colors shrink-0 cursor-pointer shadow-sm"
+              >
+                Ativar
+              </button>
+            )}
+          </div>
+
           <Link
             to="/"
             target={isStandalone ? '_self' : '_blank'}
@@ -276,6 +347,32 @@ const AdminLayout = () => {
 
       {/* Conteúdo Principal das Telas Admin */}
       <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-7 overflow-y-auto custom-scrollbar">
+        {/* Banner de Ativação de Notificações e Som de Novos Pedidos */}
+        {notificationPermission !== 'granted' && (
+          <div className="mb-5 bg-gradient-to-r from-amber-500/15 via-[#101935] to-amber-500/10 border border-amber-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3.5 shadow-xl animate-in fade-in duration-300">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                <BellRing className="animate-bounce" size={20} />
+              </div>
+              <div>
+                <h4 className="text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
+                  <span>Ativar Som & Alertas de Novos Pedidos</span>
+                  <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">Importante</span>
+                </h4>
+                <p className="text-[11px] text-gray-300 leading-snug mt-0.5">
+                  Permita as notificações para o seu notebook tocar a campainha e avisar no sistema sempre que chegar um pedido.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleEnableNotifications}
+              className="bg-amber-400 hover:bg-amber-300 text-[#0A0F1D] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider whitespace-nowrap shadow-lg shadow-amber-500/20 active:scale-95 transition-all shrink-0 cursor-pointer flex items-center gap-2"
+            >
+              <Bell size={14} /> Ativar Som no Notebook
+            </button>
+          </div>
+        )}
+
         <Outlet />
       </main>
 
