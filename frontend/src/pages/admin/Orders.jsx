@@ -24,12 +24,21 @@ const Orders = () => {
     fetchOrdersAndMotoboys();
   }, [activeFilter]);
 
-  // Polling silencioso a cada 5 segundos
+  // Polling silencioso a cada 5 segundos + Atualização Instantânea no evento Realtime
   useEffect(() => {
+    const handleInstantUpdate = () => {
+      fetchOrdersAndMotoboys(true);
+    };
+    window.addEventListener('refresca:novo-pedido', handleInstantUpdate);
+
     const interval = setInterval(() => {
       fetchOrdersAndMotoboys(true);
     }, 5000);
-    return () => clearInterval(interval);
+
+    return () => {
+      window.removeEventListener('refresca:novo-pedido', handleInstantUpdate);
+      clearInterval(interval);
+    };
   }, [activeFilter]);
 
   const fetchOrdersAndMotoboys = async (isSilent = false) => {

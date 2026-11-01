@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast';
+
 /**
  * Módulo Universal e Portável de Impressão Térmica (80mm / 72mm Safe Area)
  * Compatível com qualquer impressora térmica (Bematech, Elgin, Epson, Daruma, POS-80)
@@ -635,7 +637,10 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         }
       }
 
+      var jaImprimiu = false;
       function executarImpressao() {
+        if (jaImprimiu) return;
+        jaImprimiu = true;
         ajustarAlturaPagina();
         window.focus();
         window.print();
@@ -680,4 +685,71 @@ export function triggerCleanIframePrint(htmlDoc) {
   doc.open();
   doc.write(htmlDoc);
   doc.close();
+
+  // Garante a impressão caso o evento 'load' do iframe já tenha ocorrido
+  setTimeout(() => {
+    try {
+      if (iframe && iframe.contentWindow) {
+        if (typeof iframe.contentWindow.executarImpressao === 'function') {
+          iframe.contentWindow.executarImpressao();
+        } else {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+        }
+      }
+    } catch (e) {
+      console.warn('Disparo de impressão no iframe:', e);
+    }
+  }, 450);
+}
+
+/**
+ * Executa a auto-impressão de um pedido recebido em tempo real.
+ * Recupera itens com tolerância a latência e dispara o spooler térmico.
+ */
+export async function autoPrintThermalReceipt(pedido, supabaseClient) {
+  try {
+    // 1. Aguarda 650ms para garantir que os itens já foram inseridos pelo backend
+    await new Promise((resolve) => setTimeout(resolve, 650));
+
+    let itens = [];
+    let { data, error } = await supabaseClient
+      .from('itens_pedido')
+      .select('*, produtos(nome)')
+      .eq('pedido_id', pedido.id);
+
+    // Se itens ainda não retornaram (latência de rede), faz uma segunda tentativa rápida
+    if ((!data || data.length === 0) && !error) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      const retry = await supabaseClient
+        .from('itens_pedido')
+        .select('*, produtos(nome)')
+        .eq('pedido_id', pedido.id);
+      data = retry.data;
+    }
+
+    itens = data || [];
+
+    // 2. Tenta envio direto silencioso via WebSerial / WebUSB caso configurado previamente
+    try {
+      const escPosBytes = buildEscPosBuffer(pedido, itens);
+      const sentDirectly = await trySilentDirectHardwarePrint(escPosBytes);
+      if (sentDirectly) {
+        toast.success(`🖨️ Notinha #${String(pedido.codigo_pedido).padStart(4, '0')} impressa automaticamente!`, { duration: 4000 });
+        return true;
+      }
+    } catch (e) {
+      console.warn('Auto-print direto ESC/POS fallback para spooler:', e);
+    }
+
+    // 3. Spooler térmico universal 80mm via iframe oculto (imprime via Driver Windows / Bematech)
+    const htmlDoc = buildThermalPrintDocument(pedido, itens);
+    triggerCleanIframePrint(htmlDoc);
+    toast.success(`🖨️ Notinha #${String(pedido.codigo_pedido).padStart(4, '0')} enviada para a impressora!`, { duration: 4000 });
+    return true;
+  } catch (err) {
+    console.error('Erro na auto-impressão do pedido:', err);
+    toast.error('Erro ao imprimir notinha automática: ' + (err.message || ''));
+    return false;
+  }
 }

@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import supabase from '../../supabaseClient';
 import { 
   Menu, X, BellRing, LogOut, LayoutDashboard, ShoppingBag, 
   Package, Tags, Users, Ticket, Truck, Clock, RefreshCw, Download,
-  Bell, Volume2 
+  Bell, Volume2, Printer 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { usePWAStore } from '../../store/usePWAStore';
+import { autoPrintThermalReceipt } from '../../utils/thermalPrinter';
 
 // Instância global para destravar áudio do navegador
 let globalAudioCtx = null;
@@ -33,6 +34,30 @@ const AdminLayout = () => {
   const [notificationPermission, setNotificationPermission] = useState(
     typeof window !== 'undefined' && 'Notification' in window ? Notification.permission : 'default'
   );
+
+  // Controle de Impressão Automática de Notinhas (Ativado por padrão)
+  const [autoPrintEnabled, setAutoPrintEnabled] = useState(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('refresca_auto_print') : null;
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const autoPrintRef = useRef(autoPrintEnabled);
+  useEffect(() => {
+    autoPrintRef.current = autoPrintEnabled;
+  }, [autoPrintEnabled]);
+
+  const toggleAutoPrint = () => {
+    setAutoPrintEnabled((prev) => {
+      const nextVal = !prev;
+      localStorage.setItem('refresca_auto_print', String(nextVal));
+      if (nextVal) {
+        toast.success('🖨️ Auto-impressão de notinhas ATIVADA!');
+      } else {
+        toast('⏸️ Auto-impressão de notinhas PAUSADA.', { icon: '🖨️' });
+      }
+      return nextVal;
+    });
+  };
 
   // Inicializa áudio no primeiro clique/toque do usuário
   useEffect(() => {
@@ -116,6 +141,14 @@ const AdminLayout = () => {
             icon: '/pwa-192x192.png'
           });
         }
+
+        // Auto-impressão da comanda na impressora térmica (se ativado)
+        if (autoPrintRef.current) {
+          autoPrintThermalReceipt(payload.new, supabase);
+        }
+
+        // Notifica tela de pedidos para atualizar instantaneamente na coluna RECEBIDO
+        window.dispatchEvent(new CustomEvent('refresca:novo-pedido', { detail: payload.new }));
 
         toast.custom((t) => (
           <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-[#101935] border border-[#00E5FF]/40 shadow-2xl rounded-2xl pointer-events-auto flex p-4 items-center gap-4`}>
@@ -212,7 +245,34 @@ const AdminLayout = () => {
         </div>
 
         {/* Rodapé da Sidebar */}
-        <div className="pt-4 border-t border-white/10 space-y-3">
+        <div className="pt-4 border-t border-white/10 space-y-2.5">
+          {/* Card de Status da Impressora Térmica / Auto-Imprimir */}
+          <div className="bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 shadow-inner">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${autoPrintEnabled ? 'bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-gray-500'}`}></span>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-200 block truncate">
+                  Auto-Imprimir
+                </span>
+                <span className="text-[9px] text-gray-400 block truncate">
+                  {autoPrintEnabled ? 'Notinha Automática' : 'Desativado'}
+                </span>
+              </div>
+            </div>
+            <button
+              onClick={toggleAutoPrint}
+              className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
+                autoPrintEnabled
+                  ? 'bg-[#10B981] hover:bg-[#059669] text-[#0A0F1D] shadow-sm'
+                  : 'bg-white/10 hover:bg-white/20 text-gray-300'
+              }`}
+              title={autoPrintEnabled ? 'Clique para pausar auto-impressão' : 'Clique para ativar auto-impressão'}
+            >
+              <Printer size={11} />
+              {autoPrintEnabled ? 'Ativo' : 'Pausar'}
+            </button>
+          </div>
+
           {/* Card de Status do Som / Notificações */}
           <div className="bg-[#0A0F1D] border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2 shadow-inner">
             <div className="flex items-center gap-2 min-w-0">
@@ -265,6 +325,20 @@ const AdminLayout = () => {
           </div>
         </Link>
         <div className="flex items-center gap-2">
+          {/* Botão Compacto Auto-Print no Topbar Mobile */}
+          <button
+            onClick={toggleAutoPrint}
+            className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-colors ${
+              autoPrintEnabled
+                ? 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40'
+                : 'bg-white/5 text-gray-400 hover:text-white'
+            }`}
+            title={autoPrintEnabled ? 'Auto-Imprimir Ativado (clique para pausar)' : 'Auto-Imprimir Pausado (clique para ativar)'}
+          >
+            <Printer size={13} />
+            <span className="hidden sm:inline">{autoPrintEnabled ? 'Auto-Print' : 'Pausado'}</span>
+          </button>
+
           {!isStandalone && (
             <button
               onClick={promptInstall}
@@ -316,6 +390,28 @@ const AdminLayout = () => {
               </Link>
             );
           })}
+          {/* Auto-Imprimir no Mobile */}
+          <div className="bg-[#0A0F1D] border border-white/10 rounded-xl p-3 flex items-center justify-between gap-2 mt-2">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${autoPrintEnabled ? 'bg-[#10B981] shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-gray-500'}`}></span>
+              <div>
+                <p className="text-xs font-bold text-white uppercase tracking-wider">Auto-Imprimir Notinhas</p>
+                <p className="text-[10px] text-gray-400">Imprime ao receber novo pedido</p>
+              </div>
+            </div>
+            <button
+              onClick={toggleAutoPrint}
+              className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                autoPrintEnabled
+                  ? 'bg-[#10B981] text-[#0A0F1D]'
+                  : 'bg-white/10 text-gray-300'
+              }`}
+            >
+              <Printer size={13} />
+              {autoPrintEnabled ? 'Ativo' : 'Pausar'}
+            </button>
+          </div>
+
           {!isStandalone && (
             <div className="pt-2">
               <button
