@@ -303,8 +303,6 @@ function uint8ToBase64(bytes) {
  */
 export function buildThermalPrintDocument(pedido, itens = []) {
   const formaPgto = formatPaymentMethod(pedido.metodo_pagamento);
-  const escPosBytes = buildEscPosBuffer(pedido, itens);
-  const escPosBase64 = uint8ToBase64(escPosBytes);
 
   const rowsHtml = itens
     .map((i) => {
@@ -342,7 +340,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
   const dataHora = new Date(pedido.created_at).toLocaleString('pt-BR');
   const codigoFormatado = String(pedido.codigo_pedido).padStart(4, '0');
   const motoboyNome = pedido.motoboys?.nome;
-  const alturaInicialMm = Math.max(90, 75 + itens.length * 14);
+  const alturaInicialMm = Math.max(100, 85 + itens.length * 14 + 18);
 
   return `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -360,31 +358,35 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           background-color: #070B16 !important;
           min-height: 100vh;
           margin: 0;
-          padding: 0 0 24px 0;
+          padding: 0 0 32px 0;
           font-family: system-ui, -apple-system, sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         }
         .screen-toolbar {
+          width: 100%;
           position: sticky;
           top: 0;
           z-index: 50;
           background: rgba(16, 25, 53, 0.96);
           backdrop-filter: blur(8px);
           border-bottom: 1px solid rgba(255,255,255,0.1);
-          padding: 10px 14px;
-          margin-bottom: 16px;
+          padding: 12px 16px;
+          margin-bottom: 20px;
         }
         .toolbar-inner {
-          max-width: 340px;
+          max-width: 360px;
           margin: 0 auto;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
         }
         .toolbar-badge {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 10px;
+          font-size: 11px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -401,6 +403,8 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.08);
           border-radius: 4px;
           overflow: hidden;
+          display: flex;
+          justify-content: center;
         }
       }
       @media print {
@@ -410,10 +414,13 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           height: fit-content !important;
           max-height: fit-content !important;
           overflow: hidden !important;
-          margin: 0 !important;
+          margin: 0 auto !important;
           padding: 0 !important;
           background-color: #ffffff !important;
           color: #000000 !important;
+          display: flex !important;
+          justify-content: center !important;
+          align-items: flex-start !important;
           page-break-after: avoid !important;
           break-after: avoid !important;
         }
@@ -421,10 +428,12 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           width: 80mm !important;
           max-width: 80mm !important;
           height: fit-content !important;
-          margin: 0 !important;
+          margin: 0 auto !important;
           padding: 0 !important;
           box-shadow: none !important;
           border-radius: 0 !important;
+          display: flex !important;
+          justify-content: center !important;
           page-break-after: avoid !important;
           break-after: avoid !important;
         }
@@ -433,7 +442,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
           max-width: 72mm !important;
           height: fit-content !important;
           margin: 0 auto !important;
-          padding: 2mm 0 3mm 0 !important;
+          padding: 2mm 0 16mm 0 !important;
           page-break-inside: avoid !important;
           page-break-after: avoid !important;
           break-after: avoid !important;
@@ -456,7 +465,7 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         width: 72mm;
         max-width: 72mm;
         margin: 0 auto;
-        padding: 4mm 0 4mm 0;
+        padding: 4mm 0 16mm 0;
         font-size: 11px;
         line-height: 1.25;
         font-weight: 700;
@@ -478,49 +487,36 @@ export function buildThermalPrintDocument(pedido, itens = []) {
       }
       .actions-bar {
         display: flex;
-        gap: 6px;
+        gap: 8px;
         width: 100%;
       }
       .btn-imprimir {
         flex: 1;
         background: #00E5FF !important;
         color: #070B16 !important;
-        padding: 9px 10px;
+        padding: 11px 14px;
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        font-size: 11px;
+        font-size: 12px;
         border: none;
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 10px;
+        box-shadow: 0 4px 14px rgba(0, 229, 255, 0.35);
+        transition: transform 0.1s ease;
       }
-      .hw-bar {
-        display: flex;
-        gap: 6px;
-        width: 100%;
-      }
-      .btn-direto {
-        flex: 1;
-        background: #10B981 !important;
-        color: #070B16 !important;
-        padding: 7px 8px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        font-size: 10px;
-        border: none;
-        cursor: pointer;
-        border-radius: 8px;
+      .btn-imprimir:active {
+        transform: scale(0.98);
       }
       .btn-fechar {
         background: rgba(255,255,255,0.08) !important;
         color: #ffffff !important;
-        padding: 9px 12px;
+        padding: 11px 16px;
         font-weight: 700;
-        font-size: 11px;
-        border: 1px solid rgba(255,255,255,0.15);
+        font-size: 12px;
+        border: 1px solid rgba(255,255,255,0.18);
         cursor: pointer;
-        border-radius: 8px;
+        border-radius: 10px;
       }
     </style>
     <style id="dynamic-page-size"></style>
@@ -530,15 +526,11 @@ export function buildThermalPrintDocument(pedido, itens = []) {
       <div class="toolbar-inner">
         <div class="toolbar-badge">
           <span><span class="dot">●</span> Bobina 80mm (72mm úteis)</span>
-          <span id="status-msg">#${codigoFormatado}</span>
+          <span id="status-msg">Pedido #${codigoFormatado}</span>
         </div>
         <div class="actions-bar">
           <button class="btn-imprimir" onclick="executarImpressao()">🖨️ Imprimir Bobina (80mm)</button>
           <button class="btn-fechar" onclick="window.close()">✕ Fechar</button>
-        </div>
-        <div class="hw-bar">
-          <button class="btn-direto" onclick="selecionarPortaUsb()">🔌 Selecionar USB (ESC/POS)</button>
-          <button class="btn-direto" onclick="selecionarPortaSerial()">⚡ Selecionar Porta Serial</button>
         </div>
       </div>
     </div>
@@ -619,34 +611,23 @@ export function buildThermalPrintDocument(pedido, itens = []) {
 
         <div class="sep-line"></div>
 
-        <div class="center" style="font-size: 10px; margin-top: 4px;">
+        <div class="center" style="font-size: 10px; margin-top: 5px; margin-bottom: 2px;">
           Bebida gelada no seu evento em minutos!<br/>
           depositorefresca.com.br
         </div>
 
-        <div style="height: 6mm; line-height: 6mm; text-align: center;">&nbsp;</div>
+        <!-- Espaçador generoso para a guilhotina cortar com folga limpa e elegante sem encostar no rodapé -->
+        <div style="height: 16mm; line-height: 16mm; text-align: center;">&nbsp;</div>
       </div>
     </div>
 
     <script>
-      var ESCPOS_BASE64 = "${escPosBase64}";
-      var STORAGE_KEY = "${STORAGE_PREF_KEY}";
-
-      function base64ToUint8Array(base64) {
-        var binary = window.atob(base64);
-        var len = binary.length;
-        var bytes = new Uint8Array(len);
-        for (var i = 0; i < len; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        return bytes;
-      }
-
       function ajustarAlturaPagina() {
         var container = document.getElementById('receipt-container');
         if (container) {
           var alturaPx = container.offsetHeight;
-          var alturaMm = Math.max(75, Math.ceil((alturaPx * 25.4) / 96) + 2);
+          // Converte pixels para mm e adiciona respiro extra para o corte da guilhotina
+          var alturaMm = Math.max(90, Math.ceil((alturaPx * 25.4) / 96) + 14);
           var styleEl = document.getElementById('dynamic-page-size');
           if (styleEl) {
             styleEl.innerHTML = '@page { size: 80mm ' + alturaMm + 'mm; margin: 0mm; }';
@@ -658,119 +639,6 @@ export function buildThermalPrintDocument(pedido, itens = []) {
         ajustarAlturaPagina();
         window.focus();
         window.print();
-      }
-
-      // Listagem e seleção dinâmica de qualquer impressora USB pelo navegador
-      async function selecionarPortaUsb() {
-        var statusEl = document.getElementById('status-msg');
-        var navUsb = navigator.usb || (window.opener && window.opener.navigator && window.opener.navigator.usb);
-        if (!navUsb) {
-          alert('Seu navegador não suporta WebUSB direto. Use o botão Imprimir Bobina (80mm).');
-          return;
-        }
-        try {
-          var payload = base64ToUint8Array(ESCPOS_BASE64);
-          var device = await navUsb.requestDevice({ filters: [] });
-          await device.open();
-          if (device.configuration === null) {
-            await device.selectConfiguration(1);
-          }
-          var interfaces = device.configuration.interfaces || [];
-          var targetIface = null;
-          var targetAlt = 0;
-          var targetEp = null;
-
-          for (var i = 0; i < interfaces.length; i++) {
-            var alts = interfaces[i].alternates || [];
-            for (var j = 0; j < alts.length; j++) {
-              var eps = alts[j].endpoints || [];
-              for (var k = 0; k < eps.length; k++) {
-                if (eps[k].direction === 'out') {
-                  targetIface = interfaces[i].interfaceNumber;
-                  targetAlt = alts[j].alternateSetting;
-                  targetEp = eps[k].endpointNumber;
-                  if (alts[j].interfaceClass === 7) break;
-                }
-              }
-              if (targetEp !== null) break;
-            }
-            if (targetEp !== null) break;
-          }
-
-          if (targetIface === null || targetEp === null) {
-            await device.close();
-            alert('Endpoint de saída não encontrado nesta impressora USB.');
-            return;
-          }
-
-          await device.claimInterface(targetIface);
-          if (targetAlt !== 0) {
-            await device.selectAlternateInterface(targetIface, targetAlt);
-          }
-
-          for (var offset = 0; offset < payload.length; offset += 512) {
-            await device.transferOut(targetEp, payload.slice(offset, offset + 512));
-          }
-          await device.close();
-
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({
-              type: 'usb',
-              vendorId: device.vendorId,
-              productId: device.productId
-            }));
-          } catch (e) {}
-
-          if (statusEl) statusEl.innerText = 'USB ENVIADO!';
-        } catch (err) {
-          if (err && err.name !== 'NotFoundError') {
-            alert('Não foi possível acessar a porta USB diretamente (' + err.message + '). Tente Selecionar Porta Serial ou Imprimir Bobina (80mm).');
-          }
-        }
-      }
-
-      // Listagem e seleção dinâmica de qualquer porta Serial/COM/ACM pelo navegador
-      async function selecionarPortaSerial() {
-        var statusEl = document.getElementById('status-msg');
-        var navSerial = navigator.serial || (window.opener && window.opener.navigator && window.opener.navigator.serial);
-        if (!navSerial) {
-          alert('Seu navegador não suporta WebSerial direto. Use o botão Imprimir Bobina (80mm).');
-          return;
-        }
-        try {
-          var payload = base64ToUint8Array(ESCPOS_BASE64);
-          var port = await navSerial.requestPort();
-          var bauds = [9600, 115200, 38400, 19200];
-          var opened = false;
-          for (var i = 0; i < bauds.length; i++) {
-            try {
-              await port.open({ baudRate: bauds[i], dataBits: 8, stopBits: 1, parity: 'none' });
-              opened = true;
-              break;
-            } catch (openErr) {
-              if (openErr && openErr.name === 'InvalidStateError') {
-                opened = true;
-                break;
-              }
-            }
-          }
-          if (!opened) throw new Error('Falha ao abrir porta serial.');
-
-          var writer = port.writable.getWriter();
-          await writer.write(payload);
-          writer.releaseLock();
-          await port.close();
-
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ type: 'serial' }));
-          } catch (e) {}
-
-          if (statusEl) statusEl.innerText = 'SERIAL ENVIADO!';
-        } catch (err) {
-          if (err && err.name !== 'NotFoundError') {
-            alert('Erro ao comunicar com a porta selecionada: ' + err.message);
-          }
-        }
       }
 
       window.addEventListener('keydown', function(e) {
