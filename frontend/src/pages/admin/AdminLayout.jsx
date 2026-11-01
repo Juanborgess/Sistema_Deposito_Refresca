@@ -4,11 +4,15 @@ import supabase from '../../supabaseClient';
 import { 
   Menu, X, BellRing, LogOut, LayoutDashboard, ShoppingBag, 
   Package, Tags, Users, Ticket, Truck, Clock, RefreshCw, Download,
-  Bell, Volume2, Printer 
+  Bell, Volume2, Printer, Settings, Zap, CheckCircle2, HelpCircle 
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { usePWAStore } from '../../store/usePWAStore';
-import { autoPrintThermalReceipt } from '../../utils/thermalPrinter';
+import { 
+  autoPrintThermalReceipt, 
+  pairWebSerialPrinter, 
+  downloadDesktopShortcut 
+} from '../../utils/thermalPrinter';
 
 // Instância global para destravar áudio do navegador
 let globalAudioCtx = null;
@@ -56,6 +60,57 @@ const AdminLayout = () => {
         toast('⏸️ Auto-impressão de notinhas PAUSADA.', { icon: '🖨️' });
       }
       return nextVal;
+    });
+  };
+
+  // Modal de Configuração de Impressão Direta (Zero Telas)
+  const [isPrinterModalOpen, setIsPrinterModalOpen] = useState(false);
+  const [isDirectPaired, setIsDirectPaired] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.serial) {
+      navigator.serial.getPorts().then((ports) => {
+        setIsDirectPaired(ports.length > 0);
+      }).catch(() => {});
+    }
+  }, [isPrinterModalOpen]);
+
+  const handlePairDirectPrinter = async () => {
+    try {
+      await pairWebSerialPrinter();
+      setIsDirectPaired(true);
+      toast.success('⚡ Bematech conectada com sucesso! As notinhas vão imprimir direto sem confirmação.');
+    } catch (err) {
+      if (err.name !== 'NotFoundError') {
+        toast.error('Erro ao conectar impressora: ' + err.message);
+      }
+    }
+  };
+
+  const handleTestPrint = async () => {
+    toast('Enviando cupom de teste para a impressora...', { icon: '🖨️' });
+    const dummyOrder = {
+      id: 'teste-' + Date.now(),
+      codigo_pedido: 9999,
+      cliente_nome: 'Teste de Impressão PDV',
+      cliente_telefone: '(21) 98378-5928',
+      endereco_completo: 'Rua São Tillon, 141 - Depósito',
+      bairro: 'Barra da Tijuca',
+      metodo_pagamento: 'PIX',
+      subtotal: 15.00,
+      taxa_entrega: 0.00,
+      total: 15.00,
+      created_at: new Date().toISOString()
+    };
+    const dummyItens = [
+      {
+        quantidade: 1,
+        preco_unitario: 15.00,
+        produtos: { nome: 'Teste de Comunicação Térmica' }
+      }
+    ];
+    await autoPrintThermalReceipt(dummyOrder, {
+      from: () => ({ select: () => ({ eq: () => Promise.resolve({ data: dummyItens }) }) })
     });
   };
 
@@ -259,18 +314,27 @@ const AdminLayout = () => {
                 </span>
               </div>
             </div>
-            <button
-              onClick={toggleAutoPrint}
-              className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 flex items-center gap-1 ${
-                autoPrintEnabled
-                  ? 'bg-[#10B981] hover:bg-[#059669] text-[#0A0F1D] shadow-sm'
-                  : 'bg-white/10 hover:bg-white/20 text-gray-300'
-              }`}
-              title={autoPrintEnabled ? 'Clique para pausar auto-impressão' : 'Clique para ativar auto-impressão'}
-            >
-              <Printer size={11} />
-              {autoPrintEnabled ? 'Ativo' : 'Pausar'}
-            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                onClick={() => setIsPrinterModalOpen(true)}
+                className="p-1.5 text-gray-400 hover:text-[#00E5FF] hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                title="Configurações de Impressão (Zero Telas)"
+              >
+                <Settings size={13} />
+              </button>
+              <button
+                onClick={toggleAutoPrint}
+                className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1 ${
+                  autoPrintEnabled
+                    ? 'bg-[#10B981] hover:bg-[#059669] text-[#0A0F1D] shadow-sm'
+                    : 'bg-white/10 hover:bg-white/20 text-gray-300'
+                }`}
+                title={autoPrintEnabled ? 'Clique para pausar auto-impressão' : 'Clique para ativar auto-impressão'}
+              >
+                <Printer size={11} />
+                {autoPrintEnabled ? 'Ativo' : 'Pausar'}
+              </button>
+            </div>
           </div>
 
           {/* Card de Status do Som / Notificações */}
@@ -399,17 +463,26 @@ const AdminLayout = () => {
                 <p className="text-[10px] text-gray-400">Imprime ao receber novo pedido</p>
               </div>
             </div>
-            <button
-              onClick={toggleAutoPrint}
-              className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
-                autoPrintEnabled
-                  ? 'bg-[#10B981] text-[#0A0F1D]'
-                  : 'bg-white/10 text-gray-300'
-              }`}
-            >
-              <Printer size={13} />
-              {autoPrintEnabled ? 'Ativo' : 'Pausar'}
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); setIsPrinterModalOpen(true); }}
+                className="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-colors cursor-pointer"
+                title="Configurações da Impressora"
+              >
+                <Settings size={15} />
+              </button>
+              <button
+                onClick={toggleAutoPrint}
+                className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                  autoPrintEnabled
+                    ? 'bg-[#10B981] text-[#0A0F1D]'
+                    : 'bg-white/10 text-gray-300'
+                }`}
+              >
+                <Printer size={13} />
+                {autoPrintEnabled ? 'Ativo' : 'Pausar'}
+              </button>
+            </div>
           </div>
 
           {!isStandalone && (
@@ -471,6 +544,105 @@ const AdminLayout = () => {
 
         <Outlet />
       </main>
+
+      {/* Modal de Configuração da Impressora Térmica (PDV) */}
+      {isPrinterModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-[#0D1527] border border-white/10 rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-5 shadow-2xl relative">
+            <button
+              onClick={() => setIsPrinterModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white p-1 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#00E5FF]/20 text-[#00E5FF] flex items-center justify-center shrink-0">
+                <Printer size={22} />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white uppercase tracking-wider">
+                  Configuração de Impressão PDV
+                </h3>
+                <p className="text-xs text-gray-400">
+                  Como fazer a notinha sair direto na Bematech sem pedir confirmação na tela.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {/* Opção 1: Parear via WebSerial */}
+              <div className="bg-[#101935] border border-[#00E5FF]/30 rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap size={16} className="text-[#00E5FF]" />
+                    <span className="text-xs font-bold text-white uppercase">Opção 1: Conectar Direto pelo Navegador</span>
+                  </div>
+                  {isDirectPaired && (
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                      <CheckCircle2 size={10} /> Conectada
+                    </span>
+                  )}
+                </div>
+                <p className="text-[11px] text-gray-300">
+                  Conecta o Chrome/Edge direto à porta USB/Serial da Bematech. O navegador memoriza a impressora e nunca mais abre janelas de confirmação.
+                </p>
+                <button
+                  onClick={handlePairDirectPrinter}
+                  className="w-full bg-[#00E5FF] hover:bg-[#00B4D8] text-[#0A0F1D] py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md shadow-cyan-500/10 cursor-pointer"
+                >
+                  <Zap size={14} /> {isDirectPaired ? 'Reconectar / Selecionar Porta Bematech' : '⚡ Conectar Impressora Bematech'}
+                </button>
+              </div>
+
+              {/* Opção 2: Baixar Instalador de Atalho PDV */}
+              <div className="bg-[#101935] border border-white/10 rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Download size={16} className="text-emerald-400" />
+                  <span className="text-xs font-bold text-white uppercase">Opção 2: Baixar Criador de Atalho para o Notebook</span>
+                </div>
+                <p className="text-[11px] text-gray-300">
+                  Baixe este pequeno script direto no notebook do Jonathan e dê 2 cliques nele. Ele cria o ícone 'Refresca Bebidas PDV' na Área de Trabalho com o modo silencioso ativado.
+                </p>
+                <button
+                  onClick={downloadDesktopShortcut}
+                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-[#0A0F1D] py-2.5 px-3 rounded-lg text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-500/10 cursor-pointer"
+                >
+                  <Download size={14} /> 📥 Baixar Atalho para a Área de Trabalho (.bat)
+                </button>
+              </div>
+
+              {/* Opção 3: Manual 15 segundos */}
+              <div className="bg-[#070B16] border border-white/5 rounded-xl p-3 space-y-1">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
+                  💡 Ou crie o atalho manual no Windows em 15 segundos:
+                </span>
+                <p className="text-[10px] text-gray-400">
+                  Na Área de Trabalho do notebook: Botão direito → Novo → Atalho → Cole o comando abaixo:
+                </p>
+                <div className="bg-black/50 p-2 rounded-lg font-mono text-[10px] text-cyan-300 select-all break-all border border-white/5">
+                  chrome.exe --kiosk-printing --app=https://depositorefresca.com.br/admin/orders
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-3">
+              <button
+                onClick={handleTestPrint}
+                className="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <Printer size={14} /> Imprimir Cupom de Teste
+              </button>
+              <button
+                onClick={() => setIsPrinterModalOpen(false)}
+                className="bg-[#00E5FF] text-[#0A0F1D] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

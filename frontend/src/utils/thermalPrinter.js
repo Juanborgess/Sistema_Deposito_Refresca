@@ -249,35 +249,11 @@ async function sendToWebSerialPort(port, escPosBytes) {
 }
 
 /**
- * Tenta envio silencioso apenas se o usuário já tiver autorizado e salvo uma impressora anteriormente
+ * Tenta envio silencioso via hardware (WebSerial / WebUSB) se houver dispositivo previamente autorizado
  */
 export async function trySilentDirectHardwarePrint(escPosBytes) {
-  let savedPref = null;
-  try {
-    savedPref = JSON.parse(localStorage.getItem(STORAGE_PREF_KEY) || 'null');
-  } catch (e) {
-    savedPref = null;
-  }
-
-  if (!savedPref) return false;
-
-  if (savedPref.type === 'usb' && typeof navigator !== 'undefined' && navigator.usb) {
-    try {
-      const devices = await navigator.usb.getDevices();
-      const matched =
-        devices.find(
-          (d) => d.vendorId === savedPref.vendorId && d.productId === savedPref.productId
-        ) || devices[0];
-      if (matched) {
-        await sendToWebUsbDevice(matched, escPosBytes);
-        return true;
-      }
-    } catch (err) {
-      console.warn('Impressão USB silenciosa falhou, abrindo seletor/spooler:', err);
-    }
-  }
-
-  if (savedPref.type === 'serial' && typeof navigator !== 'undefined' && navigator.serial) {
+  // 1. Tenta WebSerial se houver qualquer porta previamente autorizada pelo usuário no navegador
+  if (typeof navigator !== 'undefined' && navigator.serial) {
     try {
       const ports = await navigator.serial.getPorts();
       if (ports && ports.length > 0) {
@@ -285,11 +261,58 @@ export async function trySilentDirectHardwarePrint(escPosBytes) {
         return true;
       }
     } catch (err) {
-      console.warn('Impressão Serial silenciosa falhou, abrindo seletor/spooler:', err);
+      console.warn('Impressão WebSerial silenciosa falhou:', err);
+    }
+  }
+
+  // 2. Tenta WebUSB
+  if (typeof navigator !== 'undefined' && navigator.usb) {
+    try {
+      const devices = await navigator.usb.getDevices();
+      if (devices && devices.length > 0) {
+        await sendToWebUsbDevice(devices[0], escPosBytes);
+        return true;
+      }
+    } catch (err) {
+      console.warn('Impressão WebUSB silenciosa falhou:', err);
     }
   }
 
   return false;
+}
+
+/**
+ * Solicita ao usuário o pareamento de uma impressora térmica via WebSerial (Google Chrome / Edge)
+ */
+export async function pairWebSerialPrinter() {
+  if (typeof navigator === 'undefined' || !navigator.serial) {
+    throw new Error('Seu navegador não suporta conexão direta Serial. Use o Google Chrome ou Microsoft Edge no computador.');
+  }
+  const port = await navigator.serial.requestPort();
+  localStorage.setItem(STORAGE_PREF_KEY, JSON.stringify({ type: 'serial', pairedAt: new Date().toISOString() }));
+  return port;
+}
+
+/**
+ * Faz o download do script para o cliente criar o atalho PDV no Windows com 1 clique
+ */
+export function downloadDesktopShortcut() {
+  const batContent = `@echo off
+chcp 65001 >nul
+echo Criando o atalho do Refresca PDV na sua Area de Trabalho...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws = New-Object -ComObject WScript.Shell; $d = [Environment]::GetFolderPath('Desktop'); $s = $ws.CreateShortcut([System.IO.Path]::Combine($d, 'Refresca Bebidas PDV.lnk')); $c = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' }; if (-not (Test-Path $c)) { $c = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' }; $s.TargetPath = $c; $localData = [Environment]::GetFolderPath('LocalApplicationData'); $s.Arguments = '--user-data-dir=\\"' + $localData + '\\RefrescaPDV\\" --kiosk-printing --app=https://depositorefresca.com.br/admin/orders'; $s.Description = 'Refresca Bebidas - PDV'; $s.IconLocation = $c + ',0'; $s.Save();"
+echo Pronto! O atalho 'Refresca Bebidas PDV' foi criado na sua Area de Trabalho.
+pause
+`;
+  const blob = new Blob([batContent], { type: 'application/x-bat' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'Criar_Atalho_Refresca_PDV.bat';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function uint8ToBase64(bytes) {

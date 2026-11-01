@@ -28,3 +28,4 @@ if exist %EDGE_PATH% (
 
 echo Navegador Chrome ou Edge nao encontrado.
 pause
+
