@@ -9,13 +9,13 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo_refresca.png'],
       manifest: {
-        name: 'Refresca Bebidas - Depósito & Delivery',
-        short_name: 'Refresca',
-        description: 'Depósito de Bebidas Refresca - Entrega rápida de cervejas geladas, destilados, gelo e carvão.',
-        theme_color: '#0A0F1D',
+        name: 'Refresca Bebidas - Painel Gerente',
+        short_name: 'Refresca Admin',
+        description: 'Painel Administrativo do Depósito de Bebidas Refresca - Gestão de Pedidos e Expedição.',
+        theme_color: '#070B16',
         background_color: '#0A0F1D',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/admin/orders',
         scope: '/',
         icons: [
           {

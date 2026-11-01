@@ -22,6 +22,10 @@ const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isStandalone = typeof window !== 'undefined' && (
+    window.matchMedia('(display-mode: standalone)').matches || 
+    window.navigator.standalone === true
+  );
 
   // Inicializa áudio no primeiro clique/toque do usuário
   useEffect(() => {
@@ -148,14 +152,13 @@ const AdminLayout = () => {
 
         {/* Rodapé da Sidebar */}
         <div className="pt-4 border-t border-white/10 space-y-2">
-          <a
-            href="/"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/"
+            target={isStandalone ? '_self' : '_blank'}
             className="flex items-center gap-2 text-xs text-gray-400 hover:text-[#00E5FF] px-3 py-2 transition-colors font-medium"
           >
-            Ver Loja Pública
-          </a>
+            Ver Loja Pública ↗
+          </Link>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold uppercase tracking-wider text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-colors"
@@ -217,14 +220,14 @@ const AdminLayout = () => {
             );
           })}
           <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between">
-            <a
-              href="/"
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/"
+              target={isStandalone ? '_self' : '_blank'}
+              onClick={() => setIsMobileMenuOpen(false)}
               className="px-4 py-2.5 text-xs font-bold text-[#00E5FF]"
             >
               Abrir Loja Pública ↗
-            </a>
+            </Link>
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase text-red-400 hover:bg-red-500/10 rounded-xl"
